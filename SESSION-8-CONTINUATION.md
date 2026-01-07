@@ -27,7 +27,7 @@ The following migrations were created in Session 7:
 | `2026_01_07_260007_create_backups_table.php` | System backup management |
 | `2026_01_07_260008_create_downloads_table.php` | Downloadable content for students and teachers |
 | `2026_01_07_260009_create_homework_table.php` | Homework assignments by teachers |
-| `2026_01_07_260010_create_homework_submissions_table.php` | Student homework submissions with grading |
+| `2026_01_07_260010_create_study_materials_table.php` | Study materials and resources for students |
 
 ## Session 8 Tasks (Prompts 71-80) - Model Creation Part 1
 
