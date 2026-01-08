@@ -4243,4 +4243,215 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/reports/financial', fn() => redirect('/test-reports/financial'))->name('reports.financial');
 });
 
+// Named route aliases for Settings views (temporary - remove after backend is implemented)
+Route::middleware(['auth'])->group(function () {
+    Route::get('/settings/general', fn() => redirect('/test-settings/general'))->name('settings.general');
+    Route::get('/settings/sms', fn() => redirect('/test-settings/sms'))->name('settings.sms');
+    Route::get('/settings/email', fn() => redirect('/test-settings/email'))->name('settings.email');
+    Route::get('/settings/payment', fn() => redirect('/test-settings/payment'))->name('settings.payment');
+    Route::get('/settings/languages', fn() => redirect('/test-settings/languages'))->name('settings.languages');
+    Route::get('/settings/translations', fn() => redirect('/test-settings/translations'))->name('settings.translations');
+    Route::get('/settings/theme', fn() => redirect('/test-settings/theme'))->name('settings.theme');
+    Route::get('/settings/notifications', fn() => redirect('/test-settings/notifications'))->name('settings.notifications');
+    Route::get('/settings/backups', fn() => redirect('/test-settings/backups'))->name('settings.backups');
+    Route::get('/settings/permissions', fn() => redirect('/test-settings/permissions'))->name('settings.permissions');
+    
+    Route::put('/settings/general', fn() => back()->with('success', 'Settings updated!'))->name('settings.general.update');
+    Route::put('/settings/sms', fn() => back()->with('success', 'SMS settings updated!'))->name('settings.sms.update');
+    Route::put('/settings/email', fn() => back()->with('success', 'Email settings updated!'))->name('settings.email.update');
+    Route::put('/settings/payment', fn() => back()->with('success', 'Payment settings updated!'))->name('settings.payment.update');
+    Route::put('/settings/theme', fn() => back()->with('success', 'Theme settings updated!'))->name('settings.theme.update');
+});
+
+// Temporary test routes for Session 27 settings views (remove after testing)
+Route::prefix('test-settings')->middleware(['auth'])->group(function () {
+    Route::get('/general', function () {
+        return view('admin.settings.general', [
+            'settings' => [
+                'school_name' => 'Smart School',
+                'school_code' => 'SS001',
+                'school_tagline' => 'Excellence in Education',
+                'school_address' => '123 Education Street',
+                'school_city' => 'Bangalore',
+                'school_state' => 'Karnataka',
+                'school_country' => 'India',
+                'school_postal_code' => '560001',
+                'school_phone' => '+91 80 1234 5678',
+                'school_email' => 'info@smartschool.com',
+                'school_website' => 'https://smartschool.com',
+                'current_session' => '2025-2026',
+                'academic_year_start' => '2025-04-01',
+                'academic_year_end' => '2026-03-31',
+                'school_start_time' => '08:00',
+                'school_end_time' => '15:30',
+                'timezone' => 'Asia/Kolkata',
+                'principal_name' => 'Dr. John Smith',
+                'principal_phone' => '+91 98765 43210',
+                'principal_email' => 'principal@smartschool.com',
+                'admin_name' => 'Admin User',
+                'admin_phone' => '+91 98765 43211',
+                'admin_email' => 'admin@smartschool.com',
+            ],
+            'academicSessions' => collect([
+                (object)['id' => 1, 'name' => '2025-2026', 'is_current' => true],
+                (object)['id' => 2, 'name' => '2024-2025', 'is_current' => false],
+            ]),
+            'workingDays' => ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'],
+        ]);
+    })->name('test.settings.general');
+
+    Route::get('/sms', function () {
+        return view('admin.settings.sms', [
+            'settings' => [
+                'sms_gateway' => 'twilio',
+                'twilio_sid' => '',
+                'twilio_token' => '',
+                'twilio_phone' => '',
+                'sender_id' => 'SCHOOL',
+                'sms_type' => 'transactional',
+                'character_limit' => 160,
+                'unicode_support' => true,
+                'dlt_entity_id' => '',
+                'dlt_template_id' => '',
+            ],
+            'smsBalance' => 500,
+            'smsStats' => [
+                'sent_today' => 45,
+                'sent_month' => 1250,
+                'failed' => 3,
+            ],
+        ]);
+    })->name('test.settings.sms');
+
+    Route::get('/email', function () {
+        return view('admin.settings.email', [
+            'settings' => [
+                'mail_driver' => 'smtp',
+                'smtp_host' => 'smtp.gmail.com',
+                'smtp_port' => 587,
+                'smtp_username' => '',
+                'smtp_password' => '',
+                'smtp_encryption' => 'tls',
+                'from_email' => 'noreply@smartschool.com',
+                'from_name' => 'Smart School',
+                'reply_to_email' => 'info@smartschool.com',
+                'reply_to_name' => 'Smart School Support',
+            ],
+            'emailStats' => [
+                'sent' => 2500,
+                'delivered' => 2450,
+                'opened' => 1800,
+                'bounced' => 25,
+                'failed' => 25,
+            ],
+            'emailTemplates' => collect([
+                (object)['id' => 1, 'name' => 'Welcome Email', 'subject' => 'Welcome to Smart School', 'is_active' => true],
+                (object)['id' => 2, 'name' => 'Fee Reminder', 'subject' => 'Fee Payment Reminder', 'is_active' => true],
+                (object)['id' => 3, 'name' => 'Exam Schedule', 'subject' => 'Upcoming Exam Schedule', 'is_active' => true],
+            ]),
+        ]);
+    })->name('test.settings.email');
+
+    Route::get('/payment', function () {
+        return view('admin.settings.payment', [
+            'settings' => [
+                'currency' => 'INR',
+                'currency_symbol' => '₹',
+                'symbol_position' => 'before',
+                'decimal_places' => 2,
+                'thousand_separator' => ',',
+                'decimal_separator' => '.',
+                'razorpay_enabled' => true,
+                'razorpay_mode' => 'test',
+                'stripe_enabled' => false,
+                'paypal_enabled' => false,
+                'offline_enabled' => true,
+                'offline_cash' => true,
+                'offline_cheque' => true,
+                'offline_dd' => true,
+                'offline_bank_transfer' => true,
+                'fee_reminder_days' => 7,
+                'late_fee_grace_days' => 5,
+                'auto_late_fee' => true,
+                'partial_payment' => true,
+                'send_receipt' => true,
+                'online_payment_parent' => true,
+            ],
+            'stats' => [
+                'total_collected' => 1250000,
+                'online_payments' => 156,
+                'offline_payments' => 89,
+                'failed_transactions' => 3,
+                'pending_amount' => 450000,
+            ],
+        ]);
+    })->name('test.settings.payment');
+
+    Route::get('/languages', function () {
+        return view('admin.settings.languages', [
+            'languages' => collect([
+                (object)['id' => 1, 'name' => 'English', 'code' => 'en', 'native_name' => 'English', 'flag' => '🇺🇸', 'direction' => 'ltr', 'is_default' => true, 'is_active' => true],
+                (object)['id' => 2, 'name' => 'Hindi', 'code' => 'hi', 'native_name' => 'हिन्दी', 'flag' => '🇮🇳', 'direction' => 'ltr', 'is_default' => false, 'is_active' => true],
+            ]),
+        ]);
+    })->name('test.settings.languages');
+
+    Route::get('/translations', function () {
+        return view('admin.settings.translations', [
+            'languages' => collect([
+                (object)['code' => 'en', 'name' => 'English', 'direction' => 'ltr'],
+                (object)['code' => 'hi', 'name' => 'Hindi', 'direction' => 'ltr'],
+            ]),
+        ]);
+    })->name('test.settings.translations');
+
+    Route::get('/theme', function () {
+        return view('admin.settings.theme', [
+            'settings' => [
+                'theme_mode' => 'light',
+                'primary_color' => '#0d6efd',
+                'secondary_color' => '#6c757d',
+                'accent_color' => '#198754',
+                'success_color' => '#198754',
+                'warning_color' => '#ffc107',
+                'danger_color' => '#dc3545',
+                'primary_font' => 'Inter',
+                'heading_font' => 'Inter',
+                'font_size' => '16px',
+                'font_weight' => '400',
+                'sidebar_style' => 'default',
+                'sidebar_position' => 'left',
+                'header_style' => 'fixed',
+                'container_width' => 'fluid',
+                'card_style' => 'shadow',
+                'border_radius' => '8px',
+                'show_breadcrumbs' => true,
+                'show_footer' => true,
+                'sticky_sidebar' => true,
+                'enable_animations' => true,
+                'rtl_mode' => false,
+            ],
+        ]);
+    })->name('test.settings.theme');
+
+    Route::get('/notifications', function () {
+        return view('admin.settings.notifications', [
+            'settings' => [],
+        ]);
+    })->name('test.settings.notifications');
+
+    Route::get('/backups', function () {
+        return view('admin.settings.backups', [
+            'backups' => collect([]),
+        ]);
+    })->name('test.settings.backups');
+
+    Route::get('/permissions', function () {
+        return view('admin.settings.permissions', [
+            'roles' => collect([]),
+            'modules' => collect([]),
+        ]);
+    })->name('test.settings.permissions');
+});
+
 require __DIR__.'/auth.php';
