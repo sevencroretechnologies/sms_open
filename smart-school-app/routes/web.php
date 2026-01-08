@@ -3627,10 +3627,620 @@ Route::prefix('test-income')->middleware(['auth'])->group(function () {
         return view('admin.income.categories-create');
     })->name('test.income-categories.create');
 
-    // Income List (placeholder for future)
+    // Income List
     Route::get('/index', function () {
-        return redirect('/test-income/categories');
+        $income = collect([
+            (object)[
+                'id' => 1,
+                'title' => 'Tuition Fee - January 2026',
+                'date' => '2026-01-05',
+                'category' => (object)['id' => 1, 'name' => 'Tuition Fees'],
+                'amount' => 25000.00,
+                'payment_method' => 'bank_transfer',
+                'reference_number' => 'TUI-2026-001',
+                'source' => 'John Doe (Parent)',
+                'receipt' => 'receipt_001.pdf',
+                'created_by' => (object)['name' => 'Admin User'],
+                'created_at' => now()->subDays(3),
+            ],
+            (object)[
+                'id' => 2,
+                'title' => 'Admission Fee - New Student',
+                'date' => '2026-01-03',
+                'category' => (object)['id' => 2, 'name' => 'Admission Fees'],
+                'amount' => 5000.00,
+                'payment_method' => 'cash',
+                'reference_number' => 'ADM-2026-015',
+                'source' => 'Jane Smith (Parent)',
+                'receipt' => null,
+                'created_by' => (object)['name' => 'Admin User'],
+                'created_at' => now()->subDays(5),
+            ],
+            (object)[
+                'id' => 3,
+                'title' => 'Library Fine Collection',
+                'date' => '2026-01-02',
+                'category' => (object)['id' => 4, 'name' => 'Library Fees'],
+                'amount' => 500.00,
+                'payment_method' => 'cash',
+                'reference_number' => 'LIB-2026-042',
+                'source' => 'Multiple Students',
+                'receipt' => null,
+                'created_by' => (object)['name' => 'Librarian'],
+                'created_at' => now()->subDays(6),
+            ],
+            (object)[
+                'id' => 4,
+                'title' => 'Transport Fee - Q1 2026',
+                'date' => '2026-01-01',
+                'category' => (object)['id' => 5, 'name' => 'Transport Fees'],
+                'amount' => 15000.00,
+                'payment_method' => 'online',
+                'reference_number' => 'TRN-2026-008',
+                'source' => 'Multiple Parents',
+                'receipt' => 'transport_receipt.pdf',
+                'created_by' => (object)['name' => 'Accountant'],
+                'created_at' => now()->subDays(7),
+            ],
+        ]);
+        
+        $categories = collect([
+            (object)['id' => 1, 'name' => 'Tuition Fees'],
+            (object)['id' => 2, 'name' => 'Admission Fees'],
+            (object)['id' => 3, 'name' => 'Exam Fees'],
+            (object)['id' => 4, 'name' => 'Library Fees'],
+            (object)['id' => 5, 'name' => 'Transport Fees'],
+        ]);
+        
+        $stats = [
+            'total' => 1799000.00,
+            'this_month' => 45500.00,
+            'this_year' => 1799000.00,
+            'count' => 680,
+        ];
+        
+        return view('admin.income.index', compact('income', 'categories', 'stats'));
     })->name('test.income.index');
+
+    // Income Create
+    Route::get('/create', function () {
+        $categories = collect([
+            (object)['id' => 1, 'name' => 'Tuition Fees'],
+            (object)['id' => 2, 'name' => 'Admission Fees'],
+            (object)['id' => 3, 'name' => 'Exam Fees'],
+            (object)['id' => 4, 'name' => 'Library Fees'],
+            (object)['id' => 5, 'name' => 'Transport Fees'],
+            (object)['id' => 6, 'name' => 'Donations'],
+        ]);
+        
+        $recentIncome = collect([
+            (object)[
+                'id' => 1,
+                'title' => 'Tuition Fee - January 2026',
+                'amount' => 25000.00,
+                'category' => (object)['name' => 'Tuition Fees'],
+            ],
+            (object)[
+                'id' => 2,
+                'title' => 'Admission Fee - New Student',
+                'amount' => 5000.00,
+                'category' => (object)['name' => 'Admission Fees'],
+            ],
+            (object)[
+                'id' => 3,
+                'title' => 'Library Fine Collection',
+                'amount' => 500.00,
+                'category' => (object)['name' => 'Library Fees'],
+            ],
+        ]);
+        
+        return view('admin.income.create', compact('categories', 'recentIncome'));
+    })->name('test.income.create');
+});
+
+// Named route aliases for Income views (temporary - remove after backend is implemented)
+Route::middleware(['auth'])->group(function () {
+    Route::get('/income', fn() => redirect('/test-income/index'))->name('income.index');
+    Route::get('/income/create', fn() => redirect('/test-income/create'))->name('income.create');
+    Route::post('/income', fn() => back()->with('success', 'Income recorded successfully!'))->name('income.store');
+    Route::get('/income/{id}/edit', fn($id) => redirect('/test-income/index'))->name('income.edit');
+    Route::put('/income/{id}', fn($id) => back()->with('success', 'Income updated successfully!'))->name('income.update');
+    Route::delete('/income/{id}', fn($id) => back()->with('success', 'Income deleted successfully!'))->name('income.destroy');
+});
+
+// Temporary test routes for Accounting views (remove after testing)
+Route::prefix('test-accounting')->middleware(['auth'])->group(function () {
+    // Accounting Report
+    Route::get('/report', function () {
+        $academicSessions = collect([
+            (object)['id' => 1, 'name' => '2025-2026', 'is_current' => true],
+            (object)['id' => 2, 'name' => '2024-2025', 'is_current' => false],
+        ]);
+        
+        $summary = [
+            'total_income' => 1799000.00,
+            'total_expenses' => 407500.00,
+            'net_balance' => 1391500.00,
+            'profit_margin' => 77.3,
+        ];
+        
+        $incomeByCategory = collect([
+            (object)['name' => 'Tuition Fees', 'total' => 1250000.00, 'percentage' => 69.5],
+            (object)['name' => 'Admission Fees', 'total' => 225000.00, 'percentage' => 12.5],
+            (object)['name' => 'Transport Fees', 'total' => 160000.00, 'percentage' => 8.9],
+            (object)['name' => 'Exam Fees', 'total' => 90000.00, 'percentage' => 5.0],
+            (object)['name' => 'Library Fees', 'total' => 24000.00, 'percentage' => 1.3],
+            (object)['name' => 'Donations', 'total' => 50000.00, 'percentage' => 2.8],
+        ]);
+        
+        $expensesByCategory = collect([
+            (object)['name' => 'Salaries', 'total' => 250000.00, 'percentage' => 61.3],
+            (object)['name' => 'Utilities', 'total' => 75000.00, 'percentage' => 18.4],
+            (object)['name' => 'Maintenance', 'total' => 45000.00, 'percentage' => 11.0],
+            (object)['name' => 'Office Supplies', 'total' => 25000.00, 'percentage' => 6.1],
+            (object)['name' => 'Transport', 'total' => 12500.00, 'percentage' => 3.1],
+        ]);
+        
+        $monthlyBreakdown = collect([
+            (object)['month_name' => 'January', 'income' => 150000, 'expenses' => 35000, 'net' => 115000, 'cumulative' => 115000],
+            (object)['month_name' => 'February', 'income' => 145000, 'expenses' => 33000, 'net' => 112000, 'cumulative' => 227000],
+            (object)['month_name' => 'March', 'income' => 160000, 'expenses' => 38000, 'net' => 122000, 'cumulative' => 349000],
+            (object)['month_name' => 'April', 'income' => 155000, 'expenses' => 34000, 'net' => 121000, 'cumulative' => 470000],
+            (object)['month_name' => 'May', 'income' => 148000, 'expenses' => 32000, 'net' => 116000, 'cumulative' => 586000],
+            (object)['month_name' => 'June', 'income' => 142000, 'expenses' => 31000, 'net' => 111000, 'cumulative' => 697000],
+        ]);
+        
+        $chartData = [
+            'labels' => ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
+            'income' => [150000, 145000, 160000, 155000, 148000, 142000],
+            'expenses' => [35000, 33000, 38000, 34000, 32000, 31000],
+        ];
+        
+        $categoryChartData = [
+            'labels' => ['Tuition', 'Admission', 'Transport', 'Exam', 'Library', 'Salaries', 'Utilities'],
+            'data' => [69.5, 12.5, 8.9, 5.0, 1.3, 61.3, 18.4],
+        ];
+        
+        return view('admin.accounting.report', compact(
+            'academicSessions', 'summary', 'incomeByCategory', 'expensesByCategory',
+            'monthlyBreakdown', 'chartData', 'categoryChartData'
+        ));
+    })->name('test.accounting.report');
+
+    // Balance Sheet
+    Route::get('/balance-sheet', function () {
+        $academicSessions = collect([
+            (object)['id' => 1, 'name' => '2025-2026', 'is_current' => true],
+            (object)['id' => 2, 'name' => '2024-2025', 'is_current' => false],
+        ]);
+        
+        $balanceSheet = [
+            'total_income' => 1799000.00,
+            'total_expenses' => 407500.00,
+            'net_balance' => 1391500.00,
+            'profit_margin' => 77.3,
+            'expense_ratio' => 22.7,
+            'period' => 'January - December 2025',
+        ];
+        
+        $comparison = [
+            'income_change' => 12.5,
+            'expense_change' => 8.2,
+            'balance_change' => 15.3,
+        ];
+        
+        $incomeItems = collect([
+            (object)['name' => 'Tuition Fees', 'current' => 1250000.00, 'previous' => 1100000.00],
+            (object)['name' => 'Admission Fees', 'current' => 225000.00, 'previous' => 200000.00],
+            (object)['name' => 'Transport Fees', 'current' => 160000.00, 'previous' => 150000.00],
+            (object)['name' => 'Exam Fees', 'current' => 90000.00, 'previous' => 85000.00],
+            (object)['name' => 'Library Fees', 'current' => 24000.00, 'previous' => 22000.00],
+            (object)['name' => 'Donations', 'current' => 50000.00, 'previous' => 40000.00],
+        ]);
+        
+        $expenseItems = collect([
+            (object)['name' => 'Salaries', 'current' => 250000.00, 'previous' => 230000.00],
+            (object)['name' => 'Utilities', 'current' => 75000.00, 'previous' => 70000.00],
+            (object)['name' => 'Maintenance', 'current' => 45000.00, 'previous' => 42000.00],
+            (object)['name' => 'Office Supplies', 'current' => 25000.00, 'previous' => 23000.00],
+            (object)['name' => 'Transport', 'current' => 12500.00, 'previous' => 12000.00],
+        ]);
+        
+        $trendData = [
+            'labels' => ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
+            'income' => [150000, 145000, 160000, 155000, 148000, 142000],
+            'expenses' => [35000, 33000, 38000, 34000, 32000, 31000],
+            'balance' => [115000, 112000, 122000, 121000, 116000, 111000],
+        ];
+        
+        $filters = ['compareWith' => ''];
+        
+        return view('admin.accounting.balance-sheet', compact(
+            'academicSessions', 'balanceSheet', 'comparison', 'incomeItems',
+            'expenseItems', 'trendData', 'filters'
+        ));
+    })->name('test.accounting.balance-sheet');
+});
+
+// Named route aliases for Accounting views (temporary - remove after backend is implemented)
+Route::middleware(['auth'])->group(function () {
+    Route::get('/accounting/report', fn() => redirect('/test-accounting/report'))->name('accounting.report');
+    Route::get('/accounting/balance-sheet', fn() => redirect('/test-accounting/balance-sheet'))->name('accounting.balance-sheet');
+});
+
+// Temporary test routes for Reports views (remove after testing)
+Route::prefix('test-reports')->middleware(['auth'])->group(function () {
+    // Reports Dashboard
+    Route::get('/index', function () {
+        $stats = [
+            'total_reports' => 15,
+            'generated_today' => 5,
+            'scheduled' => 3,
+            'downloads_this_month' => 42,
+        ];
+        
+        $recentReports = collect([
+            (object)[
+                'name' => 'Student Attendance Report - January 2026',
+                'type' => 'Attendance',
+                'generated_by' => 'Admin User',
+                'format' => 'pdf',
+                'created_at' => now()->subHours(2),
+            ],
+            (object)[
+                'name' => 'Fee Collection Summary - Q4 2025',
+                'type' => 'Financial',
+                'generated_by' => 'Accountant',
+                'format' => 'excel',
+                'created_at' => now()->subHours(5),
+            ],
+            (object)[
+                'name' => 'Exam Results - Mid-Term 2025',
+                'type' => 'Academic',
+                'generated_by' => 'Admin User',
+                'format' => 'pdf',
+                'created_at' => now()->subDays(1),
+            ],
+        ]);
+        
+        return view('admin.reports.index', compact('stats', 'recentReports'));
+    })->name('test.reports.index');
+
+    // Student Report
+    Route::get('/students', function () {
+        $academicSessions = collect([
+            (object)['id' => 1, 'name' => '2025-2026', 'is_current' => true],
+        ]);
+        
+        $classes = collect([
+            (object)['id' => 1, 'name' => 'Class 1'],
+            (object)['id' => 2, 'name' => 'Class 2'],
+            (object)['id' => 3, 'name' => 'Class 3'],
+        ]);
+        
+        $sections = collect([
+            (object)['id' => 1, 'name' => 'Section A'],
+            (object)['id' => 2, 'name' => 'Section B'],
+        ]);
+        
+        $stats = [
+            'total_students' => 740,
+            'active_students' => 720,
+            'new_admissions' => 85,
+            'graduated' => 65,
+            'male_count' => 410,
+            'female_count' => 330,
+        ];
+        
+        $classWiseData = collect([
+            (object)['name' => 'Class 1', 'total' => 75, 'male' => 42, 'female' => 33, 'active' => 74, 'inactive' => 1, 'avg_attendance' => 92.5, 'avg_performance' => 78.3],
+            (object)['name' => 'Class 2', 'total' => 72, 'male' => 38, 'female' => 34, 'active' => 72, 'inactive' => 0, 'avg_attendance' => 94.2, 'avg_performance' => 81.5],
+            (object)['name' => 'Class 3', 'total' => 78, 'male' => 45, 'female' => 33, 'active' => 77, 'inactive' => 1, 'avg_attendance' => 91.8, 'avg_performance' => 76.9],
+            (object)['name' => 'Class 4', 'total' => 70, 'male' => 36, 'female' => 34, 'active' => 70, 'inactive' => 0, 'avg_attendance' => 93.5, 'avg_performance' => 79.2],
+            (object)['name' => 'Class 5', 'total' => 68, 'male' => 35, 'female' => 33, 'active' => 67, 'inactive' => 1, 'avg_attendance' => 90.1, 'avg_performance' => 74.8],
+        ]);
+        
+        $trendData = [
+            'labels' => ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+            'admissions' => [15, 20, 25, 18, 22, 30, 45, 50, 35, 20, 15, 10],
+            'total' => [680, 700, 725, 743, 765, 795, 840, 890, 925, 945, 960, 970],
+        ];
+        
+        $classDistribution = [
+            'labels' => ['Class 1', 'Class 2', 'Class 3', 'Class 4', 'Class 5'],
+            'data' => [75, 72, 78, 70, 68],
+        ];
+        
+        $ageDistribution = [
+            'labels' => ['5-7', '8-10', '11-13', '14-16', '17-18'],
+            'data' => [120, 180, 200, 160, 80],
+        ];
+        
+        return view('admin.reports.students', compact(
+            'academicSessions', 'classes', 'sections', 'stats', 'classWiseData',
+            'trendData', 'classDistribution', 'ageDistribution'
+        ));
+    })->name('test.reports.students');
+
+    // Attendance Report
+    Route::get('/attendance', function () {
+        $academicSessions = collect([
+            (object)['id' => 1, 'name' => '2025-2026', 'is_current' => true],
+        ]);
+        
+        $classes = collect([
+            (object)['id' => 1, 'name' => 'Class 1'],
+            (object)['id' => 2, 'name' => 'Class 2'],
+            (object)['id' => 3, 'name' => 'Class 3'],
+        ]);
+        
+        $sections = collect([
+            (object)['id' => 1, 'name' => 'Section A'],
+            (object)['id' => 2, 'name' => 'Section B'],
+        ]);
+        
+        $stats = [
+            'present_percentage' => 91.5,
+            'total_present' => 13725,
+            'total_absent' => 1275,
+            'total_late' => 450,
+            'absent_percentage' => 8.5,
+            'late_percentage' => 3.0,
+            'leave_percentage' => 1.5,
+        ];
+        
+        $classWiseAttendance = collect([
+            (object)['name' => 'Class 1', 'total_students' => 75, 'working_days' => 22, 'present' => 1540, 'absent' => 110, 'late' => 45, 'attendance_percentage' => 93.3],
+            (object)['name' => 'Class 2', 'total_students' => 72, 'working_days' => 22, 'present' => 1490, 'absent' => 94, 'late' => 38, 'attendance_percentage' => 94.1],
+            (object)['name' => 'Class 3', 'total_students' => 78, 'working_days' => 22, 'present' => 1580, 'absent' => 136, 'late' => 52, 'attendance_percentage' => 92.1],
+            (object)['name' => 'Class 4', 'total_students' => 70, 'working_days' => 22, 'present' => 1420, 'absent' => 120, 'late' => 40, 'attendance_percentage' => 92.2],
+            (object)['name' => 'Class 5', 'total_students' => 68, 'working_days' => 22, 'present' => 1360, 'absent' => 136, 'late' => 48, 'attendance_percentage' => 90.9],
+        ]);
+        
+        $lowAttendanceStudents = collect([
+            (object)['name' => 'John Smith', 'admission_no' => 'ADM001', 'class' => 'Class 3', 'present' => 14, 'absent' => 8, 'attendance_percentage' => 63.6],
+            (object)['name' => 'Emily Johnson', 'admission_no' => 'ADM045', 'class' => 'Class 5', 'present' => 15, 'absent' => 7, 'attendance_percentage' => 68.2],
+            (object)['name' => 'Michael Brown', 'admission_no' => 'ADM078', 'class' => 'Class 2', 'present' => 16, 'absent' => 6, 'attendance_percentage' => 72.7],
+        ]);
+        
+        $trendData = [
+            'labels' => ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri'],
+            'present' => [92, 88, 95, 90, 85, 93, 91, 94, 89, 87],
+            'absent' => [8, 12, 5, 10, 15, 7, 9, 6, 11, 13],
+        ];
+        
+        $classComparison = [
+            'labels' => ['Class 1', 'Class 2', 'Class 3', 'Class 4', 'Class 5'],
+            'data' => [93.3, 94.1, 92.1, 92.2, 90.9],
+        ];
+        
+        $dayWiseData = [92, 94, 95, 93, 88, 85];
+        
+        return view('admin.reports.attendance', compact(
+            'academicSessions', 'classes', 'sections', 'stats', 'classWiseAttendance',
+            'lowAttendanceStudents', 'trendData', 'classComparison', 'dayWiseData'
+        ));
+    })->name('test.reports.attendance');
+
+    // Exam Report
+    Route::get('/exams', function () {
+        $academicSessions = collect([
+            (object)['id' => 1, 'name' => '2025-2026', 'is_current' => true],
+        ]);
+        
+        $exams = collect([
+            (object)['id' => 1, 'name' => 'Mid-Term Exam'],
+            (object)['id' => 2, 'name' => 'Final Exam'],
+            (object)['id' => 3, 'name' => 'Unit Test 1'],
+        ]);
+        
+        $classes = collect([
+            (object)['id' => 1, 'name' => 'Class 1'],
+            (object)['id' => 2, 'name' => 'Class 2'],
+            (object)['id' => 3, 'name' => 'Class 3'],
+        ]);
+        
+        $subjects = collect([
+            (object)['id' => 1, 'name' => 'Mathematics'],
+            (object)['id' => 2, 'name' => 'Science'],
+            (object)['id' => 3, 'name' => 'English'],
+            (object)['id' => 4, 'name' => 'History'],
+        ]);
+        
+        $stats = [
+            'total_students' => 350,
+            'pass_percentage' => 92.3,
+            'average_score' => 72.5,
+            'highest_score' => 98.5,
+            'passed' => 323,
+            'failed' => 27,
+        ];
+        
+        $subjectWiseResults = collect([
+            (object)['name' => 'Mathematics', 'students' => 350, 'highest' => 98, 'lowest' => 28, 'average' => 72.5, 'pass_percentage' => 88.5, 'grade_a_plus' => 25, 'grade_a' => 45, 'grade_b' => 85, 'grade_c' => 120, 'fail' => 40],
+            (object)['name' => 'Science', 'students' => 350, 'highest' => 96, 'lowest' => 32, 'average' => 75.2, 'pass_percentage' => 91.2, 'grade_a_plus' => 30, 'grade_a' => 55, 'grade_b' => 90, 'grade_c' => 110, 'fail' => 31],
+            (object)['name' => 'English', 'students' => 350, 'highest' => 95, 'lowest' => 35, 'average' => 78.8, 'pass_percentage' => 94.5, 'grade_a_plus' => 35, 'grade_a' => 60, 'grade_b' => 95, 'grade_c' => 105, 'fail' => 19],
+            (object)['name' => 'History', 'students' => 350, 'highest' => 92, 'lowest' => 30, 'average' => 70.3, 'pass_percentage' => 86.8, 'grade_a_plus' => 20, 'grade_a' => 40, 'grade_b' => 80, 'grade_c' => 125, 'fail' => 46],
+        ]);
+        
+        $topPerformers = collect([
+            (object)['name' => 'Sarah Wilson', 'class' => 'Class 3', 'score' => 98.5, 'grade' => 'A+'],
+            (object)['name' => 'David Lee', 'class' => 'Class 2', 'score' => 97.2, 'grade' => 'A+'],
+            (object)['name' => 'Emma Davis', 'class' => 'Class 3', 'score' => 96.8, 'grade' => 'A+'],
+            (object)['name' => 'James Miller', 'class' => 'Class 1', 'score' => 95.5, 'grade' => 'A+'],
+            (object)['name' => 'Olivia Taylor', 'class' => 'Class 2', 'score' => 94.9, 'grade' => 'A+'],
+        ]);
+        
+        $needsImprovement = collect([
+            (object)['name' => 'Tom Anderson', 'class' => 'Class 1', 'score' => 35.2, 'grade' => 'F'],
+            (object)['name' => 'Lisa White', 'class' => 'Class 3', 'score' => 38.5, 'grade' => 'F'],
+        ]);
+        
+        $gradeDistribution = [15, 25, 20, 15, 10, 8, 5, 2];
+        $subjectLabels = ['Math', 'Science', 'English', 'History'];
+        $subjectScores = [72.5, 75.2, 78.8, 70.3];
+        $trendLabels = ['Unit Test 1', 'Mid Term', 'Unit Test 2', 'Final Exam'];
+        $trendScores = [68, 72, 75, 78];
+        $trendPassRate = [85, 88, 90, 92];
+        
+        return view('admin.reports.exams', compact(
+            'academicSessions', 'exams', 'classes', 'subjects', 'stats', 'subjectWiseResults',
+            'topPerformers', 'needsImprovement', 'gradeDistribution', 'subjectLabels',
+            'subjectScores', 'trendLabels', 'trendScores', 'trendPassRate'
+        ));
+    })->name('test.reports.exams');
+
+    // Fee Report
+    Route::get('/fees', function () {
+        $academicSessions = collect([
+            (object)['id' => 1, 'name' => '2025-2026', 'is_current' => true],
+        ]);
+        
+        $classes = collect([
+            (object)['id' => 1, 'name' => 'Class 1'],
+            (object)['id' => 2, 'name' => 'Class 2'],
+            (object)['id' => 3, 'name' => 'Class 3'],
+        ]);
+        
+        $feeTypes = collect([
+            (object)['id' => 1, 'name' => 'Tuition Fee'],
+            (object)['id' => 2, 'name' => 'Transport Fee'],
+            (object)['id' => 3, 'name' => 'Library Fee'],
+        ]);
+        
+        $stats = [
+            'total_fees' => 2500000.00,
+            'collected' => 2125000.00,
+            'pending' => 375000.00,
+            'collection_rate' => 85.0,
+        ];
+        
+        $classWiseFees = collect([
+            (object)['name' => 'Class 1', 'students' => 75, 'total_fees' => 375000, 'collected' => 337500, 'pending' => 37500, 'collection_rate' => 90.0],
+            (object)['name' => 'Class 2', 'students' => 72, 'total_fees' => 360000, 'collected' => 306000, 'pending' => 54000, 'collection_rate' => 85.0],
+            (object)['name' => 'Class 3', 'students' => 78, 'total_fees' => 390000, 'collected' => 312000, 'pending' => 78000, 'collection_rate' => 80.0],
+            (object)['name' => 'Class 4', 'students' => 70, 'total_fees' => 350000, 'collected' => 315000, 'pending' => 35000, 'collection_rate' => 90.0],
+            (object)['name' => 'Class 5', 'students' => 68, 'total_fees' => 340000, 'collected' => 272000, 'pending' => 68000, 'collection_rate' => 80.0],
+        ]);
+        
+        $defaulters = collect([
+            (object)['name' => 'John Smith', 'admission_no' => 'ADM001', 'class' => 'Class 3', 'total_due' => 25000, 'paid' => 15000, 'pending' => 10000, 'due_date' => '2025-12-15', 'days_overdue' => 24],
+            (object)['name' => 'Emily Johnson', 'admission_no' => 'ADM045', 'class' => 'Class 5', 'total_due' => 25000, 'paid' => 10000, 'pending' => 15000, 'due_date' => '2025-12-01', 'days_overdue' => 38],
+            (object)['name' => 'Michael Brown', 'admission_no' => 'ADM078', 'class' => 'Class 2', 'total_due' => 25000, 'paid' => 20000, 'pending' => 5000, 'due_date' => '2025-12-20', 'days_overdue' => 19],
+        ]);
+        
+        $recentTransactions = collect([
+            (object)['receipt_no' => 'RCP-2026-001', 'student_name' => 'Sarah Wilson', 'fee_type' => 'Tuition Fee', 'amount' => 25000, 'payment_method' => 'online', 'date' => '2026-01-08', 'status' => 'completed'],
+            (object)['receipt_no' => 'RCP-2026-002', 'student_name' => 'David Lee', 'fee_type' => 'Transport Fee', 'amount' => 5000, 'payment_method' => 'cash', 'date' => '2026-01-07', 'status' => 'completed'],
+            (object)['receipt_no' => 'RCP-2026-003', 'student_name' => 'Emma Davis', 'fee_type' => 'Library Fee', 'amount' => 500, 'payment_method' => 'cash', 'date' => '2026-01-06', 'status' => 'completed'],
+        ]);
+        
+        $trendData = [
+            'labels' => ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+            'collected' => [150000, 165000, 155000, 170000, 180000, 175000, 190000, 185000, 195000, 188000, 192000, 200000],
+            'target' => [160000, 160000, 160000, 180000, 180000, 180000, 200000, 200000, 200000, 200000, 200000, 200000],
+        ];
+        
+        $feeTypeData = [
+            'labels' => ['Tuition', 'Transport', 'Library', 'Lab', 'Sports', 'Other'],
+            'data' => [65, 15, 5, 8, 4, 3],
+        ];
+        
+        $paymentMethodData = [850000, 450000, 680000, 145000];
+        
+        $classCollectionData = [
+            'labels' => ['Class 1', 'Class 2', 'Class 3', 'Class 4', 'Class 5'],
+            'collected' => [337500, 306000, 312000, 315000, 272000],
+            'pending' => [37500, 54000, 78000, 35000, 68000],
+        ];
+        
+        return view('admin.reports.fees', compact(
+            'academicSessions', 'classes', 'feeTypes', 'stats', 'classWiseFees',
+            'defaulters', 'recentTransactions', 'trendData', 'feeTypeData',
+            'paymentMethodData', 'classCollectionData'
+        ));
+    })->name('test.reports.fees');
+
+    // Financial Report
+    Route::get('/financial', function () {
+        $academicSessions = collect([
+            (object)['id' => 1, 'name' => '2025-2026', 'is_current' => true],
+        ]);
+        
+        $summary = [
+            'total_income' => 1799000.00,
+            'total_expenses' => 407500.00,
+            'net_profit' => 1391500.00,
+            'profit_margin' => 77.3,
+            'income_change' => 12.5,
+            'expense_change' => 8.2,
+        ];
+        
+        $monthlyData = collect([
+            (object)['month_name' => 'January', 'income' => 150000, 'expenses' => 35000, 'net' => 115000, 'margin' => 76.7, 'cumulative' => 115000],
+            (object)['month_name' => 'February', 'income' => 145000, 'expenses' => 33000, 'net' => 112000, 'margin' => 77.2, 'cumulative' => 227000],
+            (object)['month_name' => 'March', 'income' => 160000, 'expenses' => 38000, 'net' => 122000, 'margin' => 76.3, 'cumulative' => 349000],
+            (object)['month_name' => 'April', 'income' => 155000, 'expenses' => 34000, 'net' => 121000, 'margin' => 78.1, 'cumulative' => 470000],
+            (object)['month_name' => 'May', 'income' => 148000, 'expenses' => 32000, 'net' => 116000, 'margin' => 78.4, 'cumulative' => 586000],
+            (object)['month_name' => 'June', 'income' => 142000, 'expenses' => 31000, 'net' => 111000, 'margin' => 78.2, 'cumulative' => 697000],
+        ]);
+        
+        $incomeByCategory = collect([
+            (object)['name' => 'Tuition Fees', 'amount' => 1250000.00, 'percentage' => 69.5],
+            (object)['name' => 'Admission Fees', 'amount' => 225000.00, 'percentage' => 12.5],
+            (object)['name' => 'Transport Fees', 'amount' => 160000.00, 'percentage' => 8.9],
+            (object)['name' => 'Exam Fees', 'amount' => 90000.00, 'percentage' => 5.0],
+            (object)['name' => 'Library Fees', 'amount' => 24000.00, 'percentage' => 1.3],
+            (object)['name' => 'Donations', 'amount' => 50000.00, 'percentage' => 2.8],
+        ]);
+        
+        $expensesByCategory = collect([
+            (object)['name' => 'Salaries', 'amount' => 250000.00, 'percentage' => 61.3],
+            (object)['name' => 'Utilities', 'amount' => 75000.00, 'percentage' => 18.4],
+            (object)['name' => 'Maintenance', 'amount' => 45000.00, 'percentage' => 11.0],
+            (object)['name' => 'Office Supplies', 'amount' => 25000.00, 'percentage' => 6.1],
+            (object)['name' => 'Transport', 'amount' => 12500.00, 'percentage' => 3.1],
+        ]);
+        
+        $metrics = [
+            'revenue_growth' => 12.5,
+            'expense_ratio' => 22.7,
+            'avg_monthly_income' => 149833.33,
+            'avg_monthly_expense' => 33916.67,
+        ];
+        
+        $trendData = [
+            'labels' => ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+            'income' => [150000, 145000, 160000, 155000, 148000, 142000, 158000, 162000, 170000, 165000, 175000, 180000],
+            'expenses' => [35000, 33000, 38000, 34000, 32000, 31000, 36000, 35000, 40000, 38000, 42000, 45000],
+            'profit' => [115000, 112000, 122000, 121000, 116000, 111000, 122000, 127000, 130000, 127000, 133000, 135000],
+        ];
+        
+        $incomeBreakdown = [
+            'labels' => ['Fee Collection', 'Donations', 'Grants', 'Other Income'],
+            'data' => [1525000, 50000, 150000, 74000],
+        ];
+        
+        $expenseBreakdown = [
+            'labels' => ['Salaries', 'Utilities', 'Supplies', 'Maintenance', 'Other'],
+            'data' => [250000, 75000, 25000, 45000, 12500],
+        ];
+        
+        return view('admin.reports.financial', compact(
+            'academicSessions', 'summary', 'monthlyData', 'incomeByCategory',
+            'expensesByCategory', 'metrics', 'trendData', 'incomeBreakdown', 'expenseBreakdown'
+        ));
+    })->name('test.reports.financial');
+});
+
+// Named route aliases for Reports views (temporary - remove after backend is implemented)
+Route::middleware(['auth'])->group(function () {
+    Route::get('/reports', fn() => redirect('/test-reports/index'))->name('reports.index');
+    Route::get('/reports/students', fn() => redirect('/test-reports/students'))->name('reports.students');
+    Route::get('/reports/attendance', fn() => redirect('/test-reports/attendance'))->name('reports.attendance');
+    Route::get('/reports/exams', fn() => redirect('/test-reports/exams'))->name('reports.exams');
+    Route::get('/reports/fees', fn() => redirect('/test-reports/fees'))->name('reports.fees');
+    Route::get('/reports/financial', fn() => redirect('/test-reports/financial'))->name('reports.financial');
 });
 
 require __DIR__.'/auth.php';
