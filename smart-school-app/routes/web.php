@@ -2682,4 +2682,422 @@ Route::prefix('test-transport')->middleware(['auth'])->group(function () {
     })->name('test.transport.report');
 });
 
+// Named route aliases for communication views (temporary - remove after backend is implemented)
+Route::middleware(['auth'])->group(function () {
+    // Notices routes
+    Route::get('/notices', fn() => redirect('/test-communication/notices'))->name('notices.index');
+    Route::get('/notices/create', fn() => redirect('/test-communication/notices/create'))->name('notices.create');
+    Route::post('/notices', fn() => back()->with('success', 'Notice created!'))->name('notices.store');
+    Route::get('/notices/{id}', fn($id) => redirect('/test-communication/notices/show'))->name('notices.show');
+    Route::get('/notices/{id}/edit', fn($id) => redirect('/test-communication/notices/edit'))->name('notices.edit');
+    Route::put('/notices/{id}', fn($id) => back()->with('success', 'Notice updated!'))->name('notices.update');
+    Route::delete('/notices/{id}', fn($id) => back()->with('success', 'Notice deleted!'))->name('notices.destroy');
+    Route::patch('/notices/{id}/toggle-publish', fn($id) => back()->with('success', 'Notice status updated!'))->name('notices.toggle-publish');
+    Route::post('/notices/{id}/send-sms', fn($id) => back()->with('success', 'SMS notifications sent!'))->name('notices.send-sms');
+    Route::post('/notices/{id}/send-email', fn($id) => back()->with('success', 'Email notifications sent!'))->name('notices.send-email');
+    Route::get('/notices/{id}/pdf', fn($id) => back())->name('notices.pdf');
+    Route::post('/notices/bulk-action', fn() => back()->with('success', 'Bulk action completed!'))->name('notices.bulk-action');
+    
+    // Messages routes
+    Route::get('/messages/inbox', fn() => redirect('/test-communication/messages/inbox'))->name('messages.inbox');
+    Route::get('/messages/sent', fn() => redirect('/test-communication/messages/sent'))->name('messages.sent');
+    Route::get('/messages/compose', fn() => redirect('/test-communication/messages/compose'))->name('messages.compose');
+    Route::post('/messages', fn() => back()->with('success', 'Message sent!'))->name('messages.store');
+    Route::get('/messages/{id}', fn($id) => redirect('/test-communication/messages/show'))->name('messages.show');
+    Route::delete('/messages/{id}', fn($id) => back()->with('success', 'Message deleted!'))->name('messages.destroy');
+    Route::post('/messages/{id}/reply', fn($id) => back()->with('success', 'Reply sent!'))->name('messages.reply');
+    Route::patch('/messages/{id}/toggle-read', fn($id) => back()->with('success', 'Message status updated!'))->name('messages.toggle-read');
+    Route::post('/messages/{id}/resend', fn($id) => back()->with('success', 'Message resent!'))->name('messages.resend');
+    Route::post('/messages/bulk-mark-read', fn() => back()->with('success', 'Messages marked as read!'))->name('messages.bulk-mark-read');
+    Route::post('/messages/bulk-mark-unread', fn() => back()->with('success', 'Messages marked as unread!'))->name('messages.bulk-mark-unread');
+    Route::delete('/messages/bulk-delete', fn() => back()->with('success', 'Messages deleted!'))->name('messages.bulk-delete');
+    Route::get('/messages/export', fn() => back())->name('messages.export');
+    
+    // SMS routes
+    Route::get('/sms/logs', fn() => redirect('/test-communication/sms/logs'))->name('sms.logs');
+    Route::get('/sms/send', fn() => redirect('/test-communication/sms/send'))->name('sms.send');
+    Route::post('/sms', fn() => back()->with('success', 'SMS sent!'))->name('sms.store');
+    Route::post('/sms/{id}/retry', fn($id) => back()->with('success', 'SMS retry initiated!'))->name('sms.retry');
+    Route::get('/sms/export', fn() => back())->name('sms.export');
+    Route::get('/sms/templates', fn() => redirect('/dashboard'))->name('sms.templates');
+});
+
+// Temporary test routes for Session 24 communication views (remove after testing)
+Route::prefix('test-communication')->middleware(['auth'])->group(function () {
+    // Notices List
+    Route::get('/notices', function () {
+        $notices = collect([
+            (object)[
+                'id' => 1,
+                'title' => 'Annual Sports Day Announcement',
+                'content' => 'We are pleased to announce that the Annual Sports Day will be held on February 15, 2026. All students are encouraged to participate.',
+                'notice_date' => '2026-01-08',
+                'expiry_date' => '2026-02-15',
+                'is_published' => true,
+                'target_roles' => ['student', 'parent', 'teacher'],
+                'target_classes' => [1, 2, 3],
+                'attachment' => null,
+                'publisher' => (object)['name' => 'Admin User'],
+                'created_at' => now()->subDays(2),
+                'updated_at' => now()->subDays(1),
+            ],
+            (object)[
+                'id' => 2,
+                'title' => 'Parent-Teacher Meeting Schedule',
+                'content' => 'Parent-Teacher meetings will be conducted on January 20, 2026 for all classes.',
+                'notice_date' => '2026-01-05',
+                'expiry_date' => '2026-01-20',
+                'is_published' => true,
+                'target_roles' => ['parent', 'teacher'],
+                'target_classes' => [],
+                'attachment' => 'notices/ptm-schedule.pdf',
+                'publisher' => (object)['name' => 'Principal'],
+                'created_at' => now()->subDays(5),
+                'updated_at' => now()->subDays(5),
+            ],
+            (object)[
+                'id' => 3,
+                'title' => 'Holiday Notice - Republic Day',
+                'content' => 'The school will remain closed on January 26, 2026 on account of Republic Day.',
+                'notice_date' => '2026-01-10',
+                'expiry_date' => '2026-01-26',
+                'is_published' => false,
+                'target_roles' => [],
+                'target_classes' => [],
+                'attachment' => null,
+                'publisher' => null,
+                'created_at' => now()->subDays(1),
+                'updated_at' => now()->subDays(1),
+            ],
+        ]);
+        
+        $classes = collect([
+            (object)['id' => 1, 'name' => 'Class 1'],
+            (object)['id' => 2, 'name' => 'Class 2'],
+            (object)['id' => 3, 'name' => 'Class 3'],
+            (object)['id' => 4, 'name' => 'Class 4'],
+            (object)['id' => 5, 'name' => 'Class 5'],
+        ]);
+        
+        $stats = [
+            'total' => 15,
+            'published' => 10,
+            'draft' => 3,
+            'expired' => 2,
+        ];
+        
+        return view('admin.notices.index', compact('notices', 'classes', 'stats'));
+    })->name('test.notices.index');
+
+    // Notices Create
+    Route::get('/notices/create', function () {
+        $classes = collect([
+            (object)['id' => 1, 'name' => 'Class 1'],
+            (object)['id' => 2, 'name' => 'Class 2'],
+            (object)['id' => 3, 'name' => 'Class 3'],
+            (object)['id' => 4, 'name' => 'Class 4'],
+            (object)['id' => 5, 'name' => 'Class 5'],
+        ]);
+        
+        return view('admin.notices.create', compact('classes'));
+    })->name('test.notices.create');
+
+    // Notices Edit
+    Route::get('/notices/edit', function () {
+        $notice = (object)[
+            'id' => 1,
+            'title' => 'Annual Sports Day Announcement',
+            'content' => 'We are pleased to announce that the Annual Sports Day will be held on February 15, 2026. All students are encouraged to participate in various sports events.',
+            'notice_date' => '2026-01-08',
+            'expiry_date' => '2026-02-15',
+            'is_published' => true,
+            'target_roles' => ['student', 'parent', 'teacher'],
+            'target_classes' => [1, 2, 3],
+            'attachment' => 'notices/sports-day-schedule.pdf',
+            'publisher' => (object)['name' => 'Admin User'],
+            'published_at' => now()->subDays(1),
+            'created_at' => now()->subDays(2),
+            'updated_at' => now()->subDays(1),
+        ];
+        
+        $classes = collect([
+            (object)['id' => 1, 'name' => 'Class 1'],
+            (object)['id' => 2, 'name' => 'Class 2'],
+            (object)['id' => 3, 'name' => 'Class 3'],
+            (object)['id' => 4, 'name' => 'Class 4'],
+            (object)['id' => 5, 'name' => 'Class 5'],
+        ]);
+        
+        return view('admin.notices.edit', compact('notice', 'classes'));
+    })->name('test.notices.edit');
+
+    // Notices Show
+    Route::get('/notices/show', function () {
+        $notice = (object)[
+            'id' => 1,
+            'title' => 'Annual Sports Day Announcement',
+            'content' => 'We are pleased to announce that the Annual Sports Day will be held on February 15, 2026. All students are encouraged to participate in various sports events including athletics, cricket, football, basketball, and indoor games. Parents are cordially invited to attend and cheer for their children.',
+            'notice_date' => '2026-01-08',
+            'expiry_date' => '2026-02-15',
+            'is_published' => true,
+            'target_roles' => ['student', 'parent', 'teacher'],
+            'target_classes' => [1, 2, 3],
+            'attachment' => 'notices/sports-day-schedule.pdf',
+            'publisher' => (object)['name' => 'Admin User'],
+            'published_at' => now()->subDays(1),
+            'created_at' => now()->subDays(2),
+            'updated_at' => now()->subDays(1),
+        ];
+        
+        $classes = collect([
+            (object)['id' => 1, 'name' => 'Class 1'],
+            (object)['id' => 2, 'name' => 'Class 2'],
+            (object)['id' => 3, 'name' => 'Class 3'],
+        ]);
+        
+        $recipientCount = 150;
+        
+        $recipients = collect([
+            (object)['name' => 'John Doe', 'role' => 'student', 'email' => 'john@example.com', 'phone' => '+1234567890'],
+            (object)['name' => 'Jane Smith', 'role' => 'parent', 'email' => 'jane@example.com', 'phone' => '+0987654321'],
+            (object)['name' => 'Bob Wilson', 'role' => 'teacher', 'email' => 'bob@example.com', 'phone' => '+1122334455'],
+        ]);
+        
+        return view('admin.notices.show', compact('notice', 'classes', 'recipientCount', 'recipients'));
+    })->name('test.notices.show');
+
+    // Messages Inbox
+    Route::get('/messages/inbox', function () {
+        $messages = collect([
+            (object)[
+                'id' => 1,
+                'subject' => 'Question about homework assignment',
+                'body' => 'Dear Teacher, I have a question about the math homework that was assigned yesterday. Could you please clarify problem number 5?',
+                'sender' => (object)['id' => 2, 'name' => 'John Parent', 'email' => 'john.parent@example.com', 'role' => 'parent'],
+                'is_read' => false,
+                'attachment' => null,
+                'priority' => 'normal',
+                'created_at' => now()->subHours(2),
+            ],
+            (object)[
+                'id' => 2,
+                'subject' => 'Leave Application for Student',
+                'body' => 'Dear Sir/Madam, I am writing to request leave for my child from January 15-17, 2026 due to a family function.',
+                'sender' => (object)['id' => 3, 'name' => 'Sarah Parent', 'email' => 'sarah.parent@example.com', 'role' => 'parent'],
+                'is_read' => true,
+                'attachment' => 'messages/leave-application.pdf',
+                'priority' => 'high',
+                'created_at' => now()->subDays(1),
+            ],
+            (object)[
+                'id' => 3,
+                'subject' => 'Staff Meeting Reminder',
+                'body' => 'This is a reminder that the staff meeting is scheduled for tomorrow at 3 PM in the conference room.',
+                'sender' => (object)['id' => 1, 'name' => 'Principal', 'email' => 'principal@school.com', 'role' => 'admin'],
+                'is_read' => true,
+                'attachment' => null,
+                'priority' => 'normal',
+                'created_at' => now()->subDays(2),
+            ],
+        ]);
+        
+        $stats = [
+            'total' => 25,
+            'unread' => 5,
+            'read' => 20,
+            'with_attachments' => 8,
+        ];
+        
+        return view('admin.messages.inbox', compact('messages', 'stats'));
+    })->name('test.messages.inbox');
+
+    // Messages Sent
+    Route::get('/messages/sent', function () {
+        $messages = collect([
+            (object)[
+                'id' => 4,
+                'subject' => 'Re: Question about homework assignment',
+                'body' => 'Dear Parent, Thank you for reaching out. Problem 5 requires you to use the quadratic formula...',
+                'recipients' => [
+                    (object)['id' => 2, 'name' => 'John Parent', 'role' => 'parent', 'pivot' => (object)['is_read' => true, 'read_at' => now()->subHours(1)]],
+                ],
+                'attachment' => null,
+                'priority' => 'normal',
+                'created_at' => now()->subHours(1),
+            ],
+            (object)[
+                'id' => 5,
+                'subject' => 'Fee Payment Reminder',
+                'body' => 'Dear Parents, This is a reminder that the fee payment for the current quarter is due by January 31, 2026.',
+                'recipients' => [
+                    (object)['id' => 2, 'name' => 'John Parent', 'role' => 'parent', 'pivot' => (object)['is_read' => true, 'read_at' => now()->subHours(5)]],
+                    (object)['id' => 3, 'name' => 'Sarah Parent', 'role' => 'parent', 'pivot' => (object)['is_read' => false, 'read_at' => null]],
+                    (object)['id' => 4, 'name' => 'Mike Parent', 'role' => 'parent', 'pivot' => (object)['is_read' => false, 'read_at' => null]],
+                ],
+                'attachment' => null,
+                'priority' => 'high',
+                'created_at' => now()->subDays(1),
+            ],
+        ]);
+        
+        $stats = [
+            'total' => 15,
+            'read' => 10,
+            'unread' => 5,
+            'this_week' => 8,
+        ];
+        
+        return view('admin.messages.sent', compact('messages', 'stats'));
+    })->name('test.messages.sent');
+
+    // Messages Compose
+    Route::get('/messages/compose', function () {
+        $classes = collect([
+            (object)['id' => 1, 'name' => 'Class 1'],
+            (object)['id' => 2, 'name' => 'Class 2'],
+            (object)['id' => 3, 'name' => 'Class 3'],
+            (object)['id' => 4, 'name' => 'Class 4'],
+            (object)['id' => 5, 'name' => 'Class 5'],
+        ]);
+        
+        $drafts = collect([
+            (object)['id' => 1, 'subject' => 'Draft: Meeting Agenda', 'updated_at' => now()->subHours(3)],
+            (object)['id' => 2, 'subject' => 'Draft: Event Announcement', 'updated_at' => now()->subDays(1)],
+        ]);
+        
+        $replyTo = null;
+        
+        return view('admin.messages.compose', compact('classes', 'drafts', 'replyTo'));
+    })->name('test.messages.compose');
+
+    // Messages Show
+    Route::get('/messages/show', function () {
+        $message = (object)[
+            'id' => 1,
+            'subject' => 'Question about homework assignment',
+            'body' => 'Dear Teacher, I have a question about the math homework that was assigned yesterday. Could you please clarify problem number 5? My child is having difficulty understanding the concept of quadratic equations and how to apply the formula. Any additional resources or explanation would be greatly appreciated.',
+            'sender' => (object)['id' => 2, 'name' => 'John Parent', 'email' => 'john.parent@example.com', 'phone' => '+1234567890', 'role' => 'parent'],
+            'recipients' => [
+                (object)['id' => 1, 'name' => 'Admin User', 'role' => 'admin', 'pivot' => (object)['is_read' => true, 'read_at' => now()->subHours(1)]],
+            ],
+            'is_read' => true,
+            'is_sent' => false,
+            'read_at' => now()->subHours(1),
+            'attachment' => null,
+            'priority' => 'normal',
+            'created_at' => now()->subHours(2),
+        ];
+        
+        $thread = collect([
+            (object)[
+                'id' => 4,
+                'body' => 'Thank you for reaching out. Problem 5 requires you to use the quadratic formula. I have attached some additional resources that might help.',
+                'sender' => (object)['id' => 1, 'name' => 'Admin User'],
+                'sender_id' => 1,
+                'attachment' => 'messages/quadratic-formula-guide.pdf',
+                'created_at' => now()->subHours(1),
+            ],
+        ]);
+        
+        return view('admin.messages.show', compact('message', 'thread'));
+    })->name('test.messages.show');
+
+    // SMS Logs
+    Route::get('/sms/logs', function () {
+        $logs = collect([
+            (object)[
+                'id' => 1,
+                'phone' => '+1234567890',
+                'message' => 'Dear Parent, Your child John was absent today. Please contact the school for more information.',
+                'recipient' => (object)['name' => 'John Parent'],
+                'recipient_type' => 'parent',
+                'type' => 'attendance',
+                'status' => 'delivered',
+                'credits_used' => 1,
+                'error_message' => null,
+                'created_at' => now()->subHours(2),
+            ],
+            (object)[
+                'id' => 2,
+                'phone' => '+0987654321',
+                'message' => 'Fee payment reminder: Your fee of Rs. 5000 is due by January 31, 2026.',
+                'recipient' => (object)['name' => 'Sarah Parent'],
+                'recipient_type' => 'parent',
+                'type' => 'fee',
+                'status' => 'delivered',
+                'credits_used' => 1,
+                'error_message' => null,
+                'created_at' => now()->subHours(5),
+            ],
+            (object)[
+                'id' => 3,
+                'phone' => '+1122334455',
+                'message' => 'Exam schedule: Mid-term exams will start from February 15, 2026.',
+                'recipient' => (object)['name' => 'Mike Parent'],
+                'recipient_type' => 'parent',
+                'type' => 'exam',
+                'status' => 'pending',
+                'credits_used' => 1,
+                'error_message' => null,
+                'created_at' => now()->subMinutes(30),
+            ],
+            (object)[
+                'id' => 4,
+                'phone' => '+5566778899',
+                'message' => 'School will remain closed on January 26, 2026 for Republic Day.',
+                'recipient' => (object)['name' => 'Lisa Parent'],
+                'recipient_type' => 'parent',
+                'type' => 'notice',
+                'status' => 'failed',
+                'credits_used' => 0,
+                'error_message' => 'Invalid phone number',
+                'created_at' => now()->subDays(1),
+            ],
+        ]);
+        
+        $stats = [
+            'total' => 150,
+            'delivered' => 140,
+            'pending' => 5,
+            'failed' => 5,
+            'this_month' => 45,
+        ];
+        
+        $smsCredits = 500;
+        
+        return view('admin.sms.logs', compact('logs', 'stats', 'smsCredits'));
+    })->name('test.sms.logs');
+
+    // SMS Send
+    Route::get('/sms/send', function () {
+        $classes = collect([
+            (object)['id' => 1, 'name' => 'Class 1', 'students_count' => 30],
+            (object)['id' => 2, 'name' => 'Class 2', 'students_count' => 28],
+            (object)['id' => 3, 'name' => 'Class 3', 'students_count' => 32],
+            (object)['id' => 4, 'name' => 'Class 4', 'students_count' => 25],
+            (object)['id' => 5, 'name' => 'Class 5', 'students_count' => 27],
+        ]);
+        
+        $roleCounts = [
+            'admin' => 5,
+            'teacher' => 25,
+            'student' => 200,
+            'parent' => 180,
+            'accountant' => 3,
+            'librarian' => 2,
+        ];
+        
+        $templates = collect([
+            (object)['id' => 1, 'name' => 'Absent Notification', 'content' => 'Dear Parent, Your child {name} was absent on {date}. Please contact the school.'],
+            (object)['id' => 2, 'name' => 'Fee Reminder', 'content' => 'Fee payment reminder: Your fee is due by {date}. Please pay at the earliest.'],
+            (object)['id' => 3, 'name' => 'Exam Schedule', 'content' => 'Exam schedule: {name} exams will start from {date}.'],
+            (object)['id' => 4, 'name' => 'Holiday Notice', 'content' => 'School will remain closed on {date} for {name}.'],
+        ]);
+        
+        $smsCredits = 500;
+        
+        return view('admin.sms.send', compact('classes', 'roleCounts', 'templates', 'smsCredits'));
+    })->name('test.sms.send');
+});
+
 require __DIR__.'/auth.php';
