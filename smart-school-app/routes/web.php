@@ -2131,4 +2131,555 @@ Route::prefix('test-hostels')->middleware(['auth'])->group(function () {
     })->name('test.hostels.report');
 });
 
+// Named route aliases for transport views (temporary - remove after backend is implemented)
+Route::middleware(['auth'])->group(function () {
+    Route::get('/transport/routes', fn() => redirect('/test-transport/routes'))->name('transport.routes.index');
+    Route::get('/transport/routes/create', fn() => redirect('/test-transport/routes/create'))->name('transport.routes.create');
+    Route::post('/transport/routes', fn() => back()->with('success', 'Route created!'))->name('transport.routes.store');
+    Route::get('/transport/routes/{id}', fn($id) => redirect('/test-transport/routes/show'))->name('transport.routes.show');
+    Route::get('/transport/routes/{id}/edit', fn($id) => redirect('/test-transport/routes/create'))->name('transport.routes.edit');
+    Route::put('/transport/routes/{id}', fn($id) => back()->with('success', 'Route updated!'))->name('transport.routes.update');
+    Route::delete('/transport/routes/{id}', fn($id) => back()->with('success', 'Route deleted!'))->name('transport.routes.destroy');
+        Route::get('/transport/routes/{id}/stops', fn($id) => redirect('/test-transport/stops'))->name('transport.routes.stops');
+        Route::post('/transport/routes/{id}/stops', fn($id) => back()->with('success', 'Stop added!'))->name('transport.routes.stops.store');
+        Route::put('/transport/routes/{id}/stops/{stopId}', fn($id, $stopId) => back()->with('success', 'Stop updated!'))->name('transport.routes.stops.update');
+        Route::delete('/transport/routes/{id}/stops/{stopId}', fn($id, $stopId) => back()->with('success', 'Stop deleted!'))->name('transport.routes.stops.destroy');
+        Route::post('/transport/routes/{id}/stops/{stopId}/move', fn($id, $stopId) => back()->with('success', 'Stop moved!'))->name('transport.routes.stops.move');
+        Route::get('/transport/routes/{id}/export', fn($id) => back()->with('success', 'Route exported!'))->name('transport.routes.export');
+    
+    Route::get('/transport/vehicles', fn() => redirect('/test-transport/vehicles'))->name('transport.vehicles.index');
+    Route::get('/transport/vehicles/create', fn() => redirect('/test-transport/vehicles/create'))->name('transport.vehicles.create');
+    Route::post('/transport/vehicles', fn() => back()->with('success', 'Vehicle created!'))->name('transport.vehicles.store');
+    Route::get('/transport/vehicles/{id}', fn($id) => redirect('/test-transport/vehicles/show'))->name('transport.vehicles.show');
+    Route::get('/transport/vehicles/{id}/edit', fn($id) => redirect('/test-transport/vehicles/create'))->name('transport.vehicles.edit');
+    Route::put('/transport/vehicles/{id}', fn($id) => back()->with('success', 'Vehicle updated!'))->name('transport.vehicles.update');
+    Route::delete('/transport/vehicles/{id}', fn($id) => back()->with('success', 'Vehicle deleted!'))->name('transport.vehicles.destroy');
+    
+    Route::get('/students/{id}', fn($id) => back())->name('students.show');
+    Route::get('/transport/students', fn() => redirect('/test-transport/students'))->name('transport.students.index');
+    Route::get('/transport/students/{id}/edit', fn($id) => redirect('/test-transport/assign'))->name('transport.students.edit');
+    Route::delete('/transport/students/{id}', fn($id) => back()->with('success', 'Transport removed!'))->name('transport.students.destroy');
+    Route::get('/transport/students/export', fn() => back()->with('success', 'Students exported!'))->name('transport.students.export');
+    
+    Route::get('/transport/assign', fn() => redirect('/test-transport/assign'))->name('transport.assign');
+    Route::post('/transport/assign', fn() => back()->with('success', 'Transport assigned!'))->name('transport.assign.store');
+    
+    Route::get('/transport/reports', fn() => redirect('/test-transport/report'))->name('transport.reports');
+    Route::get('/transport/reports/export', fn() => back()->with('success', 'Report exported!'))->name('transport.reports.export');
+});
+
+// Temporary test routes for Session 22 transport views (remove after testing)
+Route::prefix('test-transport')->middleware(['auth'])->group(function () {
+    // Transport Routes List
+    Route::get('/routes', function () {
+        return view('admin.transport.routes', [
+            'routes' => collect([
+                (object)[
+                    'id' => 1,
+                    'name' => 'North Zone Route',
+                    'route_number' => 'NZ-001',
+                    'description' => 'Covers northern residential areas including Green Valley and Sunrise Colony',
+                    'stops_count' => 8,
+                    'students_count' => 45,
+                    'vehicles_count' => 2,
+                    'is_active' => true,
+                    'created_at' => now()->subMonths(6),
+                ],
+                (object)[
+                    'id' => 2,
+                    'name' => 'South Zone Route',
+                    'route_number' => 'SZ-002',
+                    'description' => 'Covers southern areas including Lake View and Palm Gardens',
+                    'stops_count' => 6,
+                    'students_count' => 38,
+                    'vehicles_count' => 1,
+                    'is_active' => true,
+                    'created_at' => now()->subMonths(5),
+                ],
+                (object)[
+                    'id' => 3,
+                    'name' => 'East Zone Route',
+                    'route_number' => 'EZ-003',
+                    'description' => 'Covers eastern industrial area and nearby residential zones',
+                    'stops_count' => 5,
+                    'students_count' => 28,
+                    'vehicles_count' => 1,
+                    'is_active' => true,
+                    'created_at' => now()->subMonths(4),
+                ],
+                (object)[
+                    'id' => 4,
+                    'name' => 'West Zone Route',
+                    'route_number' => 'WZ-004',
+                    'description' => 'Covers western suburbs',
+                    'stops_count' => 4,
+                    'students_count' => 0,
+                    'vehicles_count' => 0,
+                    'is_active' => false,
+                    'created_at' => now()->subMonths(3),
+                ],
+            ]),
+        ]);
+    })->name('test.transport.routes');
+
+    // Transport Routes Create
+    Route::get('/routes/create', function () {
+        return view('admin.transport.routes-create');
+    })->name('test.transport.routes.create');
+
+    // Transport Route Details
+    Route::get('/routes/show', function () {
+        $route = (object)[
+            'id' => 1,
+            'name' => 'North Zone Route',
+            'route_number' => 'NZ-001',
+            'description' => 'Covers northern residential areas including Green Valley and Sunrise Colony',
+            'is_active' => true,
+            'created_at' => now()->subMonths(6),
+        ];
+        
+        $stops = collect([
+            (object)['id' => 1, 'stop_name' => 'Green Valley Gate', 'stop_order' => 1, 'stop_time' => '07:00:00', 'fare' => 500, 'students_count' => 8],
+            (object)['id' => 2, 'stop_name' => 'Sunrise Colony', 'stop_order' => 2, 'stop_time' => '07:10:00', 'fare' => 550, 'students_count' => 6],
+            (object)['id' => 3, 'stop_name' => 'Park Avenue', 'stop_order' => 3, 'stop_time' => '07:20:00', 'fare' => 600, 'students_count' => 10],
+            (object)['id' => 4, 'stop_name' => 'Central Market', 'stop_order' => 4, 'stop_time' => '07:30:00', 'fare' => 650, 'students_count' => 7],
+            (object)['id' => 5, 'stop_name' => 'City Hospital', 'stop_order' => 5, 'stop_time' => '07:40:00', 'fare' => 700, 'students_count' => 5],
+            (object)['id' => 6, 'stop_name' => 'Metro Station', 'stop_order' => 6, 'stop_time' => '07:50:00', 'fare' => 750, 'students_count' => 4],
+            (object)['id' => 7, 'stop_name' => 'Tech Park', 'stop_order' => 7, 'stop_time' => '08:00:00', 'fare' => 800, 'students_count' => 3],
+            (object)['id' => 8, 'stop_name' => 'School Gate', 'stop_order' => 8, 'stop_time' => '08:15:00', 'fare' => 0, 'students_count' => 2],
+        ]);
+        
+        $vehicles = collect([
+            (object)[
+                'id' => 1,
+                'vehicle_number' => 'KA-01-AB-1234',
+                'vehicle_type' => 'Bus',
+                'capacity' => 40,
+                'driver_name' => 'Ramesh Kumar',
+                'driver_phone' => '+91 9876543210',
+                'students_count' => 35,
+            ],
+            (object)[
+                'id' => 2,
+                'vehicle_number' => 'KA-01-CD-5678',
+                'vehicle_type' => 'Mini Bus',
+                'capacity' => 20,
+                'driver_name' => 'Suresh Babu',
+                'driver_phone' => '+91 9876543211',
+                'students_count' => 10,
+            ],
+        ]);
+        
+        $students = collect([
+            (object)[
+                'id' => 1,
+                'student_id' => 1,
+                'student' => (object)[
+                    'first_name' => 'Rahul',
+                    'last_name' => 'Sharma',
+                    'admission_number' => 'ADM001',
+                    'photo' => null,
+                    'class' => (object)['name' => 'Class 10'],
+                    'section' => (object)['name' => 'A'],
+                ],
+                'stop' => (object)['stop_name' => 'Green Valley Gate'],
+                'transport_fees' => 500,
+            ],
+            (object)[
+                'id' => 2,
+                'student_id' => 2,
+                'student' => (object)[
+                    'first_name' => 'Priya',
+                    'last_name' => 'Patel',
+                    'admission_number' => 'ADM002',
+                    'photo' => null,
+                    'class' => (object)['name' => 'Class 9'],
+                    'section' => (object)['name' => 'B'],
+                ],
+                'stop' => (object)['stop_name' => 'Sunrise Colony'],
+                'transport_fees' => 550,
+            ],
+        ]);
+        
+        return view('admin.transport.routes-show', compact('route', 'stops', 'vehicles', 'students'));
+    })->name('test.transport.routes.show');
+
+    // Transport Route Stops
+    Route::get('/stops', function () {
+        $route = (object)[
+            'id' => 1,
+            'name' => 'North Zone Route',
+            'route_number' => 'NZ-001',
+            'description' => 'Covers northern residential areas',
+            'is_active' => true,
+            'stops_count' => 8,
+            'vehicles_count' => 2,
+            'students_count' => 45,
+        ];
+        
+        $stops = collect([
+            (object)['id' => 1, 'stop_name' => 'Green Valley Gate', 'stop_order' => 1, 'stop_time' => '07:00:00', 'fare' => 500, 'students_count' => 8],
+            (object)['id' => 2, 'stop_name' => 'Sunrise Colony', 'stop_order' => 2, 'stop_time' => '07:10:00', 'fare' => 550, 'students_count' => 6],
+            (object)['id' => 3, 'stop_name' => 'Park Avenue', 'stop_order' => 3, 'stop_time' => '07:20:00', 'fare' => 600, 'students_count' => 10],
+            (object)['id' => 4, 'stop_name' => 'Central Market', 'stop_order' => 4, 'stop_time' => '07:30:00', 'fare' => 650, 'students_count' => 7],
+            (object)['id' => 5, 'stop_name' => 'City Hospital', 'stop_order' => 5, 'stop_time' => '07:40:00', 'fare' => 700, 'students_count' => 5],
+        ]);
+        
+        return view('admin.transport.stops', compact('route', 'stops'));
+    })->name('test.transport.stops');
+
+    // Transport Vehicles List
+    Route::get('/vehicles', function () {
+        $routes = collect([
+            (object)['id' => 1, 'name' => 'North Zone Route'],
+            (object)['id' => 2, 'name' => 'South Zone Route'],
+            (object)['id' => 3, 'name' => 'East Zone Route'],
+        ]);
+        
+        $vehicles = collect([
+            (object)[
+                'id' => 1,
+                'vehicle_number' => 'KA-01-AB-1234',
+                'vehicle_type' => 'Bus',
+                'vehicle_model' => 'Tata Starbus',
+                'capacity' => 40,
+                'driver_name' => 'Ramesh Kumar',
+                'driver_phone' => '+91 9876543210',
+                'driver_license' => 'KA0120210012345',
+                'route_id' => 1,
+                'route' => (object)['name' => 'North Zone Route'],
+                'students_count' => 35,
+                'is_active' => true,
+            ],
+            (object)[
+                'id' => 2,
+                'vehicle_number' => 'KA-01-CD-5678',
+                'vehicle_type' => 'Mini Bus',
+                'vehicle_model' => 'Force Traveller',
+                'capacity' => 20,
+                'driver_name' => 'Suresh Babu',
+                'driver_phone' => '+91 9876543211',
+                'driver_license' => 'KA0120210012346',
+                'route_id' => 1,
+                'route' => (object)['name' => 'North Zone Route'],
+                'students_count' => 10,
+                'is_active' => true,
+            ],
+            (object)[
+                'id' => 3,
+                'vehicle_number' => 'KA-01-EF-9012',
+                'vehicle_type' => 'Bus',
+                'vehicle_model' => 'Ashok Leyland',
+                'capacity' => 45,
+                'driver_name' => 'Mahesh Gowda',
+                'driver_phone' => '+91 9876543212',
+                'driver_license' => 'KA0120210012347',
+                'route_id' => 2,
+                'route' => (object)['name' => 'South Zone Route'],
+                'students_count' => 38,
+                'is_active' => true,
+            ],
+            (object)[
+                'id' => 4,
+                'vehicle_number' => 'KA-01-GH-3456',
+                'vehicle_type' => 'Van',
+                'vehicle_model' => 'Maruti Eeco',
+                'capacity' => 8,
+                'driver_name' => null,
+                'driver_phone' => null,
+                'driver_license' => null,
+                'route_id' => null,
+                'route' => null,
+                'students_count' => 0,
+                'is_active' => false,
+            ],
+        ]);
+        
+        return view('admin.transport.vehicles', compact('routes', 'vehicles'));
+    })->name('test.transport.vehicles');
+
+    // Transport Vehicles Create
+    Route::get('/vehicles/create', function () {
+        $routes = collect([
+            (object)['id' => 1, 'name' => 'North Zone Route', 'route_number' => 'NZ-001'],
+            (object)['id' => 2, 'name' => 'South Zone Route', 'route_number' => 'SZ-002'],
+            (object)['id' => 3, 'name' => 'East Zone Route', 'route_number' => 'EZ-003'],
+        ]);
+        
+        return view('admin.transport.vehicles-create', compact('routes'));
+    })->name('test.transport.vehicles.create');
+
+    // Transport Vehicle Details
+    Route::get('/vehicles/show', function () {
+        $vehicle = (object)[
+            'id' => 1,
+            'vehicle_number' => 'KA-01-AB-1234',
+            'vehicle_type' => 'Bus',
+            'vehicle_model' => 'Tata Starbus',
+            'capacity' => 40,
+            'driver_name' => 'Ramesh Kumar',
+            'driver_phone' => '+91 9876543210',
+            'driver_license' => 'KA0120210012345',
+            'route_id' => 1,
+            'route' => (object)['name' => 'North Zone Route', 'route_number' => 'NZ-001'],
+            'is_active' => true,
+        ];
+        
+        $students = collect([
+            (object)[
+                'id' => 1,
+                'student_id' => 1,
+                'student' => (object)[
+                    'first_name' => 'Rahul',
+                    'last_name' => 'Sharma',
+                    'admission_number' => 'ADM001',
+                    'photo' => null,
+                    'class' => (object)['name' => 'Class 10'],
+                    'section' => (object)['name' => 'A'],
+                ],
+                'stop' => (object)['stop_name' => 'Green Valley Gate', 'stop_time' => '07:00:00'],
+                'transport_fees' => 500,
+            ],
+            (object)[
+                'id' => 2,
+                'student_id' => 2,
+                'student' => (object)[
+                    'first_name' => 'Priya',
+                    'last_name' => 'Patel',
+                    'admission_number' => 'ADM002',
+                    'photo' => null,
+                    'class' => (object)['name' => 'Class 9'],
+                    'section' => (object)['name' => 'B'],
+                ],
+                'stop' => (object)['stop_name' => 'Sunrise Colony', 'stop_time' => '07:10:00'],
+                'transport_fees' => 550,
+            ],
+            (object)[
+                'id' => 3,
+                'student_id' => 3,
+                'student' => (object)[
+                    'first_name' => 'Amit',
+                    'last_name' => 'Kumar',
+                    'admission_number' => 'ADM003',
+                    'photo' => null,
+                    'class' => (object)['name' => 'Class 8'],
+                    'section' => (object)['name' => 'A'],
+                ],
+                'stop' => (object)['stop_name' => 'Park Avenue', 'stop_time' => '07:20:00'],
+                'transport_fees' => 600,
+            ],
+        ]);
+        
+        return view('admin.transport.vehicles-show', compact('vehicle', 'students'));
+    })->name('test.transport.vehicles.show');
+
+    // Transport Students List
+    Route::get('/students', function () {
+        $routes = collect([
+            (object)['id' => 1, 'name' => 'North Zone Route'],
+            (object)['id' => 2, 'name' => 'South Zone Route'],
+        ]);
+        
+        $vehicles = collect([
+            (object)['id' => 1, 'vehicle_number' => 'KA-01-AB-1234'],
+            (object)['id' => 2, 'vehicle_number' => 'KA-01-CD-5678'],
+        ]);
+        
+        $classes = collect([
+            (object)['id' => 1, 'name' => 'Class 10'],
+            (object)['id' => 2, 'name' => 'Class 9'],
+            (object)['id' => 3, 'name' => 'Class 8'],
+        ]);
+        
+        $transportStudents = collect([
+            (object)[
+                'id' => 1,
+                'student_id' => 1,
+                'student' => (object)[
+                    'first_name' => 'Rahul',
+                    'last_name' => 'Sharma',
+                    'admission_number' => 'ADM001',
+                    'photo' => null,
+                    'class_id' => 1,
+                    'class' => (object)['name' => 'Class 10'],
+                    'section' => (object)['name' => 'A'],
+                ],
+                'route_id' => 1,
+                'route' => (object)['name' => 'North Zone Route'],
+                'stop' => (object)['stop_name' => 'Green Valley Gate', 'stop_time' => '07:00:00'],
+                'vehicle_id' => 1,
+                'vehicle' => (object)['vehicle_number' => 'KA-01-AB-1234', 'driver_name' => 'Ramesh Kumar', 'driver_phone' => '+91 9876543210'],
+                'transport_fees' => 500,
+            ],
+            (object)[
+                'id' => 2,
+                'student_id' => 2,
+                'student' => (object)[
+                    'first_name' => 'Priya',
+                    'last_name' => 'Patel',
+                    'admission_number' => 'ADM002',
+                    'photo' => null,
+                    'class_id' => 2,
+                    'class' => (object)['name' => 'Class 9'],
+                    'section' => (object)['name' => 'B'],
+                ],
+                'route_id' => 1,
+                'route' => (object)['name' => 'North Zone Route'],
+                'stop' => (object)['stop_name' => 'Sunrise Colony', 'stop_time' => '07:10:00'],
+                'vehicle_id' => 1,
+                'vehicle' => (object)['vehicle_number' => 'KA-01-AB-1234', 'driver_name' => 'Ramesh Kumar', 'driver_phone' => '+91 9876543210'],
+                'transport_fees' => 550,
+            ],
+            (object)[
+                'id' => 3,
+                'student_id' => 3,
+                'student' => (object)[
+                    'first_name' => 'Amit',
+                    'last_name' => 'Kumar',
+                    'admission_number' => 'ADM003',
+                    'photo' => null,
+                    'class_id' => 3,
+                    'class' => (object)['name' => 'Class 8'],
+                    'section' => (object)['name' => 'A'],
+                ],
+                'route_id' => 2,
+                'route' => (object)['name' => 'South Zone Route'],
+                'stop' => (object)['stop_name' => 'Lake View', 'stop_time' => '07:15:00'],
+                'vehicle_id' => 2,
+                'vehicle' => (object)['vehicle_number' => 'KA-01-CD-5678', 'driver_name' => 'Suresh Babu', 'driver_phone' => '+91 9876543211'],
+                'transport_fees' => 600,
+            ],
+        ]);
+        
+        return view('admin.transport.students', compact('routes', 'vehicles', 'classes', 'transportStudents'));
+    })->name('test.transport.students');
+
+    // Transport Assign
+    Route::get('/assign', function () {
+        $sessions = collect([
+            (object)['id' => 1, 'name' => '2025-2026'],
+        ]);
+        
+        $classes = collect([
+            (object)['id' => 1, 'name' => 'Class 10'],
+            (object)['id' => 2, 'name' => 'Class 9'],
+        ]);
+        
+        $sections = collect([
+            (object)['id' => 1, 'name' => 'Section A'],
+            (object)['id' => 2, 'name' => 'Section B'],
+        ]);
+        
+        $routes = collect([
+            (object)['id' => 1, 'name' => 'North Zone Route', 'stops_count' => 8, 'students_count' => 45],
+            (object)['id' => 2, 'name' => 'South Zone Route', 'stops_count' => 6, 'students_count' => 38],
+        ]);
+        
+        $stops = collect([
+            (object)['id' => 1, 'route_id' => 1, 'stop_name' => 'Green Valley Gate', 'fare' => 500],
+            (object)['id' => 2, 'route_id' => 1, 'stop_name' => 'Sunrise Colony', 'fare' => 550],
+            (object)['id' => 3, 'route_id' => 2, 'stop_name' => 'Lake View', 'fare' => 600],
+        ]);
+        
+        $vehicles = collect([
+            (object)['id' => 1, 'vehicle_number' => 'KA-01-AB-1234'],
+            (object)['id' => 2, 'vehicle_number' => 'KA-01-CD-5678'],
+        ]);
+        
+        $students = collect([
+            (object)[
+                'id' => 1,
+                'first_name' => 'Rahul',
+                'last_name' => 'Sharma',
+                'admission_number' => 'ADM001',
+                'photo' => null,
+                'class' => (object)['name' => 'Class 10'],
+                'section' => (object)['name' => 'A'],
+                'transportAssignment' => (object)['route_id' => 1, 'stop_id' => 1, 'vehicle_id' => 1, 'transport_fees' => 500],
+            ],
+            (object)[
+                'id' => 2,
+                'first_name' => 'Priya',
+                'last_name' => 'Patel',
+                'admission_number' => 'ADM002',
+                'photo' => null,
+                'class' => (object)['name' => 'Class 10'],
+                'section' => (object)['name' => 'A'],
+                'transportAssignment' => null,
+            ],
+            (object)[
+                'id' => 3,
+                'first_name' => 'Amit',
+                'last_name' => 'Kumar',
+                'admission_number' => 'ADM003',
+                'photo' => null,
+                'class' => (object)['name' => 'Class 10'],
+                'section' => (object)['name' => 'A'],
+                'transportAssignment' => null,
+            ],
+        ]);
+        
+        return view('admin.transport.assign', compact('sessions', 'classes', 'sections', 'routes', 'stops', 'vehicles', 'students'));
+    })->name('test.transport.assign');
+
+    // Transport Report
+    Route::get('/report', function () {
+        $sessions = collect([
+            (object)['id' => 1, 'name' => '2025-2026'],
+        ]);
+        
+        $routes = collect([
+            (object)['id' => 1, 'name' => 'North Zone Route'],
+            (object)['id' => 2, 'name' => 'South Zone Route'],
+            (object)['id' => 3, 'name' => 'East Zone Route'],
+        ]);
+        
+        $vehicles = collect([
+            (object)['id' => 1, 'vehicle_number' => 'KA-01-AB-1234'],
+            (object)['id' => 2, 'vehicle_number' => 'KA-01-CD-5678'],
+            (object)['id' => 3, 'vehicle_number' => 'KA-01-EF-9012'],
+        ]);
+        
+        $stats = [
+            'total_routes' => 4,
+            'total_vehicles' => 4,
+            'total_students' => 111,
+            'total_fees' => 62500,
+            'collected_fees' => 48750,
+            'pending_fees' => 13750,
+        ];
+        
+        $routeStats = [
+            ['id' => 1, 'name' => 'North Zone Route', 'route_number' => 'NZ-001', 'stops_count' => 8, 'students_count' => 45, 'vehicles_count' => 2, 'total_fees' => 25000, 'collected_fees' => 20000, 'pending_fees' => 5000],
+            ['id' => 2, 'name' => 'South Zone Route', 'route_number' => 'SZ-002', 'stops_count' => 6, 'students_count' => 38, 'vehicles_count' => 1, 'total_fees' => 21000, 'collected_fees' => 17500, 'pending_fees' => 3500],
+            ['id' => 3, 'name' => 'East Zone Route', 'route_number' => 'EZ-003', 'stops_count' => 5, 'students_count' => 28, 'vehicles_count' => 1, 'total_fees' => 16500, 'collected_fees' => 11250, 'pending_fees' => 5250],
+        ];
+        
+        $stopStats = [
+            ['stop_name' => 'Green Valley Gate', 'students_count' => 12],
+            ['stop_name' => 'Sunrise Colony', 'students_count' => 10],
+            ['stop_name' => 'Park Avenue', 'students_count' => 15],
+            ['stop_name' => 'Central Market', 'students_count' => 8],
+            ['stop_name' => 'Lake View', 'students_count' => 14],
+            ['stop_name' => 'Palm Gardens', 'students_count' => 11],
+            ['stop_name' => 'Industrial Area', 'students_count' => 9],
+            ['stop_name' => 'Tech Park', 'students_count' => 7],
+        ];
+        
+        $vehicleStats = [
+            ['vehicle_number' => 'KA-01-AB-1234', 'capacity' => 40, 'students_count' => 35],
+            ['vehicle_number' => 'KA-01-CD-5678', 'capacity' => 20, 'students_count' => 10],
+            ['vehicle_number' => 'KA-01-EF-9012', 'capacity' => 45, 'students_count' => 38],
+            ['vehicle_number' => 'KA-01-GH-3456', 'capacity' => 30, 'students_count' => 28],
+        ];
+        
+        $feeCollectionTrend = [
+            'labels' => ['Aug', 'Sep', 'Oct', 'Nov', 'Dec', 'Jan'],
+            'data' => [5000, 8500, 12000, 9500, 7250, 6500],
+        ];
+        
+        return view('admin.transport.report', compact('sessions', 'routes', 'vehicles', 'stats', 'routeStats', 'stopStats', 'vehicleStats', 'feeCollectionTrend'));
+    })->name('test.transport.report');
+});
+
 require __DIR__.'/auth.php';
