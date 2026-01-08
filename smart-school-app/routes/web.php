@@ -1517,8 +1517,12 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/transport/routes/{id}/edit', fn($id) => redirect('/test-transport/routes/create'))->name('transport.routes.edit');
     Route::put('/transport/routes/{id}', fn($id) => back()->with('success', 'Route updated!'))->name('transport.routes.update');
     Route::delete('/transport/routes/{id}', fn($id) => back()->with('success', 'Route deleted!'))->name('transport.routes.destroy');
-    Route::get('/transport/routes/{id}/stops', fn($id) => redirect('/test-transport/stops'))->name('transport.routes.stops');
-    Route::get('/transport/routes/{id}/export', fn($id) => back()->with('success', 'Route exported!'))->name('transport.routes.export');
+        Route::get('/transport/routes/{id}/stops', fn($id) => redirect('/test-transport/stops'))->name('transport.routes.stops');
+        Route::post('/transport/routes/{id}/stops', fn($id) => back()->with('success', 'Stop added!'))->name('transport.routes.stops.store');
+        Route::put('/transport/routes/{id}/stops/{stopId}', fn($id, $stopId) => back()->with('success', 'Stop updated!'))->name('transport.routes.stops.update');
+        Route::delete('/transport/routes/{id}/stops/{stopId}', fn($id, $stopId) => back()->with('success', 'Stop deleted!'))->name('transport.routes.stops.destroy');
+        Route::post('/transport/routes/{id}/stops/{stopId}/move', fn($id, $stopId) => back()->with('success', 'Stop moved!'))->name('transport.routes.stops.move');
+        Route::get('/transport/routes/{id}/export', fn($id) => back()->with('success', 'Route exported!'))->name('transport.routes.export');
     
     Route::get('/transport/vehicles', fn() => redirect('/test-transport/vehicles'))->name('transport.vehicles.index');
     Route::get('/transport/vehicles/create', fn() => redirect('/test-transport/vehicles/create'))->name('transport.vehicles.create');
@@ -1528,6 +1532,7 @@ Route::middleware(['auth'])->group(function () {
     Route::put('/transport/vehicles/{id}', fn($id) => back()->with('success', 'Vehicle updated!'))->name('transport.vehicles.update');
     Route::delete('/transport/vehicles/{id}', fn($id) => back()->with('success', 'Vehicle deleted!'))->name('transport.vehicles.destroy');
     
+    Route::get('/students/{id}', fn($id) => back())->name('students.show');
     Route::get('/transport/students', fn() => redirect('/test-transport/students'))->name('transport.students.index');
     Route::get('/transport/students/{id}/edit', fn($id) => redirect('/test-transport/assign'))->name('transport.students.edit');
     Route::delete('/transport/students/{id}', fn($id) => back()->with('success', 'Transport removed!'))->name('transport.students.destroy');

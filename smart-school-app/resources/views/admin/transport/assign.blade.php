@@ -428,12 +428,18 @@ function transportAssignManager() {
         },
         selectedStudents: [],
         selectAll: false,
-        assignments: @json(collect($students ?? [])->mapWithKeys(fn($s) => [$s->id => [
-            'route_id' => $s->transportAssignment->route_id ?? '',
-            'stop_id' => $s->transportAssignment->stop_id ?? '',
-            'vehicle_id' => $s->transportAssignment->vehicle_id ?? '',
-            'transport_fees' => $s->transportAssignment->transport_fees ?? ''
-        ]])),
+        assignments: @php
+            $assignmentData = [];
+            foreach ($students ?? [] as $s) {
+                $assignmentData[$s->id] = [
+                    'route_id' => $s->transportAssignment->route_id ?? '',
+                    'stop_id' => $s->transportAssignment->stop_id ?? '',
+                    'vehicle_id' => $s->transportAssignment->vehicle_id ?? '',
+                    'transport_fees' => $s->transportAssignment->transport_fees ?? ''
+                ];
+            }
+            echo json_encode($assignmentData);
+        @endphp,
         totalStudents: {{ count($students ?? []) }},
         applyType: '',
         applyValue: '',

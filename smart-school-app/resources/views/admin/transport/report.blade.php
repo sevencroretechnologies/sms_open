@@ -438,7 +438,13 @@ function transportReports() {
                             },
                             {
                                 label: 'Available',
-                                data: @json(collect($vehicleStats ?? [])->map(fn($v) => $v['capacity'] - $v['students_count'])),
+                                data: @php
+                                    $availableData = [];
+                                    foreach ($vehicleStats ?? [] as $v) {
+                                        $availableData[] = $v['capacity'] - $v['students_count'];
+                                    }
+                                    echo json_encode($availableData);
+                                @endphp,
                                 backgroundColor: '#e9ecef'
                             }
                         ]
@@ -470,10 +476,10 @@ function transportReports() {
                 new Chart(feeCtx, {
                     type: 'line',
                     data: {
-                        labels: @json($feeCollectionTrend['labels'] ?? ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun']),
+                        labels: {!! json_encode($feeCollectionTrend['labels'] ?? ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun']) !!},
                         datasets: [{
                             label: 'Collected Fees',
-                            data: @json($feeCollectionTrend['data'] ?? [0, 0, 0, 0, 0, 0]),
+                            data: {!! json_encode($feeCollectionTrend['data'] ?? [0, 0, 0, 0, 0, 0]) !!},
                             borderColor: '#198754',
                             backgroundColor: 'rgba(25, 135, 84, 0.1)',
                             fill: true,
