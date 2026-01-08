@@ -14,7 +14,7 @@
             <nav aria-label="breadcrumb">
                 <ol class="breadcrumb mb-0">
                     <li class="breadcrumb-item"><a href="{{ route('dashboard') }}">Dashboard</a></li>
-                    <li class="breadcrumb-item"><a href="{{ route('attendance.index') }}">Attendance</a></li>
+                    <li class="breadcrumb-item"><a href="{{ Route::has('attendance.index') ? route('attendance.index') : '#' }}">Attendance</a></li>
                     <li class="breadcrumb-item active">Mark Attendance</li>
                 </ol>
             </nav>
