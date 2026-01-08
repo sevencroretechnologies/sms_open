@@ -15,13 +15,13 @@
                 <ol class="breadcrumb mb-0">
                     <li class="breadcrumb-item"><a href="{{ route('dashboard') }}">Dashboard</a></li>
                     <li class="breadcrumb-item"><a href="{{ route('exams.index') }}">Exams</a></li>
-                    <li class="breadcrumb-item"><a href="{{ route('exams.marks') }}">Marks</a></li>
+                    <li class="breadcrumb-item"><a href="{{ route('admin.exams.marks') }}">Marks</a></li>
                     <li class="breadcrumb-item active">Edit</li>
                 </ol>
             </nav>
         </div>
         <div class="d-flex gap-2 mt-3 mt-md-0">
-            <a href="{{ route('exams.marks') }}" class="btn btn-outline-secondary">
+            <a href="{{ route('admin.exams.marks') }}" class="btn btn-outline-secondary">
                 <i class="bi bi-arrow-left me-1"></i> Back to Marks
             </a>
         </div>
@@ -115,7 +115,7 @@
     </x-card>
 
     <!-- Edit Form -->
-    <form action="{{ route('exams.marks.update', $mark->id) }}" method="POST" @submit="saving = true">
+    <form action="#" method="POST" @submit="saving = true">
         @csrf
         @method('PUT')
         
@@ -232,7 +232,7 @@
                             <span class="text-muted">Last Updated:</span>
                             <span>{{ $mark->updated_at ? $mark->updated_at->format('M d, Y h:i A') : 'N/A' }}</span>
                         </div>
-                        @if($mark->updated_by)
+                        @if(isset($mark->updated_by) && $mark->updated_by)
                         <div>
                             <span class="text-muted">Updated By:</span>
                             <span>{{ $mark->updatedBy->name ?? 'N/A' }}</span>
@@ -245,7 +245,7 @@
 
         <!-- Action Buttons -->
         <div class="d-flex justify-content-end gap-2 mt-4">
-            <a href="{{ route('exams.marks') }}" class="btn btn-outline-secondary">
+            <a href="{{ route('admin.exams.marks') }}" class="btn btn-outline-secondary">
                 <i class="bi bi-x-lg me-1"></i> Cancel
             </a>
             <button type="submit" class="btn btn-primary" :disabled="saving">
@@ -332,8 +332,8 @@ function marksEditManager() {
     return {
         form: {
             obtainedMarks: {{ old('obtained_marks', $mark->obtained_marks ?? 0) }},
-            grade: '{{ old('grade', $mark->grade ?? '') }}',
-            remarks: '{{ old('remarks', $mark->remarks ?? '') }}'
+            grade: '{{ old('grade', is_string($mark->grade ?? '') ? ($mark->grade ?? '') : '') }}',
+            remarks: '{{ old('remarks', is_string($mark->remarks ?? '') ? ($mark->remarks ?? '') : '') }}'
         },
         fullMarks: {{ $mark->examSchedule->full_marks ?? 100 }},
         passingMarks: {{ $mark->examSchedule->passing_marks ?? 35 }},

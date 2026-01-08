@@ -412,7 +412,7 @@
             </a>
         </div>
         <div class="col-md-3">
-            <a href="{{ route('exams.report') }}" class="card text-decoration-none h-100">
+            <a href="#" class="card text-decoration-none h-100">
                 <div class="card-body text-center">
                     <i class="bi bi-graph-up fs-1 text-warning mb-2 d-block"></i>
                     <h6 class="mb-0">Reports</h6>
@@ -421,7 +421,7 @@
             </a>
         </div>
         <div class="col-md-3">
-            <a href="{{ route('exams.results') }}" class="card text-decoration-none h-100">
+            <a href="#" class="card text-decoration-none h-100">
                 <div class="card-body text-center">
                     <i class="bi bi-file-earmark-text fs-1 text-info mb-2 d-block"></i>
                     <h6 class="mb-0">Result Cards</h6>

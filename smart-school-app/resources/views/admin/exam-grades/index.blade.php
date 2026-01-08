@@ -280,7 +280,7 @@
             </a>
         </div>
         <div class="col-md-4">
-            <a href="{{ route('exams.marks') }}" class="card text-decoration-none h-100">
+            <a href="{{ route('admin.exams.marks') }}" class="card text-decoration-none h-100">
                 <div class="card-body text-center">
                     <i class="bi bi-clipboard-data fs-1 text-warning mb-2 d-block"></i>
                     <h6 class="mb-0">View Marks</h6>
