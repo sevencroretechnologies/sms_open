@@ -127,14 +127,18 @@
                         @endif
                     >
                         <option value="">{{ $filter['placeholder'] ?? 'All' }}</option>
-                        @foreach($filter['options'] ?? [] as $value => $label)
-                        <option 
-                            value="{{ $value }}"
-                            {{ request($filter['name'] ?? '') == $value ? 'selected' : '' }}
-                        >
-                            {{ $label }}
-                        </option>
-                        @endforeach
+                                                @foreach($filter['options'] ?? [] as $key => $option)
+                                                @php
+                                                    $optValue = is_array($option) ? ($option['value'] ?? $option['id'] ?? $key) : $key;
+                                                    $optLabel = is_array($option) ? ($option['label'] ?? $option['name'] ?? $option) : $option;
+                                                @endphp
+                                                <option 
+                                                    value="{{ $optValue }}"
+                                                    {{ request($filter['name'] ?? '') == $optValue ? 'selected' : '' }}
+                                                >
+                                                    {{ $optLabel }}
+                                                </option>
+                                                @endforeach
                     </select>
                     @elseif(($filter['type'] ?? '') === 'date')
                     <label class="form-label small fw-medium">{{ $filter['label'] ?? ucfirst($filter['name'] ?? '') }}</label>

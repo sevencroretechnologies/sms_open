@@ -157,10 +157,10 @@
             @endforeach
         @else
             @foreach($options as $key => $option)
-            @php
-                $optValue = is_object($option) ? $option->{$optionValue} : (is_array($option) ? $option[$optionValue] : $key);
-                $optLabel = is_object($option) ? $option->{$optionLabel} : (is_array($option) ? $option[$optionLabel] : $option);
-            @endphp
+                        @php
+                            $optValue = is_object($option) ? $option->{$optionValue} : (is_array($option) ? ($option[$optionValue] ?? $option['value'] ?? $key) : $key);
+                            $optLabel = is_object($option) ? $option->{$optionLabel} : (is_array($option) ? ($option[$optionLabel] ?? $option['label'] ?? $option) : $option);
+                        @endphp
             <option 
                 value="{{ $optValue }}"
                 {{ (is_array($selectedValue) ? in_array($optValue, $selectedValue) : $selectedValue == $optValue) ? 'selected' : '' }}

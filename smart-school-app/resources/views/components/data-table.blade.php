@@ -213,9 +213,13 @@
                             >
                         </td>
                         @endif
-                        @foreach($columns as $column)
-                        <td x-text="row['{{ $column['key'] }}']"></td>
-                        @endforeach
+                                                @foreach($columns as $column)
+                                                @if($column['html'] ?? false)
+                                                <td x-html="row['{{ $column['key'] }}']"></td>
+                                                @else
+                                                <td x-text="row['{{ $column['key'] }}']"></td>
+                                                @endif
+                                                @endforeach
                     </tr>
                 </template>
             </tbody>
