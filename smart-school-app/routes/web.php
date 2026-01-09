@@ -345,6 +345,23 @@ Route::prefix('admin')
             Route::get('/import-export', [\App\Http\Controllers\Admin\SettingsController::class, 'importExport'])->name('import-export');
             Route::get('/help', [\App\Http\Controllers\Admin\SettingsController::class, 'help'])->name('help');
             Route::get('/about', [\App\Http\Controllers\Admin\SettingsController::class, 'about'])->name('about');
+            
+            // Language Management (Prompt 496)
+            Route::prefix('languages')->name('languages.')->group(function () {
+                Route::get('/', [\App\Http\Controllers\Admin\LanguageController::class, 'index'])->name('index');
+                Route::get('/create', [\App\Http\Controllers\Admin\LanguageController::class, 'create'])->name('create');
+                Route::post('/', [\App\Http\Controllers\Admin\LanguageController::class, 'store'])->name('store');
+                Route::get('/{language}/edit', [\App\Http\Controllers\Admin\LanguageController::class, 'edit'])->name('edit');
+                Route::put('/{language}', [\App\Http\Controllers\Admin\LanguageController::class, 'update'])->name('update');
+                Route::delete('/{language}', [\App\Http\Controllers\Admin\LanguageController::class, 'destroy'])->name('destroy');
+                Route::post('/{language}/toggle', [\App\Http\Controllers\Admin\LanguageController::class, 'toggle'])->name('toggle');
+                Route::get('/{language}/translations', [\App\Http\Controllers\Admin\LanguageController::class, 'translations'])->name('translations');
+                Route::post('/{language}/translations', [\App\Http\Controllers\Admin\LanguageController::class, 'updateTranslation'])->name('translations.update');
+                Route::get('/export', [\App\Http\Controllers\Admin\LanguageController::class, 'export'])->name('export');
+                Route::get('/import', [\App\Http\Controllers\Admin\LanguageController::class, 'importForm'])->name('import');
+                Route::post('/import', [\App\Http\Controllers\Admin\LanguageController::class, 'import'])->name('import.store');
+                Route::post('/sync', [\App\Http\Controllers\Admin\LanguageController::class, 'sync'])->name('sync');
+            });
         });
     });
 
