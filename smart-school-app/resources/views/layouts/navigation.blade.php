@@ -27,16 +27,16 @@
             <div class="menu-header">Academic</div>
             
             @can('students.view')
-            <a href="javascript:void(0)" class="nav-link sidebar-dropdown-toggle" onclick="toggleSubmenu('studentsMenu', this)">
+            <a href="#studentsMenu" class="nav-link" data-bs-toggle="collapse" aria-expanded="false" aria-controls="studentsMenu">
                 <i class="bi bi-people"></i>
                 <span>Students</span>
-                <i class="bi bi-chevron-down ms-auto small dropdown-icon"></i>
+                <i class="bi bi-chevron-down ms-auto small"></i>
             </a>
-            <div class="sidebar-submenu" id="studentsMenu" style="display: none;">
-                <a href="{{ route('admin.students.index') }}" class="nav-link submenu-item">All Students</a>
-                <a href="{{ route('admin.students.create') }}" class="nav-link submenu-item">Add Student</a>
-                <a href="{{ route('admin.student-categories.index') }}" class="nav-link submenu-item">Student Categories</a>
-                <a href="{{ route('admin.promotions.index') }}" class="nav-link submenu-item">Promotions</a>
+            <div class="collapse" id="studentsMenu">
+                <a href="{{ route('admin.students.index') }}" class="nav-link ps-5">All Students</a>
+                <a href="{{ route('admin.students.create') }}" class="nav-link ps-5">Add Student</a>
+                <a href="{{ route('admin.student-categories.index') }}" class="nav-link ps-5">Student Categories</a>
+                <a href="{{ route('admin.promotions.index') }}" class="nav-link ps-5">Promotions</a>
             </div>
             @endcan
             
