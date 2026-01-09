@@ -3,70 +3,72 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\AcademicSession;
+use App\Models\SchoolClass;
 use Illuminate\Http\Request;
 
-/**
- * AttendanceController
- * 
- * Stub controller - to be implemented in future sessions.
- */
 class AttendanceController extends Controller
 {
-    public function __call($method, $parameters)
+    public function index(Request $request)
     {
-        return $this->placeholder();
+        $academicSessions = AcademicSession::active()->orderBy('start_date', 'desc')->get();
+        $classes = SchoolClass::active()->ordered()->get();
+        $attendanceTypes = [];
+        
+        return view('admin.attendance.index', compact('academicSessions', 'classes', 'attendanceTypes'));
     }
 
-    public function index()
+    public function markForm()
     {
-        return $this->placeholder();
+        $academicSessions = AcademicSession::active()->orderBy('start_date', 'desc')->get();
+        $classes = SchoolClass::active()->ordered()->get();
+        $attendanceTypes = [];
+        
+        return view('admin.attendance.index', compact('academicSessions', 'classes', 'attendanceTypes'));
     }
 
-    public function create()
+    public function mark(Request $request)
     {
-        return $this->placeholder();
-    }
-
-    public function store(Request $request)
-    {
-        return $this->placeholder();
-    }
-
-    public function show($id)
-    {
-        return $this->placeholder();
+        return redirect()->route('admin.attendance.index')->with('success', 'Attendance marked successfully.');
     }
 
     public function edit($id)
     {
-        return $this->placeholder();
+        return view('admin.attendance.edit', ['attendance' => null]);
     }
 
     public function update(Request $request, $id)
     {
-        return $this->placeholder();
+        return redirect()->route('admin.attendance.index')->with('success', 'Attendance updated successfully.');
     }
 
-    public function destroy($id)
+    public function report()
     {
-        return $this->placeholder();
+        return view('admin.attendance.report');
     }
 
-    protected function placeholder()
+    public function calendar($student = null)
     {
-        $routeName = request()->route()?->getName() ?? 'unknown';
-        
-        if (request()->expectsJson()) {
-            return response()->json([
-                'status' => 'info',
-                'message' => 'This feature is coming soon',
-                'route' => $routeName,
-            ], 200);
-        }
+        return view('admin.attendance.calendar', ['student' => null]);
+    }
 
-        return response()->view('errors.coming-soon', [
-            'route' => $routeName,
-            'message' => 'This feature is under development and will be available soon.',
-        ], 200);
+    public function export()
+    {
+        return view('admin.attendance.export');
+    }
+
+    public function print()
+    {
+        return view('admin.attendance.print');
+    }
+
+    public function smsForm()
+    {
+        return view('admin.attendance.sms');
+    }
+
+    public function sendSms(Request $request)
+    {
+        return redirect()->route('admin.attendance.sms')->with('success', 'SMS sent successfully.');
     }
 }

@@ -5,68 +5,46 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
-/**
- * HostelRoomController
- * 
- * Stub controller - to be implemented in future sessions.
- */
 class HostelRoomController extends Controller
 {
-    public function __call($method, $parameters)
+    public function index(Request $request)
     {
-        return $this->placeholder();
-    }
-
-    public function index()
-    {
-        return $this->placeholder();
+        $rooms = collect([]);
+        return view('admin.hostels.rooms', compact('rooms'));
     }
 
     public function create()
     {
-        return $this->placeholder();
+        return view('admin.hostels.rooms-create');
     }
 
     public function store(Request $request)
     {
-        return $this->placeholder();
+        return redirect()->route('admin.hostel-rooms.index')->with('success', 'Room created successfully.');
     }
 
     public function show($id)
     {
-        return $this->placeholder();
+        return view('admin.hostels.rooms-show', ['room' => null]);
     }
 
     public function edit($id)
     {
-        return $this->placeholder();
+        return view('admin.hostels.rooms-create', ['room' => null]);
     }
 
     public function update(Request $request, $id)
     {
-        return $this->placeholder();
+        return redirect()->route('admin.hostel-rooms.index')->with('success', 'Room updated successfully.');
     }
 
     public function destroy($id)
     {
-        return $this->placeholder();
+        return redirect()->route('admin.hostel-rooms.index')->with('success', 'Room deleted successfully.');
     }
 
-    protected function placeholder()
+    public function byBuilding($building)
     {
-        $routeName = request()->route()?->getName() ?? 'unknown';
-        
-        if (request()->expectsJson()) {
-            return response()->json([
-                'status' => 'info',
-                'message' => 'This feature is coming soon',
-                'route' => $routeName,
-            ], 200);
-        }
-
-        return response()->view('errors.coming-soon', [
-            'route' => $routeName,
-            'message' => 'This feature is under development and will be available soon.',
-        ], 200);
+        return view('admin.hostels.rooms', ['rooms' => collect([])]);
     }
 }

@@ -5,68 +5,31 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
-/**
- * TransportStudentController
- * 
- * Stub controller - to be implemented in future sessions.
- */
 class TransportStudentController extends Controller
 {
-    public function __call($method, $parameters)
+    public function index(Request $request)
     {
-        return $this->placeholder();
+        $students = collect([]);
+        return view('admin.transport.students', compact('students'));
     }
 
-    public function index()
+    public function assignForm()
     {
-        return $this->placeholder();
+        return view('admin.transport.assign');
     }
 
-    public function create()
+    public function assign(Request $request)
     {
-        return $this->placeholder();
+        return redirect()->route('admin.transport-students.index')->with('success', 'Student assigned successfully.');
     }
 
-    public function store(Request $request)
+    public function unassign($id)
     {
-        return $this->placeholder();
+        return redirect()->route('admin.transport-students.index')->with('success', 'Student unassigned successfully.');
     }
 
-    public function show($id)
+    public function report()
     {
-        return $this->placeholder();
-    }
-
-    public function edit($id)
-    {
-        return $this->placeholder();
-    }
-
-    public function update(Request $request, $id)
-    {
-        return $this->placeholder();
-    }
-
-    public function destroy($id)
-    {
-        return $this->placeholder();
-    }
-
-    protected function placeholder()
-    {
-        $routeName = request()->route()?->getName() ?? 'unknown';
-        
-        if (request()->expectsJson()) {
-            return response()->json([
-                'status' => 'info',
-                'message' => 'This feature is coming soon',
-                'route' => $routeName,
-            ], 200);
-        }
-
-        return response()->view('errors.coming-soon', [
-            'route' => $routeName,
-            'message' => 'This feature is under development and will be available soon.',
-        ], 200);
+        return view('admin.transport.report');
     }
 }

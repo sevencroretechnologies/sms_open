@@ -220,23 +220,41 @@
         /* Sidebar Collapse Styles */
         .sidebar-menu .collapse {
             padding-left: 0;
-            background: rgba(0, 0, 0, 0.15);
+            background: rgba(0, 0, 0, 0.2);
+            border-left: 2px solid var(--primary-color);
+            margin-left: 1rem;
         }
         
         .sidebar-menu .collapse .nav-link,
         .sidebar-menu .collapse a.nav-link {
-            padding-left: 3rem !important;
-            font-size: 0.9rem;
-            color: rgba(255, 255, 255, 0.8) !important;
+            padding: 0.6rem 1rem 0.6rem 1.5rem !important;
+            font-size: 0.875rem;
+            color: rgba(255, 255, 255, 0.85) !important;
             display: block !important;
-            padding-top: 0.5rem;
-            padding-bottom: 0.5rem;
+            border-left: none;
+            position: relative;
+        }
+        
+        .sidebar-menu .collapse .nav-link::before {
+            content: '';
+            position: absolute;
+            left: 0.5rem;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.4);
         }
         
         .sidebar-menu .collapse .nav-link:hover,
         .sidebar-menu .collapse a.nav-link:hover {
             color: #fff !important;
-            background: rgba(255, 255, 255, 0.1);
+            background: rgba(255, 255, 255, 0.15);
+        }
+        
+        .sidebar-menu .collapse .nav-link:hover::before {
+            background: var(--primary-color);
         }
         
         .sidebar-menu .nav-link[data-bs-toggle="collapse"] {
@@ -259,6 +277,16 @@
             height: 0;
             overflow: hidden;
             transition: height 0.35s ease;
+        }
+        
+        /* Active submenu item */
+        .sidebar-menu .collapse .nav-link.active {
+            color: #fff !important;
+            background: rgba(79, 70, 229, 0.3);
+        }
+        
+        .sidebar-menu .collapse .nav-link.active::before {
+            background: var(--primary-color);
         }
     </style>
     
@@ -413,29 +441,31 @@
             }, 5000);
         });
         
-        // Initialize sidebar collapse menus
-        document.querySelectorAll('.sidebar-menu .nav-link[data-bs-toggle="collapse"]').forEach(function(link) {
-            link.addEventListener('click', function(e) {
-                e.preventDefault();
-                const targetId = this.getAttribute('href');
-                const target = document.querySelector(targetId);
-                if (target) {
-                    // Close other open menus
-                    document.querySelectorAll('.sidebar-menu .collapse.show').forEach(function(openMenu) {
-                        if (openMenu.id !== targetId.substring(1)) {
-                            openMenu.classList.remove('show');
-                            const openLink = document.querySelector('[href="#' + openMenu.id + '"]');
-                            if (openLink) {
-                                openLink.setAttribute('aria-expanded', 'false');
-                            }
-                        }
-                    });
-                    // Toggle current menu
-                    target.classList.toggle('show');
-                    this.setAttribute('aria-expanded', target.classList.contains('show'));
+        // Pure JavaScript toggle function for sidebar submenus
+        window.toggleSubmenu = function(element) {
+            var submenu = element.nextElementSibling;
+            var icon = element.querySelector('.toggle-icon');
+            
+            // Close all other submenus first (accordion behavior)
+            document.querySelectorAll('.sidebar-submenu').forEach(function(menu) {
+                if (menu !== submenu && menu.style.display === 'block') {
+                    menu.style.display = 'none';
+                    var parentIcon = menu.previousElementSibling.querySelector('.toggle-icon');
+                    if (parentIcon) {
+                        parentIcon.style.transform = 'rotate(0deg)';
+                    }
                 }
             });
-        });
+            
+            // Toggle current submenu
+            if (submenu.style.display === 'none' || submenu.style.display === '') {
+                submenu.style.display = 'block';
+                if (icon) icon.style.transform = 'rotate(180deg)';
+            } else {
+                submenu.style.display = 'none';
+                if (icon) icon.style.transform = 'rotate(0deg)';
+            }
+        };
     </script>
     
     @stack('scripts')

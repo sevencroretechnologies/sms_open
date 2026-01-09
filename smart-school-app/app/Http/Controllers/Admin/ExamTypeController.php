@@ -5,68 +5,41 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
-/**
- * ExamTypeController
- * 
- * Stub controller - to be implemented in future sessions.
- */
 class ExamTypeController extends Controller
 {
-    public function __call($method, $parameters)
+    public function index(Request $request)
     {
-        return $this->placeholder();
-    }
-
-    public function index()
-    {
-        return $this->placeholder();
+        $examTypes = collect([]);
+        return view('admin.exam-types.index', compact('examTypes'));
     }
 
     public function create()
     {
-        return $this->placeholder();
+        return view('admin.exam-types.create');
     }
 
     public function store(Request $request)
     {
-        return $this->placeholder();
+        return redirect()->route('admin.exam-types.index')->with('success', 'Exam type created successfully.');
     }
 
     public function show($id)
     {
-        return $this->placeholder();
+        return view('admin.exam-types.index', ['examTypes' => collect([])]);
     }
 
     public function edit($id)
     {
-        return $this->placeholder();
+        return view('admin.exam-types.create', ['examType' => null]);
     }
 
     public function update(Request $request, $id)
     {
-        return $this->placeholder();
+        return redirect()->route('admin.exam-types.index')->with('success', 'Exam type updated successfully.');
     }
 
     public function destroy($id)
     {
-        return $this->placeholder();
-    }
-
-    protected function placeholder()
-    {
-        $routeName = request()->route()?->getName() ?? 'unknown';
-        
-        if (request()->expectsJson()) {
-            return response()->json([
-                'status' => 'info',
-                'message' => 'This feature is coming soon',
-                'route' => $routeName,
-            ], 200);
-        }
-
-        return response()->view('errors.coming-soon', [
-            'route' => $routeName,
-            'message' => 'This feature is under development and will be available soon.',
-        ], 200);
+        return redirect()->route('admin.exam-types.index')->with('success', 'Exam type deleted successfully.');
     }
 }

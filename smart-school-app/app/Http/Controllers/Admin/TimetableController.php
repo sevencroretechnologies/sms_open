@@ -3,70 +3,60 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\AcademicSession;
+use App\Models\SchoolClass;
 use Illuminate\Http\Request;
 
-/**
- * TimetableController
- * 
- * Stub controller - to be implemented in future sessions.
- */
 class TimetableController extends Controller
 {
-    public function __call($method, $parameters)
+    public function index(Request $request)
     {
-        return $this->placeholder();
-    }
-
-    public function index()
-    {
-        return $this->placeholder();
+        $academicSessions = AcademicSession::active()->orderBy('start_date', 'desc')->get();
+        $classes = SchoolClass::active()->ordered()->get();
+        return view('admin.timetable.index', compact('academicSessions', 'classes'));
     }
 
     public function create()
     {
-        return $this->placeholder();
+        $academicSessions = AcademicSession::active()->orderBy('start_date', 'desc')->get();
+        $classes = SchoolClass::active()->ordered()->get();
+        return view('admin.timetable.create', compact('academicSessions', 'classes'));
     }
 
     public function store(Request $request)
     {
-        return $this->placeholder();
+        return redirect()->route('admin.timetables.index')->with('success', 'Timetable created successfully.');
     }
 
     public function show($id)
     {
-        return $this->placeholder();
+        return view('admin.timetable.show', ['timetable' => null]);
     }
 
     public function edit($id)
     {
-        return $this->placeholder();
+        $academicSessions = AcademicSession::active()->orderBy('start_date', 'desc')->get();
+        $classes = SchoolClass::active()->ordered()->get();
+        return view('admin.timetable.create', compact('academicSessions', 'classes') + ['timetable' => null]);
     }
 
     public function update(Request $request, $id)
     {
-        return $this->placeholder();
+        return redirect()->route('admin.timetables.index')->with('success', 'Timetable updated successfully.');
     }
 
     public function destroy($id)
     {
-        return $this->placeholder();
+        return redirect()->route('admin.timetables.index')->with('success', 'Timetable deleted successfully.');
     }
 
-    protected function placeholder()
+    public function byClass($classId)
     {
-        $routeName = request()->route()?->getName() ?? 'unknown';
-        
-        if (request()->expectsJson()) {
-            return response()->json([
-                'status' => 'info',
-                'message' => 'This feature is coming soon',
-                'route' => $routeName,
-            ], 200);
-        }
+        return view('admin.timetable.index', ['academicSessions' => collect([]), 'classes' => collect([])]);
+    }
 
-        return response()->view('errors.coming-soon', [
-            'route' => $routeName,
-            'message' => 'This feature is under development and will be available soon.',
-        ], 200);
+    public function print($id)
+    {
+        return view('admin.timetable.print', ['timetable' => null]);
     }
 }

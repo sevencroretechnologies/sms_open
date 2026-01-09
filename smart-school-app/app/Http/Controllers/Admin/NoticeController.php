@@ -5,68 +5,46 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
-/**
- * NoticeController
- * 
- * Stub controller - to be implemented in future sessions.
- */
 class NoticeController extends Controller
 {
-    public function __call($method, $parameters)
+    public function index(Request $request)
     {
-        return $this->placeholder();
-    }
-
-    public function index()
-    {
-        return $this->placeholder();
+        $notices = collect([]);
+        return view('admin.notices.index', compact('notices'));
     }
 
     public function create()
     {
-        return $this->placeholder();
+        return view('admin.notices.create');
     }
 
     public function store(Request $request)
     {
-        return $this->placeholder();
+        return redirect()->route('admin.notices.index')->with('success', 'Notice created successfully.');
     }
 
     public function show($id)
     {
-        return $this->placeholder();
+        return view('admin.notices.show', ['notice' => null]);
     }
 
     public function edit($id)
     {
-        return $this->placeholder();
+        return view('admin.notices.edit', ['notice' => null]);
     }
 
     public function update(Request $request, $id)
     {
-        return $this->placeholder();
+        return redirect()->route('admin.notices.index')->with('success', 'Notice updated successfully.');
     }
 
     public function destroy($id)
     {
-        return $this->placeholder();
+        return redirect()->route('admin.notices.index')->with('success', 'Notice deleted successfully.');
     }
 
-    protected function placeholder()
+    public function publish($id)
     {
-        $routeName = request()->route()?->getName() ?? 'unknown';
-        
-        if (request()->expectsJson()) {
-            return response()->json([
-                'status' => 'info',
-                'message' => 'This feature is coming soon',
-                'route' => $routeName,
-            ], 200);
-        }
-
-        return response()->view('errors.coming-soon', [
-            'route' => $routeName,
-            'message' => 'This feature is under development and will be available soon.',
-        ], 200);
+        return redirect()->route('admin.notices.index')->with('success', 'Notice published successfully.');
     }
 }

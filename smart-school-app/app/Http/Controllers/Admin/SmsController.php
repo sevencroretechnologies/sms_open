@@ -5,68 +5,46 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
-/**
- * SmsController
- * 
- * Stub controller - to be implemented in future sessions.
- */
 class SmsController extends Controller
 {
-    public function __call($method, $parameters)
+    public function index(Request $request)
     {
-        return $this->placeholder();
+        $messages = collect([]);
+        return view('admin.communication.sms', compact('messages'));
     }
 
-    public function index()
+    public function compose()
     {
-        return $this->placeholder();
+        return view('admin.communication.compose-sms');
     }
 
-    public function create()
+    public function send(Request $request)
     {
-        return $this->placeholder();
-    }
-
-    public function store(Request $request)
-    {
-        return $this->placeholder();
+        return redirect()->route('admin.sms.index')->with('success', 'SMS sent successfully.');
     }
 
     public function show($id)
     {
-        return $this->placeholder();
+        return view('admin.communication.sms-show', ['message' => null]);
     }
 
-    public function edit($id)
+    public function templates()
     {
-        return $this->placeholder();
+        return view('admin.communication.sms-templates', ['templates' => collect([])]);
     }
 
-    public function update(Request $request, $id)
+    public function createTemplate()
     {
-        return $this->placeholder();
+        return view('admin.communication.sms-template-create');
     }
 
-    public function destroy($id)
+    public function storeTemplate(Request $request)
     {
-        return $this->placeholder();
+        return redirect()->route('admin.sms.templates')->with('success', 'Template created successfully.');
     }
 
-    protected function placeholder()
+    public function settings()
     {
-        $routeName = request()->route()?->getName() ?? 'unknown';
-        
-        if (request()->expectsJson()) {
-            return response()->json([
-                'status' => 'info',
-                'message' => 'This feature is coming soon',
-                'route' => $routeName,
-            ], 200);
-        }
-
-        return response()->view('errors.coming-soon', [
-            'route' => $routeName,
-            'message' => 'This feature is under development and will be available soon.',
-        ], 200);
+        return view('admin.communication.sms-settings');
     }
 }

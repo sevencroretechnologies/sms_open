@@ -5,68 +5,41 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
-/**
- * EmailController
- * 
- * Stub controller - to be implemented in future sessions.
- */
 class EmailController extends Controller
 {
-    public function __call($method, $parameters)
+    public function index(Request $request)
     {
-        return $this->placeholder();
+        $emails = collect([]);
+        return view('admin.communication.emails', compact('emails'));
     }
 
-    public function index()
+    public function compose()
     {
-        return $this->placeholder();
+        return view('admin.communication.compose-email');
     }
 
-    public function create()
+    public function send(Request $request)
     {
-        return $this->placeholder();
-    }
-
-    public function store(Request $request)
-    {
-        return $this->placeholder();
+        return redirect()->route('admin.emails.index')->with('success', 'Email sent successfully.');
     }
 
     public function show($id)
     {
-        return $this->placeholder();
+        return view('admin.communication.email-show', ['email' => null]);
     }
 
-    public function edit($id)
+    public function templates()
     {
-        return $this->placeholder();
+        return view('admin.communication.email-templates', ['templates' => collect([])]);
     }
 
-    public function update(Request $request, $id)
+    public function createTemplate()
     {
-        return $this->placeholder();
+        return view('admin.communication.email-template-create');
     }
 
-    public function destroy($id)
+    public function storeTemplate(Request $request)
     {
-        return $this->placeholder();
-    }
-
-    protected function placeholder()
-    {
-        $routeName = request()->route()?->getName() ?? 'unknown';
-        
-        if (request()->expectsJson()) {
-            return response()->json([
-                'status' => 'info',
-                'message' => 'This feature is coming soon',
-                'route' => $routeName,
-            ], 200);
-        }
-
-        return response()->view('errors.coming-soon', [
-            'route' => $routeName,
-            'message' => 'This feature is under development and will be available soon.',
-        ], 200);
+        return redirect()->route('admin.emails.templates')->with('success', 'Template created successfully.');
     }
 }

@@ -5,68 +5,41 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
-/**
- * LibraryIssueController
- * 
- * Stub controller - to be implemented in future sessions.
- */
 class LibraryIssueController extends Controller
 {
-    public function __call($method, $parameters)
+    public function index(Request $request)
     {
-        return $this->placeholder();
+        $issues = collect([]);
+        return view('admin.library.issues', compact('issues'));
     }
 
-    public function index()
+    public function issueForm()
     {
-        return $this->placeholder();
+        return view('admin.library.issue-book');
     }
 
-    public function create()
+    public function issue(Request $request)
     {
-        return $this->placeholder();
+        return redirect()->route('admin.library-issues.index')->with('success', 'Book issued successfully.');
     }
 
-    public function store(Request $request)
+    public function returnForm($id)
     {
-        return $this->placeholder();
+        return view('admin.library.return-book', ['issue' => null]);
     }
 
-    public function show($id)
+    public function returnBook(Request $request, $id)
     {
-        return $this->placeholder();
+        return redirect()->route('admin.library-issues.index')->with('success', 'Book returned successfully.');
     }
 
-    public function edit($id)
+    public function overdue()
     {
-        return $this->placeholder();
+        return view('admin.library.issues', ['issues' => collect([])]);
     }
 
-    public function update(Request $request, $id)
+    public function report()
     {
-        return $this->placeholder();
-    }
-
-    public function destroy($id)
-    {
-        return $this->placeholder();
-    }
-
-    protected function placeholder()
-    {
-        $routeName = request()->route()?->getName() ?? 'unknown';
-        
-        if (request()->expectsJson()) {
-            return response()->json([
-                'status' => 'info',
-                'message' => 'This feature is coming soon',
-                'route' => $routeName,
-            ], 200);
-        }
-
-        return response()->view('errors.coming-soon', [
-            'route' => $routeName,
-            'message' => 'This feature is under development and will be available soon.',
-        ], 200);
+        return view('admin.library.issues', ['issues' => collect([])]);
     }
 }

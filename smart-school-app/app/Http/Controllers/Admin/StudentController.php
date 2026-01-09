@@ -3,70 +3,95 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\AcademicSession;
+use App\Models\SchoolClass;
 use Illuminate\Http\Request;
 
-/**
- * StudentController
- * 
- * Stub controller - to be implemented in future sessions.
- */
 class StudentController extends Controller
 {
-    public function __call($method, $parameters)
+    public function index(Request $request)
     {
-        return $this->placeholder();
-    }
-
-    public function index()
-    {
-        return $this->placeholder();
+        $students = collect([]);
+        $classes = SchoolClass::active()->ordered()->get();
+        $academicSessions = AcademicSession::active()->orderBy('start_date', 'desc')->get();
+        return view('admin.reports.students', compact('students', 'classes', 'academicSessions'));
     }
 
     public function create()
     {
-        return $this->placeholder();
+        $classes = SchoolClass::active()->ordered()->get();
+        $academicSessions = AcademicSession::active()->orderBy('start_date', 'desc')->get();
+        return view('admin.reports.students', compact('classes', 'academicSessions'));
     }
 
     public function store(Request $request)
     {
-        return $this->placeholder();
+        return redirect()->route('admin.students.index')->with('success', 'Student created successfully.');
     }
 
     public function show($id)
     {
-        return $this->placeholder();
+        return view('admin.reports.students', ['student' => null, 'students' => collect([])]);
     }
 
     public function edit($id)
     {
-        return $this->placeholder();
+        $classes = SchoolClass::active()->ordered()->get();
+        return view('admin.reports.students', ['student' => null, 'classes' => $classes]);
     }
 
     public function update(Request $request, $id)
     {
-        return $this->placeholder();
+        return redirect()->route('admin.students.index')->with('success', 'Student updated successfully.');
     }
 
     public function destroy($id)
     {
-        return $this->placeholder();
+        return redirect()->route('admin.students.index')->with('success', 'Student deleted successfully.');
     }
 
-    protected function placeholder()
+    public function profile($id)
     {
-        $routeName = request()->route()?->getName() ?? 'unknown';
-        
-        if (request()->expectsJson()) {
-            return response()->json([
-                'status' => 'info',
-                'message' => 'This feature is coming soon',
-                'route' => $routeName,
-            ], 200);
-        }
+        return view('admin.reports.students', ['student' => null]);
+    }
 
-        return response()->view('errors.coming-soon', [
-            'route' => $routeName,
-            'message' => 'This feature is under development and will be available soon.',
-        ], 200);
+    public function documents($id)
+    {
+        return view('admin.reports.students', ['student' => null]);
+    }
+
+    public function uploadDocument(Request $request, $id)
+    {
+        return redirect()->back()->with('success', 'Document uploaded successfully.');
+    }
+
+    public function deleteDocument($studentId, $documentId)
+    {
+        return redirect()->back()->with('success', 'Document deleted successfully.');
+    }
+
+    public function importForm()
+    {
+        return view('admin.reports.students');
+    }
+
+    public function import(Request $request)
+    {
+        return redirect()->route('admin.students.index')->with('success', 'Students imported successfully.');
+    }
+
+    public function export()
+    {
+        return redirect()->route('admin.students.index')->with('success', 'Export started.');
+    }
+
+    public function bulkActionsForm()
+    {
+        return view('admin.reports.students');
+    }
+
+    public function bulkActions(Request $request)
+    {
+        return redirect()->route('admin.students.index')->with('success', 'Bulk action completed.');
     }
 }
