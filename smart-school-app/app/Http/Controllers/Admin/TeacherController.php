@@ -10,12 +10,12 @@ class TeacherController extends Controller
     public function index(Request $request)
     {
         $teachers = collect([]);
-        return view('admin.reports.index', compact('teachers'));
+        return view('admin.teachers.index', compact('teachers'));
     }
 
     public function create()
     {
-        return view('admin.reports.index');
+        return view('admin.teachers.create');
     }
 
     public function store(Request $request)
@@ -25,12 +25,12 @@ class TeacherController extends Controller
 
     public function show($id)
     {
-        return view('admin.reports.index', ['teacher' => null]);
+        return view('admin.teachers.show', ['teacher' => null]);
     }
 
     public function edit($id)
     {
-        return view('admin.reports.index', ['teacher' => null]);
+        return view('admin.teachers.create', ['teacher' => null]);
     }
 
     public function update(Request $request, $id)
