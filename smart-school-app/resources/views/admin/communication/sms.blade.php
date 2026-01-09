@@ -148,7 +148,7 @@
             </table>
         </div>
 
-        @if(isset($messages) && $messages->hasPages())
+        @if(isset($messages) && method_exists($messages, 'hasPages') && $messages->hasPages())
         <x-slot name="footer">
             {{ $messages->links() }}
         </x-slot>

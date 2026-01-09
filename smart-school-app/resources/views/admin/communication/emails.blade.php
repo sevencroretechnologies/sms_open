@@ -145,7 +145,7 @@
             </table>
         </div>
 
-        @if(isset($emails) && $emails->hasPages())
+        @if(isset($emails) && method_exists($emails, 'hasPages') && $emails->hasPages())
         <x-slot name="footer">
             {{ $emails->links() }}
         </x-slot>

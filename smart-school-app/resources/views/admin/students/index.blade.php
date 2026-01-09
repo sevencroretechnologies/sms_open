@@ -128,7 +128,7 @@
                             </div>
                         </div>
                         <div class="flex-grow-1 ms-3">
-                            <h3 class="mb-0" x-text="stats.total">{{ $students->total() ?? 0 }}</h3>
+                            <h3 class="mb-0" x-text="stats.total">{{ method_exists($students, 'total') ? $students->total() : $students->count() }}</h3>
                             <small class="text-muted">Total Students</small>
                         </div>
                     </div>
@@ -195,7 +195,7 @@
                 <span>
                     <i class="bi bi-people me-2"></i>
                     Student List
-                    <span class="badge bg-primary ms-2">{{ $students->total() ?? 0 }}</span>
+                    <span class="badge bg-primary ms-2">{{ method_exists($students, 'total') ? $students->total() : $students->count() }}</span>
                 </span>
                 <div class="d-flex align-items-center gap-2">
                     <label class="text-muted small mb-0">Show</label>
@@ -226,7 +226,7 @@
                 <tbody>
                     @forelse($students ?? [] as $index => $student)
                         <tr>
-                            <td>{{ $students->firstItem() + $index }}</td>
+                            <td>{{ (method_exists($students, 'firstItem') ? $students->firstItem() : 1) + $index }}</td>
                             <td>
                                 <div class="d-flex align-items-center gap-2">
                                     <span class="d-inline-flex align-items-center justify-content-center rounded bg-primary bg-opacity-10 text-primary" style="width: 36px; height: 36px;">
@@ -282,7 +282,7 @@
             </table>
         </div>
 
-        @if(isset($students) && $students->hasPages())
+        @if(isset($students) && method_exists($students, 'hasPages') && $students->hasPages())
         <x-slot name="footer">
             <div class="d-flex flex-column flex-md-row justify-content-between align-items-center gap-2">
                 <div class="text-muted small">
@@ -339,7 +339,7 @@ function studentsListManager() {
         },
         perPage: 15,
         stats: {
-            total: {{ $students->total() ?? 0 }},
+            total: {{ method_exists($students, 'total') ? $students->total() : $students->count() }},
             active: 0,
             male: 0,
             female: 0

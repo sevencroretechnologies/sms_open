@@ -136,7 +136,7 @@
             </table>
         </div>
 
-        @if(isset($teachers) && $teachers->hasPages())
+        @if(isset($teachers) && method_exists($teachers, 'hasPages') && $teachers->hasPages())
         <x-slot name="footer">
             {{ $teachers->links() }}
         </x-slot>

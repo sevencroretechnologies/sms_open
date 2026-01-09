@@ -89,7 +89,7 @@
         @endforelse
     </div>
 
-    @if(isset($templates) && $templates->hasPages())
+    @if(isset($templates) && method_exists($templates, 'hasPages') && $templates->hasPages())
         <div class="mt-4">
             {{ $templates->links() }}
         </div>
