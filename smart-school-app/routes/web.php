@@ -292,6 +292,14 @@ Route::prefix('admin')
         Route::resource('parents', \App\Http\Controllers\Admin\ParentController::class);
         Route::get('parents/{parent}/children', [\App\Http\Controllers\Admin\ParentController::class, 'children'])->name('parents.children');
         
+        // Roles
+        Route::resource('roles', \App\Http\Controllers\Admin\RoleController::class);
+        Route::get('roles/{role}/permissions', [\App\Http\Controllers\Admin\RoleController::class, 'permissions'])->name('roles.permissions');
+        Route::post('roles/{role}/permissions', [\App\Http\Controllers\Admin\RoleController::class, 'updatePermissions'])->name('roles.permissions.update');
+        
+        // Users
+        Route::resource('users', \App\Http\Controllers\Admin\UserController::class);
+        
         // Reports
         Route::prefix('reports')->name('reports.')->group(function () {
             Route::get('/', [\App\Http\Controllers\Admin\ReportController::class, 'index'])->name('index');

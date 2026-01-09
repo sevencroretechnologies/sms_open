@@ -47,8 +47,8 @@
                 <i class="bi bi-chevron-down ms-auto small toggle-icon"></i>
             </a>
             <div class="sidebar-submenu" style="display: none; background: rgba(0,0,0,0.2); margin-left: 15px; border-left: 2px solid #4f46e5;">
-                <a href="#" class="nav-link" style="padding: 8px 15px; font-size: 14px; color: #e2e8f0;">• All Teachers</a>
-                <a href="#" class="nav-link" style="padding: 8px 15px; font-size: 14px; color: #e2e8f0;">• Add Teacher</a>
+                <a href="{{ route('admin.teachers.index') }}" class="nav-link" style="padding: 8px 15px; font-size: 14px; color: #e2e8f0;">• All Teachers</a>
+                <a href="{{ route('admin.teachers.create') }}" class="nav-link" style="padding: 8px 15px; font-size: 14px; color: #e2e8f0;">• Add Teacher</a>
             </div>
             @endcan
             
@@ -193,11 +193,11 @@
                 <i class="bi bi-chevron-down ms-auto small toggle-icon"></i>
             </a>
             <div class="sidebar-submenu" style="display: none; background: rgba(0,0,0,0.2); margin-left: 15px; border-left: 2px solid #4f46e5;">
-                <a href="#" class="nav-link" style="padding: 8px 15px; font-size: 14px; color: #e2e8f0;">• General Settings</a>
+                <a href="{{ route('admin.settings.general') }}" class="nav-link" style="padding: 8px 15px; font-size: 14px; color: #e2e8f0;">• General Settings</a>
                 <a href="{{ route('admin.academic-sessions.index') }}" class="nav-link" style="padding: 8px 15px; font-size: 14px; color: #e2e8f0;">• Academic Sessions</a>
                 <a href="{{ route('admin.settings.languages.index') }}" class="nav-link" style="padding: 8px 15px; font-size: 14px; color: #e2e8f0;">• Languages</a>
-                <a href="#" class="nav-link" style="padding: 8px 15px; font-size: 14px; color: #e2e8f0;">• SMS Settings</a>
-                <a href="#" class="nav-link" style="padding: 8px 15px; font-size: 14px; color: #e2e8f0;">• Email Settings</a>
+                <a href="{{ route('admin.sms.settings') }}" class="nav-link" style="padding: 8px 15px; font-size: 14px; color: #e2e8f0;">• SMS Settings</a>
+                <a href="{{ route('admin.email.settings') }}" class="nav-link" style="padding: 8px 15px; font-size: 14px; color: #e2e8f0;">• Email Settings</a>
             </div>
             @endcan
             
@@ -208,9 +208,9 @@
                 <i class="bi bi-chevron-down ms-auto small toggle-icon"></i>
             </a>
             <div class="sidebar-submenu" style="display: none; background: rgba(0,0,0,0.2); margin-left: 15px; border-left: 2px solid #4f46e5;">
-                <a href="#" class="nav-link" style="padding: 8px 15px; font-size: 14px; color: #e2e8f0;">• All Users</a>
-                <a href="#" class="nav-link" style="padding: 8px 15px; font-size: 14px; color: #e2e8f0;">• Roles</a>
-                <a href="#" class="nav-link" style="padding: 8px 15px; font-size: 14px; color: #e2e8f0;">• Permissions</a>
+                <a href="{{ route('admin.users.index') }}" class="nav-link" style="padding: 8px 15px; font-size: 14px; color: #e2e8f0;">• All Users</a>
+                <a href="{{ route('admin.roles.index') }}" class="nav-link" style="padding: 8px 15px; font-size: 14px; color: #e2e8f0;">• Roles</a>
+                <a href="{{ route('admin.settings.permissions') }}" class="nav-link" style="padding: 8px 15px; font-size: 14px; color: #e2e8f0;">• Permissions</a>
             </div>
             @endcan
         @endif
