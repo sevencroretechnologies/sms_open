@@ -85,6 +85,8 @@ Repository: 01fe23bcs183/sms_open
 Reference Files:
 - SESSION-35-CONTINUATION.md - This file (context and task list)
 - smart-school/codex/DEVIN-AI-FORM-REQUESTS.md - Detailed prompt specifications (AUTHORITATIVE SOURCE)
+- smart-school/codex/DEVIN-AI-CODEX-GUIDE.md - Master guide for codex files
+- smart-school/GUIDE_FOR_DEVIN.md - Project-specific guidance
 
 Tasks for this session:
 1. Create Fee Refund Form Request (Prompt 368)
