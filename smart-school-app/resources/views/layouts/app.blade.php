@@ -441,22 +441,31 @@
             }, 5000);
         });
         
-        // Initialize sidebar collapse menus - Bootstrap handles the toggle via data-bs-target
-        // This script just handles closing other menus when one is opened (accordion behavior)
-        document.querySelectorAll('.sidebar-menu .nav-link[data-bs-toggle="collapse"]').forEach(function(link) {
-            link.addEventListener('click', function(e) {
-                const targetId = this.getAttribute('data-bs-target');
-                // Close other open menus (accordion behavior)
-                document.querySelectorAll('.sidebar-menu .collapse.show').forEach(function(openMenu) {
-                    if ('#' + openMenu.id !== targetId) {
-                        const bsCollapse = bootstrap.Collapse.getInstance(openMenu);
-                        if (bsCollapse) {
-                            bsCollapse.hide();
-                        }
+        // Pure JavaScript toggle function for sidebar submenus
+        window.toggleSubmenu = function(element) {
+            var submenu = element.nextElementSibling;
+            var icon = element.querySelector('.toggle-icon');
+            
+            // Close all other submenus first (accordion behavior)
+            document.querySelectorAll('.sidebar-submenu').forEach(function(menu) {
+                if (menu !== submenu && menu.style.display === 'block') {
+                    menu.style.display = 'none';
+                    var parentIcon = menu.previousElementSibling.querySelector('.toggle-icon');
+                    if (parentIcon) {
+                        parentIcon.style.transform = 'rotate(0deg)';
                     }
-                });
+                }
             });
-        });
+            
+            // Toggle current submenu
+            if (submenu.style.display === 'none' || submenu.style.display === '') {
+                submenu.style.display = 'block';
+                if (icon) icon.style.transform = 'rotate(180deg)';
+            } else {
+                submenu.style.display = 'none';
+                if (icon) icon.style.transform = 'rotate(0deg)';
+            }
+        };
     </script>
     
     @stack('scripts')
