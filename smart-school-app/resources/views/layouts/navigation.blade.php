@@ -195,6 +195,7 @@
             <div class="collapse" id="settingsMenu">
                 <a href="#" class="nav-link ps-5">General Settings</a>
                 <a href="{{ route('admin.academic-sessions.index') }}" class="nav-link ps-5">Academic Sessions</a>
+                <a href="{{ route('admin.settings.languages.index') }}" class="nav-link ps-5">Languages</a>
                 <a href="#" class="nav-link ps-5">SMS Settings</a>
                 <a href="#" class="nav-link ps-5">Email Settings</a>
             </div>

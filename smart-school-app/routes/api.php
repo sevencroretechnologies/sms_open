@@ -17,6 +17,39 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+/*
+|--------------------------------------------------------------------------
+| Health Check Routes (Prompt 509)
+|--------------------------------------------------------------------------
+*/
+Route::prefix('health')->group(function () {
+    Route::get('/', [\App\Http\Controllers\Api\HealthController::class, 'index']);
+    Route::get('/detailed', [\App\Http\Controllers\Api\HealthController::class, 'detailed']);
+    Route::get('/database', [\App\Http\Controllers\Api\HealthController::class, 'database']);
+    Route::get('/cache', [\App\Http\Controllers\Api\HealthController::class, 'cache']);
+    Route::get('/storage', [\App\Http\Controllers\Api\HealthController::class, 'storage']);
+    Route::get('/queue', [\App\Http\Controllers\Api\HealthController::class, 'queue']);
+    Route::get('/metrics', [\App\Http\Controllers\Api\HealthController::class, 'metrics']);
+    Route::get('/ready', [\App\Http\Controllers\Api\HealthController::class, 'ready']);
+    Route::get('/live', [\App\Http\Controllers\Api\HealthController::class, 'live']);
+});
+
+/*
+|--------------------------------------------------------------------------
+| API Token Routes (Prompt 501)
+|--------------------------------------------------------------------------
+*/
+Route::prefix('tokens')->group(function () {
+    Route::post('/', [\App\Http\Controllers\Api\TokenController::class, 'store']);
+    Route::middleware('auth:sanctum')->group(function () {
+        Route::get('/', [\App\Http\Controllers\Api\TokenController::class, 'index']);
+        Route::delete('/{tokenId}', [\App\Http\Controllers\Api\TokenController::class, 'destroy']);
+        Route::delete('/', [\App\Http\Controllers\Api\TokenController::class, 'destroyAll']);
+        Route::post('/revoke-current', [\App\Http\Controllers\Api\TokenController::class, 'revokeCurrent']);
+        Route::post('/refresh', [\App\Http\Controllers\Api\TokenController::class, 'refresh']);
+    });
+});
+
 // Current user endpoint (for authentication check)
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
