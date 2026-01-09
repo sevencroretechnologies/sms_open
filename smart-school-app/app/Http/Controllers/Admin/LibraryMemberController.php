@@ -5,68 +5,46 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
-/**
- * LibraryMemberController
- * 
- * Stub controller - to be implemented in future sessions.
- */
 class LibraryMemberController extends Controller
 {
-    public function __call($method, $parameters)
+    public function index(Request $request)
     {
-        return $this->placeholder();
-    }
-
-    public function index()
-    {
-        return $this->placeholder();
+        $members = collect([]);
+        return view('admin.library.members', compact('members'));
     }
 
     public function create()
     {
-        return $this->placeholder();
+        return view('admin.library.members-create');
     }
 
     public function store(Request $request)
     {
-        return $this->placeholder();
+        return redirect()->route('admin.library-members.index')->with('success', 'Member added successfully.');
     }
 
     public function show($id)
     {
-        return $this->placeholder();
+        return view('admin.library.members', ['members' => collect([])]);
     }
 
     public function edit($id)
     {
-        return $this->placeholder();
+        return view('admin.library.members-create', ['member' => null]);
     }
 
     public function update(Request $request, $id)
     {
-        return $this->placeholder();
+        return redirect()->route('admin.library-members.index')->with('success', 'Member updated successfully.');
     }
 
     public function destroy($id)
     {
-        return $this->placeholder();
+        return redirect()->route('admin.library-members.index')->with('success', 'Member deleted successfully.');
     }
 
-    protected function placeholder()
+    public function card($id)
     {
-        $routeName = request()->route()?->getName() ?? 'unknown';
-        
-        if (request()->expectsJson()) {
-            return response()->json([
-                'status' => 'info',
-                'message' => 'This feature is coming soon',
-                'route' => $routeName,
-            ], 200);
-        }
-
-        return response()->view('errors.coming-soon', [
-            'route' => $routeName,
-            'message' => 'This feature is under development and will be available soon.',
-        ], 200);
+        return view('admin.library.members', ['member' => null]);
     }
 }

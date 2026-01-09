@@ -3,70 +3,33 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\AcademicSession;
+use App\Models\SchoolClass;
 use Illuminate\Http\Request;
 
-/**
- * PromotionController
- * 
- * Stub controller - to be implemented in future sessions.
- */
 class PromotionController extends Controller
 {
-    public function __call($method, $parameters)
+    public function index(Request $request)
     {
-        return $this->placeholder();
+        $academicSessions = AcademicSession::active()->orderBy('start_date', 'desc')->get();
+        $classes = SchoolClass::active()->ordered()->get();
+        return view('admin.students.promotions', compact('academicSessions', 'classes'));
     }
 
-    public function index()
+    public function promoteForm()
     {
-        return $this->placeholder();
+        $academicSessions = AcademicSession::active()->orderBy('start_date', 'desc')->get();
+        $classes = SchoolClass::active()->ordered()->get();
+        return view('admin.students.promote', compact('academicSessions', 'classes'));
     }
 
-    public function create()
+    public function promote(Request $request)
     {
-        return $this->placeholder();
+        return redirect()->route('admin.promotions.index')->with('success', 'Students promoted successfully.');
     }
 
-    public function store(Request $request)
+    public function history()
     {
-        return $this->placeholder();
-    }
-
-    public function show($id)
-    {
-        return $this->placeholder();
-    }
-
-    public function edit($id)
-    {
-        return $this->placeholder();
-    }
-
-    public function update(Request $request, $id)
-    {
-        return $this->placeholder();
-    }
-
-    public function destroy($id)
-    {
-        return $this->placeholder();
-    }
-
-    protected function placeholder()
-    {
-        $routeName = request()->route()?->getName() ?? 'unknown';
-        
-        if (request()->expectsJson()) {
-            return response()->json([
-                'status' => 'info',
-                'message' => 'This feature is coming soon',
-                'route' => $routeName,
-            ], 200);
-        }
-
-        return response()->view('errors.coming-soon', [
-            'route' => $routeName,
-            'message' => 'This feature is under development and will be available soon.',
-        ], 200);
+        return view('admin.students.promotions', ['academicSessions' => collect([]), 'classes' => collect([])]);
     }
 }

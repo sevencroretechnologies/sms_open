@@ -5,68 +5,35 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
-/**
- * ReportController
- * 
- * Stub controller - to be implemented in future sessions.
- */
 class ReportController extends Controller
 {
-    public function __call($method, $parameters)
+    public function index(Request $request)
     {
-        return $this->placeholder();
+        return view('admin.reports.index');
     }
 
-    public function index()
+    public function students()
     {
-        return $this->placeholder();
+        return view('admin.reports.students');
     }
 
-    public function create()
+    public function attendance()
     {
-        return $this->placeholder();
+        return view('admin.reports.attendance');
     }
 
-    public function store(Request $request)
+    public function exams()
     {
-        return $this->placeholder();
+        return view('admin.reports.exams');
     }
 
-    public function show($id)
+    public function fees()
     {
-        return $this->placeholder();
+        return view('admin.reports.fees');
     }
 
-    public function edit($id)
+    public function financial()
     {
-        return $this->placeholder();
-    }
-
-    public function update(Request $request, $id)
-    {
-        return $this->placeholder();
-    }
-
-    public function destroy($id)
-    {
-        return $this->placeholder();
-    }
-
-    protected function placeholder()
-    {
-        $routeName = request()->route()?->getName() ?? 'unknown';
-        
-        if (request()->expectsJson()) {
-            return response()->json([
-                'status' => 'info',
-                'message' => 'This feature is coming soon',
-                'route' => $routeName,
-            ], 200);
-        }
-
-        return response()->view('errors.coming-soon', [
-            'route' => $routeName,
-            'message' => 'This feature is under development and will be available soon.',
-        ], 200);
+        return view('admin.reports.financial');
     }
 }

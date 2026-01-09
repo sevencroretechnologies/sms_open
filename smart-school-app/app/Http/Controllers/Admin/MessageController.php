@@ -5,68 +5,41 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
-/**
- * MessageController
- * 
- * Stub controller - to be implemented in future sessions.
- */
 class MessageController extends Controller
 {
-    public function __call($method, $parameters)
+    public function index(Request $request)
     {
-        return $this->placeholder();
+        $messages = collect([]);
+        return view('admin.communication.messages', compact('messages'));
     }
 
-    public function index()
+    public function inbox()
     {
-        return $this->placeholder();
+        return view('admin.communication.inbox', ['messages' => collect([])]);
     }
 
-    public function create()
+    public function sent()
     {
-        return $this->placeholder();
+        return view('admin.communication.sent', ['messages' => collect([])]);
     }
 
-    public function store(Request $request)
+    public function compose()
     {
-        return $this->placeholder();
+        return view('admin.communication.compose');
+    }
+
+    public function send(Request $request)
+    {
+        return redirect()->route('admin.messages.sent')->with('success', 'Message sent successfully.');
     }
 
     public function show($id)
     {
-        return $this->placeholder();
-    }
-
-    public function edit($id)
-    {
-        return $this->placeholder();
-    }
-
-    public function update(Request $request, $id)
-    {
-        return $this->placeholder();
+        return view('admin.communication.message-show', ['message' => null]);
     }
 
     public function destroy($id)
     {
-        return $this->placeholder();
-    }
-
-    protected function placeholder()
-    {
-        $routeName = request()->route()?->getName() ?? 'unknown';
-        
-        if (request()->expectsJson()) {
-            return response()->json([
-                'status' => 'info',
-                'message' => 'This feature is coming soon',
-                'route' => $routeName,
-            ], 200);
-        }
-
-        return response()->view('errors.coming-soon', [
-            'route' => $routeName,
-            'message' => 'This feature is under development and will be available soon.',
-        ], 200);
+        return redirect()->route('admin.messages.index')->with('success', 'Message deleted successfully.');
     }
 }

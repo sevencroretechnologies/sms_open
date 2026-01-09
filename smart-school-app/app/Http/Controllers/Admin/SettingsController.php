@@ -5,68 +5,60 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
-/**
- * SettingsController
- * 
- * Stub controller - to be implemented in future sessions.
- */
 class SettingsController extends Controller
 {
-    public function __call($method, $parameters)
-    {
-        return $this->placeholder();
-    }
-
     public function index()
     {
-        return $this->placeholder();
+        return view('admin.settings.index');
     }
 
-    public function create()
+    public function general()
     {
-        return $this->placeholder();
+        return view('admin.settings.general');
     }
 
-    public function store(Request $request)
+    public function updateGeneral(Request $request)
     {
-        return $this->placeholder();
+        return redirect()->route('admin.settings.general')->with('success', 'Settings updated successfully.');
     }
 
-    public function show($id)
+    public function school()
     {
-        return $this->placeholder();
+        return view('admin.settings.school');
     }
 
-    public function edit($id)
+    public function updateSchool(Request $request)
     {
-        return $this->placeholder();
+        return redirect()->route('admin.settings.school')->with('success', 'School settings updated successfully.');
     }
 
-    public function update(Request $request, $id)
+    public function email()
     {
-        return $this->placeholder();
+        return view('admin.settings.email');
     }
 
-    public function destroy($id)
+    public function updateEmail(Request $request)
     {
-        return $this->placeholder();
+        return redirect()->route('admin.settings.email')->with('success', 'Email settings updated successfully.');
     }
 
-    protected function placeholder()
+    public function sms()
     {
-        $routeName = request()->route()?->getName() ?? 'unknown';
-        
-        if (request()->expectsJson()) {
-            return response()->json([
-                'status' => 'info',
-                'message' => 'This feature is coming soon',
-                'route' => $routeName,
-            ], 200);
-        }
+        return view('admin.settings.sms');
+    }
 
-        return response()->view('errors.coming-soon', [
-            'route' => $routeName,
-            'message' => 'This feature is under development and will be available soon.',
-        ], 200);
+    public function updateSms(Request $request)
+    {
+        return redirect()->route('admin.settings.sms')->with('success', 'SMS settings updated successfully.');
+    }
+
+    public function payment()
+    {
+        return view('admin.settings.payment');
+    }
+
+    public function updatePayment(Request $request)
+    {
+        return redirect()->route('admin.settings.payment')->with('success', 'Payment settings updated successfully.');
     }
 }

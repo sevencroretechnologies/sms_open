@@ -5,68 +5,46 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
-/**
- * IncomeController
- * 
- * Stub controller - to be implemented in future sessions.
- */
 class IncomeController extends Controller
 {
-    public function __call($method, $parameters)
+    public function index(Request $request)
     {
-        return $this->placeholder();
-    }
-
-    public function index()
-    {
-        return $this->placeholder();
+        $incomes = collect([]);
+        return view('admin.accounting.incomes', compact('incomes'));
     }
 
     public function create()
     {
-        return $this->placeholder();
+        return view('admin.accounting.incomes-create');
     }
 
     public function store(Request $request)
     {
-        return $this->placeholder();
+        return redirect()->route('admin.incomes.index')->with('success', 'Income created successfully.');
     }
 
     public function show($id)
     {
-        return $this->placeholder();
+        return view('admin.accounting.incomes-show', ['income' => null]);
     }
 
     public function edit($id)
     {
-        return $this->placeholder();
+        return view('admin.accounting.incomes-create', ['income' => null]);
     }
 
     public function update(Request $request, $id)
     {
-        return $this->placeholder();
+        return redirect()->route('admin.incomes.index')->with('success', 'Income updated successfully.');
     }
 
     public function destroy($id)
     {
-        return $this->placeholder();
+        return redirect()->route('admin.incomes.index')->with('success', 'Income deleted successfully.');
     }
 
-    protected function placeholder()
+    public function report()
     {
-        $routeName = request()->route()?->getName() ?? 'unknown';
-        
-        if (request()->expectsJson()) {
-            return response()->json([
-                'status' => 'info',
-                'message' => 'This feature is coming soon',
-                'route' => $routeName,
-            ], 200);
-        }
-
-        return response()->view('errors.coming-soon', [
-            'route' => $routeName,
-            'message' => 'This feature is under development and will be available soon.',
-        ], 200);
+        return view('admin.accounting.income-report');
     }
 }

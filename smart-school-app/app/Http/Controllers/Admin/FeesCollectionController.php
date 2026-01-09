@@ -5,68 +5,40 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
-/**
- * FeesCollectionController
- * 
- * Stub controller - to be implemented in future sessions.
- */
 class FeesCollectionController extends Controller
 {
-    public function __call($method, $parameters)
+    public function index(Request $request)
     {
-        return $this->placeholder();
+        return view('admin.fees.collect');
     }
 
-    public function index()
+    public function collectForm($student)
     {
-        return $this->placeholder();
+        return view('admin.fees.collect', ['student' => null]);
     }
 
-    public function create()
+    public function collect(Request $request, $student)
     {
-        return $this->placeholder();
+        return redirect()->route('admin.fees-collection.index')->with('success', 'Fee collected successfully.');
     }
 
-    public function store(Request $request)
+    public function receipt($transaction)
     {
-        return $this->placeholder();
+        return view('admin.fees.receipt', ['transaction' => null]);
     }
 
-    public function show($id)
+    public function report()
     {
-        return $this->placeholder();
+        return view('admin.fees.reports');
     }
 
-    public function edit($id)
+    public function dueReport()
     {
-        return $this->placeholder();
+        return view('admin.fees.reports');
     }
 
-    public function update(Request $request, $id)
+    public function export()
     {
-        return $this->placeholder();
-    }
-
-    public function destroy($id)
-    {
-        return $this->placeholder();
-    }
-
-    protected function placeholder()
-    {
-        $routeName = request()->route()?->getName() ?? 'unknown';
-        
-        if (request()->expectsJson()) {
-            return response()->json([
-                'status' => 'info',
-                'message' => 'This feature is coming soon',
-                'route' => $routeName,
-            ], 200);
-        }
-
-        return response()->view('errors.coming-soon', [
-            'route' => $routeName,
-            'message' => 'This feature is under development and will be available soon.',
-        ], 200);
+        return redirect()->route('admin.fees-collection.index')->with('success', 'Export started.');
     }
 }

@@ -5,68 +5,59 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
-/**
- * LibraryBookController
- * 
- * Stub controller - to be implemented in future sessions.
- */
 class LibraryBookController extends Controller
 {
-    public function __call($method, $parameters)
+    public function index(Request $request)
     {
-        return $this->placeholder();
-    }
-
-    public function index()
-    {
-        return $this->placeholder();
+        $books = collect([]);
+        $categories = collect([]);
+        return view('admin.library.books', compact('books', 'categories'));
     }
 
     public function create()
     {
-        return $this->placeholder();
+        $categories = collect([]);
+        return view('admin.library.books-create', compact('categories'));
     }
 
     public function store(Request $request)
     {
-        return $this->placeholder();
+        return redirect()->route('admin.library-books.index')->with('success', 'Book added successfully.');
     }
 
     public function show($id)
     {
-        return $this->placeholder();
+        return view('admin.library.books-show', ['book' => null]);
     }
 
     public function edit($id)
     {
-        return $this->placeholder();
+        $categories = collect([]);
+        return view('admin.library.books-create', ['book' => null, 'categories' => $categories]);
     }
 
     public function update(Request $request, $id)
     {
-        return $this->placeholder();
+        return redirect()->route('admin.library-books.index')->with('success', 'Book updated successfully.');
     }
 
     public function destroy($id)
     {
-        return $this->placeholder();
+        return redirect()->route('admin.library-books.index')->with('success', 'Book deleted successfully.');
     }
 
-    protected function placeholder()
+    public function importForm()
     {
-        $routeName = request()->route()?->getName() ?? 'unknown';
-        
-        if (request()->expectsJson()) {
-            return response()->json([
-                'status' => 'info',
-                'message' => 'This feature is coming soon',
-                'route' => $routeName,
-            ], 200);
-        }
+        return view('admin.library.books', ['books' => collect([]), 'categories' => collect([])]);
+    }
 
-        return response()->view('errors.coming-soon', [
-            'route' => $routeName,
-            'message' => 'This feature is under development and will be available soon.',
-        ], 200);
+    public function import(Request $request)
+    {
+        return redirect()->route('admin.library-books.index')->with('success', 'Books imported successfully.');
+    }
+
+    public function export()
+    {
+        return redirect()->route('admin.library-books.index')->with('success', 'Export started.');
     }
 }

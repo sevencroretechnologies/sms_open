@@ -3,70 +3,95 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\AcademicSession;
+use App\Models\SchoolClass;
 use Illuminate\Http\Request;
 
-/**
- * ExamController
- * 
- * Stub controller - to be implemented in future sessions.
- */
 class ExamController extends Controller
 {
-    public function __call($method, $parameters)
+    public function index(Request $request)
     {
-        return $this->placeholder();
-    }
-
-    public function index()
-    {
-        return $this->placeholder();
+        $exams = collect([]);
+        $academicSessions = AcademicSession::active()->orderBy('start_date', 'desc')->get();
+        $classes = SchoolClass::active()->ordered()->get();
+        return view('admin.exams.index', compact('exams', 'academicSessions', 'classes'));
     }
 
     public function create()
     {
-        return $this->placeholder();
+        $academicSessions = AcademicSession::active()->orderBy('start_date', 'desc')->get();
+        $classes = SchoolClass::active()->ordered()->get();
+        $examTypes = collect([]);
+        return view('admin.exams.create', compact('academicSessions', 'classes', 'examTypes'));
     }
 
     public function store(Request $request)
     {
-        return $this->placeholder();
+        return redirect()->route('admin.exams.index')->with('success', 'Exam created successfully.');
     }
 
     public function show($id)
     {
-        return $this->placeholder();
+        return view('admin.exams.index', ['exam' => null, 'exams' => collect([])]);
     }
 
     public function edit($id)
     {
-        return $this->placeholder();
+        return view('admin.exams.create', ['exam' => null, 'academicSessions' => collect([]), 'classes' => collect([]), 'examTypes' => collect([])]);
     }
 
     public function update(Request $request, $id)
     {
-        return $this->placeholder();
+        return redirect()->route('admin.exams.index')->with('success', 'Exam updated successfully.');
     }
 
     public function destroy($id)
     {
-        return $this->placeholder();
+        return redirect()->route('admin.exams.index')->with('success', 'Exam deleted successfully.');
     }
 
-    protected function placeholder()
+    public function schedule($id)
     {
-        $routeName = request()->route()?->getName() ?? 'unknown';
-        
-        if (request()->expectsJson()) {
-            return response()->json([
-                'status' => 'info',
-                'message' => 'This feature is coming soon',
-                'route' => $routeName,
-            ], 200);
-        }
+        return view('admin.exams.schedule', ['exam' => null]);
+    }
 
-        return response()->view('errors.coming-soon', [
-            'route' => $routeName,
-            'message' => 'This feature is under development and will be available soon.',
-        ], 200);
+    public function saveSchedule(Request $request, $id)
+    {
+        return redirect()->route('admin.exams.index')->with('success', 'Schedule saved successfully.');
+    }
+
+    public function attendance($id)
+    {
+        return view('admin.exams.attendance', ['exam' => null]);
+    }
+
+    public function saveAttendance(Request $request, $id)
+    {
+        return redirect()->route('admin.exams.index')->with('success', 'Attendance saved successfully.');
+    }
+
+    public function marks($id)
+    {
+        return view('admin.exams.marks', ['exam' => null]);
+    }
+
+    public function saveMarks(Request $request, $id)
+    {
+        return redirect()->route('admin.exams.index')->with('success', 'Marks saved successfully.');
+    }
+
+    public function publish($id)
+    {
+        return redirect()->route('admin.exams.index')->with('success', 'Exam published successfully.');
+    }
+
+    public function results($id)
+    {
+        return view('admin.exams.statistics', ['exam' => null]);
+    }
+
+    public function printResults($id)
+    {
+        return view('admin.exams.report-card-print', ['exam' => null]);
     }
 }

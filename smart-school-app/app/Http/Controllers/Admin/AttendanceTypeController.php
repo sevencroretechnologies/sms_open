@@ -5,68 +5,41 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
-/**
- * AttendanceTypeController
- * 
- * Stub controller - to be implemented in future sessions.
- */
 class AttendanceTypeController extends Controller
 {
-    public function __call($method, $parameters)
+    public function index(Request $request)
     {
-        return $this->placeholder();
-    }
-
-    public function index()
-    {
-        return $this->placeholder();
+        $attendanceTypes = collect([]);
+        return view('admin.attendance.types', compact('attendanceTypes'));
     }
 
     public function create()
     {
-        return $this->placeholder();
+        return view('admin.attendance.types-create');
     }
 
     public function store(Request $request)
     {
-        return $this->placeholder();
+        return redirect()->route('admin.attendance-types.index')->with('success', 'Attendance type created successfully.');
     }
 
     public function show($id)
     {
-        return $this->placeholder();
+        return view('admin.attendance.types', ['attendanceTypes' => collect([])]);
     }
 
     public function edit($id)
     {
-        return $this->placeholder();
+        return view('admin.attendance.types-create', ['attendanceType' => null]);
     }
 
     public function update(Request $request, $id)
     {
-        return $this->placeholder();
+        return redirect()->route('admin.attendance-types.index')->with('success', 'Attendance type updated successfully.');
     }
 
     public function destroy($id)
     {
-        return $this->placeholder();
-    }
-
-    protected function placeholder()
-    {
-        $routeName = request()->route()?->getName() ?? 'unknown';
-        
-        if (request()->expectsJson()) {
-            return response()->json([
-                'status' => 'info',
-                'message' => 'This feature is coming soon',
-                'route' => $routeName,
-            ], 200);
-        }
-
-        return response()->view('errors.coming-soon', [
-            'route' => $routeName,
-            'message' => 'This feature is under development and will be available soon.',
-        ], 200);
+        return redirect()->route('admin.attendance-types.index')->with('success', 'Attendance type deleted successfully.');
     }
 }

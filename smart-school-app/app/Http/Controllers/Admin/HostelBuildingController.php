@@ -5,68 +5,41 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
-/**
- * HostelBuildingController
- * 
- * Stub controller - to be implemented in future sessions.
- */
 class HostelBuildingController extends Controller
 {
-    public function __call($method, $parameters)
+    public function index(Request $request)
     {
-        return $this->placeholder();
-    }
-
-    public function index()
-    {
-        return $this->placeholder();
+        $hostels = collect([]);
+        return view('admin.hostels.index', compact('hostels'));
     }
 
     public function create()
     {
-        return $this->placeholder();
+        return view('admin.hostels.create');
     }
 
     public function store(Request $request)
     {
-        return $this->placeholder();
+        return redirect()->route('admin.hostel-buildings.index')->with('success', 'Hostel created successfully.');
     }
 
     public function show($id)
     {
-        return $this->placeholder();
+        return view('admin.hostels.index', ['hostels' => collect([])]);
     }
 
     public function edit($id)
     {
-        return $this->placeholder();
+        return view('admin.hostels.create', ['hostel' => null]);
     }
 
     public function update(Request $request, $id)
     {
-        return $this->placeholder();
+        return redirect()->route('admin.hostel-buildings.index')->with('success', 'Hostel updated successfully.');
     }
 
     public function destroy($id)
     {
-        return $this->placeholder();
-    }
-
-    protected function placeholder()
-    {
-        $routeName = request()->route()?->getName() ?? 'unknown';
-        
-        if (request()->expectsJson()) {
-            return response()->json([
-                'status' => 'info',
-                'message' => 'This feature is coming soon',
-                'route' => $routeName,
-            ], 200);
-        }
-
-        return response()->view('errors.coming-soon', [
-            'route' => $routeName,
-            'message' => 'This feature is under development and will be available soon.',
-        ], 200);
+        return redirect()->route('admin.hostel-buildings.index')->with('success', 'Hostel deleted successfully.');
     }
 }

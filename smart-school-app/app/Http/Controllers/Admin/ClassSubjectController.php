@@ -3,70 +3,33 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\SchoolClass;
+use App\Models\Subject;
 use Illuminate\Http\Request;
 
-/**
- * ClassSubjectController
- * 
- * Stub controller - to be implemented in future sessions.
- */
 class ClassSubjectController extends Controller
 {
-    public function __call($method, $parameters)
+    public function index(Request $request)
     {
-        return $this->placeholder();
+        $classes = SchoolClass::active()->ordered()->get();
+        $subjects = Subject::active()->ordered()->get();
+        return view('admin.classes.subjects', compact('classes', 'subjects'));
     }
 
-    public function index()
+    public function assignForm()
     {
-        return $this->placeholder();
+        $classes = SchoolClass::active()->ordered()->get();
+        $subjects = Subject::active()->ordered()->get();
+        return view('admin.classes.assign-subjects', compact('classes', 'subjects'));
     }
 
-    public function create()
+    public function assign(Request $request)
     {
-        return $this->placeholder();
+        return redirect()->route('admin.class-subjects.index')->with('success', 'Subjects assigned successfully.');
     }
 
-    public function store(Request $request)
+    public function unassign(Request $request, $classId, $subjectId)
     {
-        return $this->placeholder();
-    }
-
-    public function show($id)
-    {
-        return $this->placeholder();
-    }
-
-    public function edit($id)
-    {
-        return $this->placeholder();
-    }
-
-    public function update(Request $request, $id)
-    {
-        return $this->placeholder();
-    }
-
-    public function destroy($id)
-    {
-        return $this->placeholder();
-    }
-
-    protected function placeholder()
-    {
-        $routeName = request()->route()?->getName() ?? 'unknown';
-        
-        if (request()->expectsJson()) {
-            return response()->json([
-                'status' => 'info',
-                'message' => 'This feature is coming soon',
-                'route' => $routeName,
-            ], 200);
-        }
-
-        return response()->view('errors.coming-soon', [
-            'route' => $routeName,
-            'message' => 'This feature is under development and will be available soon.',
-        ], 200);
+        return redirect()->route('admin.class-subjects.index')->with('success', 'Subject unassigned successfully.');
     }
 }

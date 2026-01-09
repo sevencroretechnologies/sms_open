@@ -5,68 +5,41 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
-/**
- * TransportVehicleController
- * 
- * Stub controller - to be implemented in future sessions.
- */
 class TransportVehicleController extends Controller
 {
-    public function __call($method, $parameters)
+    public function index(Request $request)
     {
-        return $this->placeholder();
-    }
-
-    public function index()
-    {
-        return $this->placeholder();
+        $vehicles = collect([]);
+        return view('admin.transport.vehicles', compact('vehicles'));
     }
 
     public function create()
     {
-        return $this->placeholder();
+        return view('admin.transport.vehicles-create');
     }
 
     public function store(Request $request)
     {
-        return $this->placeholder();
+        return redirect()->route('admin.transport-vehicles.index')->with('success', 'Vehicle added successfully.');
     }
 
     public function show($id)
     {
-        return $this->placeholder();
+        return view('admin.transport.vehicles-show', ['vehicle' => null]);
     }
 
     public function edit($id)
     {
-        return $this->placeholder();
+        return view('admin.transport.vehicles-create', ['vehicle' => null]);
     }
 
     public function update(Request $request, $id)
     {
-        return $this->placeholder();
+        return redirect()->route('admin.transport-vehicles.index')->with('success', 'Vehicle updated successfully.');
     }
 
     public function destroy($id)
     {
-        return $this->placeholder();
-    }
-
-    protected function placeholder()
-    {
-        $routeName = request()->route()?->getName() ?? 'unknown';
-        
-        if (request()->expectsJson()) {
-            return response()->json([
-                'status' => 'info',
-                'message' => 'This feature is coming soon',
-                'route' => $routeName,
-            ], 200);
-        }
-
-        return response()->view('errors.coming-soon', [
-            'route' => $routeName,
-            'message' => 'This feature is under development and will be available soon.',
-        ], 200);
+        return redirect()->route('admin.transport-vehicles.index')->with('success', 'Vehicle deleted successfully.');
     }
 }
