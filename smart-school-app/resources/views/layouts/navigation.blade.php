@@ -27,7 +27,7 @@
             <div class="menu-header">Academic</div>
             
             @can('students.view')
-            <a href="#studentsMenu" class="nav-link" data-bs-toggle="collapse" aria-expanded="false" aria-controls="studentsMenu">
+            <a href="javascript:void(0)" class="nav-link" data-bs-toggle="collapse" data-bs-target="#studentsMenu" aria-expanded="false" aria-controls="studentsMenu">
                 <i class="bi bi-people"></i>
                 <span>Students</span>
                 <i class="bi bi-chevron-down ms-auto small"></i>
@@ -41,7 +41,7 @@
             @endcan
             
             @can('teachers.view')
-            <a href="#teachersMenu" class="nav-link" data-bs-toggle="collapse" aria-expanded="false" aria-controls="teachersMenu">
+            <a href="javascript:void(0)" class="nav-link" data-bs-toggle="collapse" data-bs-target="#teachersMenu" aria-expanded="false" aria-controls="teachersMenu">
                 <i class="bi bi-person-badge"></i>
                 <span>Teachers</span>
                 <i class="bi bi-chevron-down ms-auto small"></i>
@@ -53,7 +53,7 @@
             @endcan
             
             @can('classes.view')
-            <a href="#classesMenu" class="nav-link" data-bs-toggle="collapse" aria-expanded="false" aria-controls="classesMenu">
+            <a href="javascript:void(0)" class="nav-link" data-bs-toggle="collapse" data-bs-target="#classesMenu" aria-expanded="false" aria-controls="classesMenu">
                 <i class="bi bi-building"></i>
                 <span>Classes</span>
                 <i class="bi bi-chevron-down ms-auto small"></i>
@@ -67,7 +67,7 @@
             @endcan
             
             @can('attendance.view')
-            <a href="#attendanceMenu" class="nav-link" data-bs-toggle="collapse" aria-expanded="false" aria-controls="attendanceMenu">
+            <a href="javascript:void(0)" class="nav-link" data-bs-toggle="collapse" data-bs-target="#attendanceMenu" aria-expanded="false" aria-controls="attendanceMenu">
                 <i class="bi bi-calendar-check"></i>
                 <span>Attendance</span>
                 <i class="bi bi-chevron-down ms-auto small"></i>
@@ -82,7 +82,7 @@
             <div class="menu-header">Examination</div>
             
             @can('exams.view')
-            <a href="#examsMenu" class="nav-link" data-bs-toggle="collapse" aria-expanded="false" aria-controls="examsMenu">
+            <a href="javascript:void(0)" class="nav-link" data-bs-toggle="collapse" data-bs-target="#examsMenu" aria-expanded="false" aria-controls="examsMenu">
                 <i class="bi bi-journal-text"></i>
                 <span>Examinations</span>
                 <i class="bi bi-chevron-down ms-auto small"></i>
@@ -99,7 +99,7 @@
             <div class="menu-header">Finance</div>
             
             @can('fees.view')
-            <a href="#feesMenu" class="nav-link" data-bs-toggle="collapse" aria-expanded="false" aria-controls="feesMenu">
+            <a href="javascript:void(0)" class="nav-link" data-bs-toggle="collapse" data-bs-target="#feesMenu" aria-expanded="false" aria-controls="feesMenu">
                 <i class="bi bi-currency-rupee"></i>
                 <span>Fees</span>
                 <i class="bi bi-chevron-down ms-auto small"></i>
@@ -116,7 +116,7 @@
             <div class="menu-header">Services</div>
             
             @can('library.view')
-            <a href="#libraryMenu" class="nav-link" data-bs-toggle="collapse" aria-expanded="false" aria-controls="libraryMenu">
+            <a href="javascript:void(0)" class="nav-link" data-bs-toggle="collapse" data-bs-target="#libraryMenu" aria-expanded="false" aria-controls="libraryMenu">
                 <i class="bi bi-book"></i>
                 <span>Library</span>
                 <i class="bi bi-chevron-down ms-auto small"></i>
@@ -129,7 +129,7 @@
             @endcan
             
             @can('transport.view')
-            <a href="#transportMenu" class="nav-link" data-bs-toggle="collapse" aria-expanded="false" aria-controls="transportMenu">
+            <a href="javascript:void(0)" class="nav-link" data-bs-toggle="collapse" data-bs-target="#transportMenu" aria-expanded="false" aria-controls="transportMenu">
                 <i class="bi bi-bus-front"></i>
                 <span>Transport</span>
                 <i class="bi bi-chevron-down ms-auto small"></i>
@@ -142,7 +142,7 @@
             @endcan
             
             @can('hostel.view')
-            <a href="#hostelMenu" class="nav-link" data-bs-toggle="collapse" aria-expanded="false" aria-controls="hostelMenu">
+            <a href="javascript:void(0)" class="nav-link" data-bs-toggle="collapse" data-bs-target="#hostelMenu" aria-expanded="false" aria-controls="hostelMenu">
                 <i class="bi bi-house"></i>
                 <span>Hostel</span>
                 <i class="bi bi-chevron-down ms-auto small"></i>
@@ -157,7 +157,7 @@
             <div class="menu-header">Communication</div>
             
             @can('notices.view')
-            <a href="#noticesMenu" class="nav-link" data-bs-toggle="collapse" aria-expanded="false" aria-controls="noticesMenu">
+            <a href="javascript:void(0)" class="nav-link" data-bs-toggle="collapse" data-bs-target="#noticesMenu" aria-expanded="false" aria-controls="noticesMenu">
                 <i class="bi bi-megaphone"></i>
                 <span>Notices</span>
                 <i class="bi bi-chevron-down ms-auto small"></i>
@@ -171,7 +171,7 @@
             <div class="menu-header">Reports</div>
             
             @can('reports.view')
-            <a href="#reportsMenu" class="nav-link" data-bs-toggle="collapse" aria-expanded="false" aria-controls="reportsMenu">
+            <a href="javascript:void(0)" class="nav-link" data-bs-toggle="collapse" data-bs-target="#reportsMenu" aria-expanded="false" aria-controls="reportsMenu">
                 <i class="bi bi-file-earmark-bar-graph"></i>
                 <span>Reports</span>
                 <i class="bi bi-chevron-down ms-auto small"></i>
@@ -187,7 +187,7 @@
             <div class="menu-header">Settings</div>
             
             @can('settings.view')
-            <a href="#settingsMenu" class="nav-link" data-bs-toggle="collapse" aria-expanded="false" aria-controls="settingsMenu">
+            <a href="javascript:void(0)" class="nav-link" data-bs-toggle="collapse" data-bs-target="#settingsMenu" aria-expanded="false" aria-controls="settingsMenu">
                 <i class="bi bi-gear"></i>
                 <span>Settings</span>
                 <i class="bi bi-chevron-down ms-auto small"></i>
@@ -202,7 +202,7 @@
             @endcan
             
             @can('users.view')
-            <a href="#usersMenu" class="nav-link" data-bs-toggle="collapse" aria-expanded="false" aria-controls="usersMenu">
+            <a href="javascript:void(0)" class="nav-link" data-bs-toggle="collapse" data-bs-target="#usersMenu" aria-expanded="false" aria-controls="usersMenu">
                 <i class="bi bi-person-gear"></i>
                 <span>User Management</span>
                 <i class="bi bi-chevron-down ms-auto small"></i>
@@ -355,12 +355,12 @@
         @if($userRole === 'accountant')
             <div class="menu-header">Finance</div>
             
-            <a href="#feesMenu" class="nav-link" data-bs-toggle="collapse">
+            <a href="javascript:void(0)" class="nav-link" data-bs-toggle="collapse" data-bs-target="#accountantFeesMenu" aria-expanded="false" aria-controls="accountantFeesMenu">
                 <i class="bi bi-currency-rupee"></i>
                 <span>Fees</span>
                 <i class="bi bi-chevron-down ms-auto small"></i>
             </a>
-            <div class="collapse" id="feesMenu">
+            <div class="collapse" id="accountantFeesMenu">
                 <a href="#" class="nav-link ps-5">Fee Collection</a>
                 <a href="#" class="nav-link ps-5">Fee Types</a>
                 <a href="#" class="nav-link ps-5">Fee Groups</a>
@@ -384,7 +384,7 @@
         @if($userRole === 'librarian')
             <div class="menu-header">Library</div>
             
-            <a href="#booksMenu" class="nav-link" data-bs-toggle="collapse">
+            <a href="javascript:void(0)" class="nav-link" data-bs-toggle="collapse" data-bs-target="#booksMenu" aria-expanded="false" aria-controls="booksMenu">
                 <i class="bi bi-book"></i>
                 <span>Books</span>
                 <i class="bi bi-chevron-down ms-auto small"></i>

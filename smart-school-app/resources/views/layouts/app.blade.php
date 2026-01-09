@@ -441,27 +441,20 @@
             }, 5000);
         });
         
-        // Initialize sidebar collapse menus
+        // Initialize sidebar collapse menus - Bootstrap handles the toggle via data-bs-target
+        // This script just handles closing other menus when one is opened (accordion behavior)
         document.querySelectorAll('.sidebar-menu .nav-link[data-bs-toggle="collapse"]').forEach(function(link) {
             link.addEventListener('click', function(e) {
-                e.preventDefault();
-                const targetId = this.getAttribute('href');
-                const target = document.querySelector(targetId);
-                if (target) {
-                    // Close other open menus
-                    document.querySelectorAll('.sidebar-menu .collapse.show').forEach(function(openMenu) {
-                        if (openMenu.id !== targetId.substring(1)) {
-                            openMenu.classList.remove('show');
-                            const openLink = document.querySelector('[href="#' + openMenu.id + '"]');
-                            if (openLink) {
-                                openLink.setAttribute('aria-expanded', 'false');
-                            }
+                const targetId = this.getAttribute('data-bs-target');
+                // Close other open menus (accordion behavior)
+                document.querySelectorAll('.sidebar-menu .collapse.show').forEach(function(openMenu) {
+                    if ('#' + openMenu.id !== targetId) {
+                        const bsCollapse = bootstrap.Collapse.getInstance(openMenu);
+                        if (bsCollapse) {
+                            bsCollapse.hide();
                         }
-                    });
-                    // Toggle current menu
-                    target.classList.toggle('show');
-                    this.setAttribute('aria-expanded', target.classList.contains('show'));
-                }
+                    }
+                });
             });
         });
     </script>
