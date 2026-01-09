@@ -27,21 +27,21 @@
             <div class="menu-header">Academic</div>
             
             @can('students.view')
-            <a href="#studentsMenu" class="nav-link" data-bs-toggle="collapse">
+            <a href="javascript:void(0)" class="nav-link sidebar-dropdown-toggle" onclick="toggleSubmenu('studentsMenu', this)">
                 <i class="bi bi-people"></i>
                 <span>Students</span>
-                <i class="bi bi-chevron-down ms-auto small"></i>
+                <i class="bi bi-chevron-down ms-auto small dropdown-icon"></i>
             </a>
-            <div class="collapse" id="studentsMenu">
-                <a href="#" class="nav-link ps-5">All Students</a>
-                <a href="#" class="nav-link ps-5">Add Student</a>
-                <a href="#" class="nav-link ps-5">Student Categories</a>
-                <a href="#" class="nav-link ps-5">Promotions</a>
+            <div class="sidebar-submenu" id="studentsMenu" style="display: none;">
+                <a href="{{ route('admin.students.index') }}" class="nav-link submenu-item">All Students</a>
+                <a href="{{ route('admin.students.create') }}" class="nav-link submenu-item">Add Student</a>
+                <a href="{{ route('admin.student-categories.index') }}" class="nav-link submenu-item">Student Categories</a>
+                <a href="{{ route('admin.promotions.index') }}" class="nav-link submenu-item">Promotions</a>
             </div>
             @endcan
             
             @can('teachers.view')
-            <a href="#teachersMenu" class="nav-link" data-bs-toggle="collapse">
+            <a href="#teachersMenu" class="nav-link" data-bs-toggle="collapse" aria-expanded="false" aria-controls="teachersMenu">
                 <i class="bi bi-person-badge"></i>
                 <span>Teachers</span>
                 <i class="bi bi-chevron-down ms-auto small"></i>
@@ -53,155 +53,155 @@
             @endcan
             
             @can('classes.view')
-            <a href="#classesMenu" class="nav-link" data-bs-toggle="collapse">
+            <a href="#classesMenu" class="nav-link" data-bs-toggle="collapse" aria-expanded="false" aria-controls="classesMenu">
                 <i class="bi bi-building"></i>
                 <span>Classes</span>
                 <i class="bi bi-chevron-down ms-auto small"></i>
             </a>
             <div class="collapse" id="classesMenu">
-                <a href="#" class="nav-link ps-5">All Classes</a>
-                <a href="#" class="nav-link ps-5">Sections</a>
-                <a href="#" class="nav-link ps-5">Subjects</a>
-                <a href="#" class="nav-link ps-5">Timetable</a>
+                <a href="{{ route('admin.classes.index') }}" class="nav-link ps-5">All Classes</a>
+                <a href="{{ route('admin.sections.index') }}" class="nav-link ps-5">Sections</a>
+                <a href="{{ route('admin.subjects.index') }}" class="nav-link ps-5">Subjects</a>
+                <a href="{{ route('admin.timetables.index') }}" class="nav-link ps-5">Timetable</a>
             </div>
             @endcan
             
             @can('attendance.view')
-            <a href="#attendanceMenu" class="nav-link" data-bs-toggle="collapse">
+            <a href="#attendanceMenu" class="nav-link" data-bs-toggle="collapse" aria-expanded="false" aria-controls="attendanceMenu">
                 <i class="bi bi-calendar-check"></i>
                 <span>Attendance</span>
                 <i class="bi bi-chevron-down ms-auto small"></i>
             </a>
             <div class="collapse" id="attendanceMenu">
-                <a href="#" class="nav-link ps-5">Mark Attendance</a>
-                <a href="#" class="nav-link ps-5">View Attendance</a>
-                <a href="#" class="nav-link ps-5">Attendance Report</a>
+                <a href="{{ route('admin.attendance.mark') }}" class="nav-link ps-5">Mark Attendance</a>
+                <a href="{{ route('admin.attendance.index') }}" class="nav-link ps-5">View Attendance</a>
+                <a href="{{ route('admin.attendance.report') }}" class="nav-link ps-5">Attendance Report</a>
             </div>
             @endcan
             
             <div class="menu-header">Examination</div>
             
             @can('exams.view')
-            <a href="#examsMenu" class="nav-link" data-bs-toggle="collapse">
+            <a href="#examsMenu" class="nav-link" data-bs-toggle="collapse" aria-expanded="false" aria-controls="examsMenu">
                 <i class="bi bi-journal-text"></i>
                 <span>Examinations</span>
                 <i class="bi bi-chevron-down ms-auto small"></i>
             </a>
             <div class="collapse" id="examsMenu">
-                <a href="#" class="nav-link ps-5">Exam Types</a>
-                <a href="#" class="nav-link ps-5">Exam Schedule</a>
-                <a href="#" class="nav-link ps-5">Exam Grades</a>
-                <a href="#" class="nav-link ps-5">Enter Marks</a>
-                <a href="#" class="nav-link ps-5">Results</a>
+                <a href="{{ route('admin.exam-types.index') }}" class="nav-link ps-5">Exam Types</a>
+                <a href="{{ route('admin.exams.index') }}" class="nav-link ps-5">Exam Schedule</a>
+                <a href="{{ route('admin.exam-grades.index') }}" class="nav-link ps-5">Exam Grades</a>
+                <a href="{{ route('admin.exams.index') }}" class="nav-link ps-5">Enter Marks</a>
+                <a href="{{ route('admin.exams.index') }}" class="nav-link ps-5">Results</a>
             </div>
             @endcan
             
             <div class="menu-header">Finance</div>
             
             @can('fees.view')
-            <a href="#feesMenu" class="nav-link" data-bs-toggle="collapse">
+            <a href="#feesMenu" class="nav-link" data-bs-toggle="collapse" aria-expanded="false" aria-controls="feesMenu">
                 <i class="bi bi-currency-rupee"></i>
                 <span>Fees</span>
                 <i class="bi bi-chevron-down ms-auto small"></i>
             </a>
             <div class="collapse" id="feesMenu">
-                <a href="#" class="nav-link ps-5">Fee Types</a>
-                <a href="#" class="nav-link ps-5">Fee Groups</a>
-                <a href="#" class="nav-link ps-5">Fee Collection</a>
-                <a href="#" class="nav-link ps-5">Fee Discounts</a>
-                <a href="#" class="nav-link ps-5">Fee Reports</a>
+                <a href="{{ route('admin.fees-types.index') }}" class="nav-link ps-5">Fee Types</a>
+                <a href="{{ route('admin.fees-groups.index') }}" class="nav-link ps-5">Fee Groups</a>
+                <a href="{{ route('admin.fees-collection.index') }}" class="nav-link ps-5">Fee Collection</a>
+                <a href="{{ route('admin.fees-discounts.index') }}" class="nav-link ps-5">Fee Discounts</a>
+                <a href="{{ route('admin.fees-collection.report') }}" class="nav-link ps-5">Fee Reports</a>
             </div>
             @endcan
             
             <div class="menu-header">Services</div>
             
             @can('library.view')
-            <a href="#libraryMenu" class="nav-link" data-bs-toggle="collapse">
+            <a href="#libraryMenu" class="nav-link" data-bs-toggle="collapse" aria-expanded="false" aria-controls="libraryMenu">
                 <i class="bi bi-book"></i>
                 <span>Library</span>
                 <i class="bi bi-chevron-down ms-auto small"></i>
             </a>
             <div class="collapse" id="libraryMenu">
-                <a href="#" class="nav-link ps-5">Books</a>
-                <a href="#" class="nav-link ps-5">Issue/Return</a>
-                <a href="#" class="nav-link ps-5">Members</a>
+                <a href="{{ route('admin.library-books.index') }}" class="nav-link ps-5">Books</a>
+                <a href="{{ route('admin.library-issues.index') }}" class="nav-link ps-5">Issue/Return</a>
+                <a href="{{ route('admin.library-members.index') }}" class="nav-link ps-5">Members</a>
             </div>
             @endcan
             
             @can('transport.view')
-            <a href="#transportMenu" class="nav-link" data-bs-toggle="collapse">
+            <a href="#transportMenu" class="nav-link" data-bs-toggle="collapse" aria-expanded="false" aria-controls="transportMenu">
                 <i class="bi bi-bus-front"></i>
                 <span>Transport</span>
                 <i class="bi bi-chevron-down ms-auto small"></i>
             </a>
             <div class="collapse" id="transportMenu">
-                <a href="#" class="nav-link ps-5">Routes</a>
-                <a href="#" class="nav-link ps-5">Vehicles</a>
-                <a href="#" class="nav-link ps-5">Assign Students</a>
+                <a href="{{ route('admin.transport-routes.index') }}" class="nav-link ps-5">Routes</a>
+                <a href="{{ route('admin.transport-vehicles.index') }}" class="nav-link ps-5">Vehicles</a>
+                <a href="{{ route('admin.transport-students.index') }}" class="nav-link ps-5">Assign Students</a>
             </div>
             @endcan
             
             @can('hostel.view')
-            <a href="#hostelMenu" class="nav-link" data-bs-toggle="collapse">
+            <a href="#hostelMenu" class="nav-link" data-bs-toggle="collapse" aria-expanded="false" aria-controls="hostelMenu">
                 <i class="bi bi-house"></i>
                 <span>Hostel</span>
                 <i class="bi bi-chevron-down ms-auto small"></i>
             </a>
             <div class="collapse" id="hostelMenu">
-                <a href="#" class="nav-link ps-5">Hostels</a>
-                <a href="#" class="nav-link ps-5">Rooms</a>
-                <a href="#" class="nav-link ps-5">Assignments</a>
+                <a href="{{ route('admin.hostel-buildings.index') }}" class="nav-link ps-5">Hostels</a>
+                <a href="{{ route('admin.hostel-rooms.index') }}" class="nav-link ps-5">Rooms</a>
+                <a href="{{ route('admin.hostel-assignments.index') }}" class="nav-link ps-5">Assignments</a>
             </div>
             @endcan
             
             <div class="menu-header">Communication</div>
             
             @can('notices.view')
-            <a href="#noticesMenu" class="nav-link" data-bs-toggle="collapse">
+            <a href="#noticesMenu" class="nav-link" data-bs-toggle="collapse" aria-expanded="false" aria-controls="noticesMenu">
                 <i class="bi bi-megaphone"></i>
                 <span>Notices</span>
                 <i class="bi bi-chevron-down ms-auto small"></i>
             </a>
             <div class="collapse" id="noticesMenu">
-                <a href="#" class="nav-link ps-5">All Notices</a>
-                <a href="#" class="nav-link ps-5">Create Notice</a>
+                <a href="{{ route('admin.notices.index') }}" class="nav-link ps-5">All Notices</a>
+                <a href="{{ route('admin.notices.create') }}" class="nav-link ps-5">Create Notice</a>
             </div>
             @endcan
             
             <div class="menu-header">Reports</div>
             
             @can('reports.view')
-            <a href="#reportsMenu" class="nav-link" data-bs-toggle="collapse">
+            <a href="#reportsMenu" class="nav-link" data-bs-toggle="collapse" aria-expanded="false" aria-controls="reportsMenu">
                 <i class="bi bi-file-earmark-bar-graph"></i>
                 <span>Reports</span>
                 <i class="bi bi-chevron-down ms-auto small"></i>
             </a>
             <div class="collapse" id="reportsMenu">
-                <a href="#" class="nav-link ps-5">Student Report</a>
-                <a href="#" class="nav-link ps-5">Attendance Report</a>
-                <a href="#" class="nav-link ps-5">Fee Report</a>
-                <a href="#" class="nav-link ps-5">Exam Report</a>
+                <a href="{{ route('admin.reports.index') }}" class="nav-link ps-5">Student Report</a>
+                <a href="{{ route('admin.attendance.report') }}" class="nav-link ps-5">Attendance Report</a>
+                <a href="{{ route('admin.fees-collection.report') }}" class="nav-link ps-5">Fee Report</a>
+                <a href="{{ route('admin.reports.index') }}" class="nav-link ps-5">Exam Report</a>
             </div>
             @endcan
             
             <div class="menu-header">Settings</div>
             
             @can('settings.view')
-            <a href="#settingsMenu" class="nav-link" data-bs-toggle="collapse">
+            <a href="#settingsMenu" class="nav-link" data-bs-toggle="collapse" aria-expanded="false" aria-controls="settingsMenu">
                 <i class="bi bi-gear"></i>
                 <span>Settings</span>
                 <i class="bi bi-chevron-down ms-auto small"></i>
             </a>
             <div class="collapse" id="settingsMenu">
                 <a href="#" class="nav-link ps-5">General Settings</a>
-                <a href="#" class="nav-link ps-5">Academic Sessions</a>
+                <a href="{{ route('admin.academic-sessions.index') }}" class="nav-link ps-5">Academic Sessions</a>
                 <a href="#" class="nav-link ps-5">SMS Settings</a>
                 <a href="#" class="nav-link ps-5">Email Settings</a>
             </div>
             @endcan
             
             @can('users.view')
-            <a href="#usersMenu" class="nav-link" data-bs-toggle="collapse">
+            <a href="#usersMenu" class="nav-link" data-bs-toggle="collapse" aria-expanded="false" aria-controls="usersMenu">
                 <i class="bi bi-person-gear"></i>
                 <span>User Management</span>
                 <i class="bi bi-chevron-down ms-auto small"></i>

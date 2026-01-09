@@ -2125,7 +2125,91 @@ The Smart School Management System frontend is complete with all 291 prompts imp
 
 ---
 
+## Session 41: API Endpoints and Backend-Frontend Integration (Prompts 473-492) - COMPLETED
+
+| Prompt # | Description | Status |
+|----------|-------------|--------|
+| 473 | Define Web Routes and Named Route Map | COMPLETED |
+| 474 | Create Versioned API Route Groups for AJAX | COMPLETED |
+| 475 | Add Base Controller Response Helpers | COMPLETED |
+| 476 | Implement View Composers for Global Layout Data | COMPLETED |
+| 477 | Build API Resource Classes for JSON Consistency | COMPLETED |
+| 478 | Standardize Validation Errors for Web and JSON | COMPLETED |
+| 479 | Add Dependent Dropdown Endpoints | COMPLETED |
+| 480 | Add Server-Side Pagination, Search, and Filters | COMPLETED |
+| 481 | Implement File Upload Endpoints for Dropzone and TinyMCE | COMPLETED |
+| 482 | Secure File Downloads and Media Access | COMPLETED |
+| 483 | Add Notification Fetch and Mark-Read Endpoints | COMPLETED |
+| 484 | Provide Dashboard Metrics and Chart Data Endpoints | COMPLETED |
+| 485 | Add Report Export Endpoints with Filters | COMPLETED |
+| 486 | Implement Locale Switcher and JS Translations | COMPLETED |
+| 487 | Wire CSRF and Session Support for AJAX | COMPLETED |
+| 488 | Enable Real-Time Events for UI Updates | COMPLETED |
+| 489 | Create Student API Resource | COMPLETED |
+| 490 | Create Teacher API Resource | COMPLETED |
+| 491 | Create Fees API Resource | COMPLETED |
+| 492 | Create Attendance API Resource | COMPLETED |
+
+---
+
+### Session 41 Files Created/Updated:
+
+#### Part 1: Route Configuration (Prompts 473-476):
+| File | Description |
+|------|-------------|
+| `routes/web.php` | Comprehensive web routes with role-based groups and named routes |
+| `routes/api.php` | Versioned API routes (/api/v1) for AJAX endpoints |
+| `app/Http/Controllers/Controller.php` | Base controller with response helpers (successResponse, errorResponse, paginatedResponse) |
+| `app/Providers/ViewServiceProvider.php` | View composers for global layout data (settings, sessions, menus) |
+
+#### Part 2: API Resources and Validation (Prompts 477-480):
+| File | Description |
+|------|-------------|
+| `app/Http/Resources/` | API Resource classes for consistent JSON serialization |
+| `app/Http/Requests/BaseFormRequest.php` | Base form request with standardized validation error handling |
+| `app/Http/Controllers/Api/DropdownController.php` | Dependent dropdown endpoints for Select2 and cascading selects |
+| `app/Traits/HasPagination.php` | Reusable pagination trait with search, filter, and sort support |
+
+#### Part 3: File Handling and Notifications (Prompts 481-484):
+| File | Description |
+|------|-------------|
+| `app/Http/Controllers/UploadController.php` | File upload endpoints for Dropzone, TinyMCE, and general uploads |
+| `app/Http/Controllers/DownloadController.php` | Secure file download endpoints with signed URLs |
+| `app/Http/Controllers/Api/NotificationController.php` | Notification fetch and mark-read endpoints |
+| `app/Http/Controllers/Api/DashboardController.php` | Dashboard metrics and chart data endpoints |
+
+#### Part 4: Reports, Localization, and Real-time (Prompts 485-492):
+| File | Description |
+|------|-------------|
+| `app/Http/Controllers/Api/ReportController.php` | Report export endpoints with filters (PDF, Excel, CSV) |
+| `app/Http/Controllers/LocaleController.php` | Locale switcher for language changes |
+| `routes/channels.php` | Broadcasting channels for real-time updates |
+| `app/Http/Resources/StudentResource.php` | Student API resource with comprehensive data transformation |
+| `app/Http/Resources/TeacherResource.php` | Teacher API resource with employment and bank info |
+| `app/Http/Resources/FeesTransactionResource.php` | Fees transaction API resource with payment details |
+| `app/Http/Resources/AttendanceResource.php` | Attendance API resource with student and type data |
+
+### Session 41 Features:
+- Comprehensive web routes with role-based middleware groups (admin, teacher, student, parent, accountant, librarian)
+- Versioned API routes (/api/v1) for AJAX endpoints with rate limiting
+- Base controller response helpers for consistent JSON responses
+- View composers for global layout data (school settings, academic sessions, user menus)
+- API Resources for consistent JSON serialization across all modules
+- Standardized validation error handling for web and JSON requests
+- Dependent dropdown endpoints for Select2 and cascading selects
+- Server-side pagination trait with search, filter, and sort support
+- File upload endpoints for Dropzone, TinyMCE, and general uploads
+- Secure file download endpoints with signed URLs
+- Notification fetch and mark-read endpoints
+- Dashboard metrics and chart data endpoints
+- Report export endpoints with filters (PDF, Excel, CSV)
+- Locale switcher for multi-language support
+- CSRF and session support for AJAX requests
+- Broadcasting channels for real-time updates via WebSockets
+
+---
+
 ## Last Updated
 Date: 2026-01-09
-Session: 40 - COMPLETED (Events and Listeners: 20 Prompts)
-Status: BACKEND INTEGRATION PHASE IN PROGRESS (472/497 prompts - 95.0%)
+Session: 41 - COMPLETED (API Endpoints and Backend-Frontend Integration: 20 Prompts)
+Status: BACKEND INTEGRATION PHASE IN PROGRESS (492/497 prompts - 99.0%)
