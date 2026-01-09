@@ -10,12 +10,12 @@ class ExpenseCategoryController extends Controller
     public function index(Request $request)
     {
         $categories = collect([]);
-        return view('admin.accounting.expense-categories', compact('categories'));
+        return view('admin.expenses.categories', compact('categories'));
     }
 
     public function create()
     {
-        return view('admin.accounting.expense-categories-create');
+        return view('admin.expenses.categories-create');
     }
 
     public function store(Request $request)
@@ -25,12 +25,12 @@ class ExpenseCategoryController extends Controller
 
     public function show($id)
     {
-        return view('admin.accounting.expense-categories', ['categories' => collect([])]);
+        return view('admin.expenses.categories', ['categories' => collect([])]);
     }
 
     public function edit($id)
     {
-        return view('admin.accounting.expense-categories-create', ['category' => null]);
+        return view('admin.expenses.categories-create', ['category' => null]);
     }
 
     public function update(Request $request, $id)

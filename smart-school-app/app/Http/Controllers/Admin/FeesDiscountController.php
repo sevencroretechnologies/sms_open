@@ -10,12 +10,12 @@ class FeesDiscountController extends Controller
     public function index(Request $request)
     {
         $discounts = collect([]);
-        return view('admin.fees.discounts', compact('discounts'));
+        return view('admin.fee-discounts.index', compact('discounts'));
     }
 
     public function create()
     {
-        return view('admin.fees.discounts-create');
+        return view('admin.fee-discounts.create');
     }
 
     public function store(Request $request)
@@ -25,12 +25,12 @@ class FeesDiscountController extends Controller
 
     public function show($id)
     {
-        return view('admin.fees.discounts', ['discounts' => collect([])]);
+        return view('admin.fee-discounts.index', ['discounts' => collect([])]);
     }
 
     public function edit($id)
     {
-        return view('admin.fees.discounts-create', ['discount' => null]);
+        return view('admin.fee-discounts.create', ['discount' => null]);
     }
 
     public function update(Request $request, $id)

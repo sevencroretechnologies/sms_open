@@ -14,14 +14,14 @@ class FeesAllotmentController extends Controller
         $academicSessions = AcademicSession::active()->orderBy('start_date', 'desc')->get();
         $classes = SchoolClass::active()->ordered()->get();
         $allotments = collect([]);
-        return view('admin.fees.allotments', compact('academicSessions', 'classes', 'allotments'));
+        return view('admin.fee-allotments.index', compact('academicSessions', 'classes', 'allotments'));
     }
 
     public function create()
     {
         $academicSessions = AcademicSession::active()->orderBy('start_date', 'desc')->get();
         $classes = SchoolClass::active()->ordered()->get();
-        return view('admin.fees.allotments-create', compact('academicSessions', 'classes'));
+        return view('admin.fee-allotments.create', compact('academicSessions', 'classes'));
     }
 
     public function store(Request $request)
@@ -31,14 +31,14 @@ class FeesAllotmentController extends Controller
 
     public function show($id)
     {
-        return view('admin.fees.allotments', ['allotments' => collect([]), 'academicSessions' => collect([]), 'classes' => collect([])]);
+        return view('admin.fee-allotments.index', ['allotments' => collect([]), 'academicSessions' => collect([]), 'classes' => collect([])]);
     }
 
     public function edit($id)
     {
         $academicSessions = AcademicSession::active()->orderBy('start_date', 'desc')->get();
         $classes = SchoolClass::active()->ordered()->get();
-        return view('admin.fees.allotments-create', compact('academicSessions', 'classes') + ['allotment' => null]);
+        return view('admin.fee-allotments.create', compact('academicSessions', 'classes') + ['allotment' => null]);
     }
 
     public function update(Request $request, $id)

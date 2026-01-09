@@ -9,7 +9,7 @@ class SettingsController extends Controller
 {
     public function index()
     {
-        return view('admin.settings.index');
+        return view('admin.settings.general');
     }
 
     public function general()
@@ -24,7 +24,7 @@ class SettingsController extends Controller
 
     public function school()
     {
-        return view('admin.settings.school');
+        return view('admin.settings.general');
     }
 
     public function updateSchool(Request $request)

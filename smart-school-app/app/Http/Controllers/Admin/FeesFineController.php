@@ -10,12 +10,12 @@ class FeesFineController extends Controller
     public function index(Request $request)
     {
         $fines = collect([]);
-        return view('admin.fees.fines', compact('fines'));
+        return view('admin.fee-fines.index', compact('fines'));
     }
 
     public function create()
     {
-        return view('admin.fees.fines-create');
+        return view('admin.fee-fines.index', ['fines' => collect([])]);
     }
 
     public function store(Request $request)
@@ -25,12 +25,12 @@ class FeesFineController extends Controller
 
     public function show($id)
     {
-        return view('admin.fees.fines', ['fines' => collect([])]);
+        return view('admin.fee-fines.index', ['fines' => collect([])]);
     }
 
     public function edit($id)
     {
-        return view('admin.fees.fines-create', ['fine' => null]);
+        return view('admin.fee-fines.index', ['fines' => collect([]), 'fine' => null]);
     }
 
     public function update(Request $request, $id)

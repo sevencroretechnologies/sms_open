@@ -10,12 +10,12 @@ class ExamGradeController extends Controller
     public function index(Request $request)
     {
         $grades = collect([]);
-        return view('admin.exams.grades', compact('grades'));
+        return view('admin.exam-grades.index', compact('grades'));
     }
 
     public function create()
     {
-        return view('admin.exams.grades-create');
+        return view('admin.exam-grades.create');
     }
 
     public function store(Request $request)
@@ -25,12 +25,12 @@ class ExamGradeController extends Controller
 
     public function show($id)
     {
-        return view('admin.exams.grades', ['grades' => collect([])]);
+        return view('admin.exam-grades.index', ['grades' => collect([])]);
     }
 
     public function edit($id)
     {
-        return view('admin.exams.grades-create', ['grade' => null]);
+        return view('admin.exam-grades.create', ['grade' => null]);
     }
 
     public function update(Request $request, $id)

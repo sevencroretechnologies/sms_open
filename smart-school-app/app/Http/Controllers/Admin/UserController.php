@@ -10,12 +10,12 @@ class UserController extends Controller
     public function index(Request $request)
     {
         $users = collect([]);
-        return view('admin.users.index', compact('users'));
+        return view('admin.settings.users', compact('users'));
     }
 
     public function create()
     {
-        return view('admin.users.create');
+        return view('admin.settings.users-create');
     }
 
     public function store(Request $request)
@@ -25,12 +25,12 @@ class UserController extends Controller
 
     public function show($id)
     {
-        return view('admin.users.show', ['user' => null]);
+        return view('admin.settings.users', ['users' => collect([])]);
     }
 
     public function edit($id)
     {
-        return view('admin.users.create', ['user' => null]);
+        return view('admin.settings.users-create', ['user' => null]);
     }
 
     public function update(Request $request, $id)

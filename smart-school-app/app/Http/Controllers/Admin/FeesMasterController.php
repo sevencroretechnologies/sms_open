@@ -10,27 +10,27 @@ class FeesMasterController extends Controller
     public function index(Request $request)
     {
         $feesMasters = collect([]);
-        return view('admin.fees.master', compact('feesMasters'));
+        return view('admin.fee-masters.index', compact('feesMasters'));
     }
 
     public function create()
     {
-        return view('admin.fees.master-create');
+        return view('admin.fee-masters.create');
     }
 
     public function store(Request $request)
     {
-        return redirect()->route('admin.fees-master.index')->with('success', 'Fees master created successfully.');
+        return redirect()->route('admin.fees-masters.index')->with('success', 'Fees master created successfully.');
     }
 
     public function show($id)
     {
-        return view('admin.fees.master', ['feesMasters' => collect([])]);
+        return view('admin.fee-masters.index', ['feesMasters' => collect([])]);
     }
 
     public function edit($id)
     {
-        return view('admin.fees.master-create', ['feesMaster' => null]);
+        return view('admin.fee-masters.create', ['feesMaster' => null]);
     }
 
     public function update(Request $request, $id)

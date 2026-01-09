@@ -10,22 +10,22 @@ class MessageController extends Controller
     public function index(Request $request)
     {
         $messages = collect([]);
-        return view('admin.communication.messages', compact('messages'));
+        return view('admin.messages.inbox', compact('messages'));
     }
 
     public function inbox()
     {
-        return view('admin.communication.inbox', ['messages' => collect([])]);
+        return view('admin.messages.inbox', ['messages' => collect([])]);
     }
 
     public function sent()
     {
-        return view('admin.communication.sent', ['messages' => collect([])]);
+        return view('admin.messages.sent', ['messages' => collect([])]);
     }
 
     public function compose()
     {
-        return view('admin.communication.compose');
+        return view('admin.messages.compose');
     }
 
     public function send(Request $request)
@@ -35,7 +35,7 @@ class MessageController extends Controller
 
     public function show($id)
     {
-        return view('admin.communication.message-show', ['message' => null]);
+        return view('admin.messages.show', ['message' => null]);
     }
 
     public function destroy($id)

@@ -10,12 +10,12 @@ class ExamTypeController extends Controller
     public function index(Request $request)
     {
         $examTypes = collect([]);
-        return view('admin.exams.types', compact('examTypes'));
+        return view('admin.exam-types.index', compact('examTypes'));
     }
 
     public function create()
     {
-        return view('admin.exams.types-create');
+        return view('admin.exam-types.create');
     }
 
     public function store(Request $request)
@@ -25,12 +25,12 @@ class ExamTypeController extends Controller
 
     public function show($id)
     {
-        return view('admin.exams.types', ['examTypes' => collect([])]);
+        return view('admin.exam-types.index', ['examTypes' => collect([])]);
     }
 
     public function edit($id)
     {
-        return view('admin.exams.types-create', ['examType' => null]);
+        return view('admin.exam-types.create', ['examType' => null]);
     }
 
     public function update(Request $request, $id)

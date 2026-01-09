@@ -10,12 +10,12 @@ class AttendanceTypeController extends Controller
     public function index(Request $request)
     {
         $attendanceTypes = collect([]);
-        return view('admin.attendance.types', compact('attendanceTypes'));
+        return view('admin.attendance-types.index', compact('attendanceTypes'));
     }
 
     public function create()
     {
-        return view('admin.attendance.types-create');
+        return view('admin.attendance-types.create');
     }
 
     public function store(Request $request)
@@ -25,12 +25,12 @@ class AttendanceTypeController extends Controller
 
     public function show($id)
     {
-        return view('admin.attendance.types', ['attendanceTypes' => collect([])]);
+        return view('admin.attendance-types.index', ['attendanceTypes' => collect([])]);
     }
 
     public function edit($id)
     {
-        return view('admin.attendance.types-create', ['attendanceType' => null]);
+        return view('admin.attendance-types.create', ['attendanceType' => null]);
     }
 
     public function update(Request $request, $id)
