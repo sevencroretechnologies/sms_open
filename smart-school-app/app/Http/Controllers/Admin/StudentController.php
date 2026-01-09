@@ -14,14 +14,14 @@ class StudentController extends Controller
         $students = collect([]);
         $classes = SchoolClass::active()->ordered()->get();
         $academicSessions = AcademicSession::active()->orderBy('start_date', 'desc')->get();
-        return view('admin.reports.students', compact('students', 'classes', 'academicSessions'));
+        return view('admin.students.index', compact('students', 'classes', 'academicSessions'));
     }
 
     public function create()
     {
         $classes = SchoolClass::active()->ordered()->get();
         $academicSessions = AcademicSession::active()->orderBy('start_date', 'desc')->get();
-        return view('admin.reports.students', compact('classes', 'academicSessions'));
+        return view('admin.students.create', compact('classes', 'academicSessions'));
     }
 
     public function store(Request $request)
@@ -31,13 +31,13 @@ class StudentController extends Controller
 
     public function show($id)
     {
-        return view('admin.reports.students', ['student' => null, 'students' => collect([])]);
+        return view('admin.students.show', ['student' => null, 'students' => collect([])]);
     }
 
     public function edit($id)
     {
         $classes = SchoolClass::active()->ordered()->get();
-        return view('admin.reports.students', ['student' => null, 'classes' => $classes]);
+        return view('admin.students.edit', ['student' => null, 'classes' => $classes]);
     }
 
     public function update(Request $request, $id)
@@ -52,12 +52,12 @@ class StudentController extends Controller
 
     public function profile($id)
     {
-        return view('admin.reports.students', ['student' => null]);
+        return view('admin.students.show', ['student' => null]);
     }
 
     public function documents($id)
     {
-        return view('admin.reports.students', ['student' => null]);
+        return view('admin.students.show', ['student' => null]);
     }
 
     public function uploadDocument(Request $request, $id)
@@ -72,7 +72,7 @@ class StudentController extends Controller
 
     public function importForm()
     {
-        return view('admin.reports.students');
+        return view('admin.students.index');
     }
 
     public function import(Request $request)
@@ -87,7 +87,7 @@ class StudentController extends Controller
 
     public function bulkActionsForm()
     {
-        return view('admin.reports.students');
+        return view('admin.students.index');
     }
 
     public function bulkActions(Request $request)
