@@ -1657,7 +1657,43 @@ The Smart School Management System frontend is complete with all 291 prompts imp
 
 ---
 
+## Phase 25: Form Request Validation Implementation Part 3 (Prompts 368-372) - SESSION 35 COMPLETED
+
+| Prompt # | Description | Status |
+|----------|-------------|--------|
+| 368 | Create Fee Refund Form Request | COMPLETED |
+| 369 | Create Library Category Store Form Request | COMPLETED |
+| 370 | Create Library Member Store Form Request | COMPLETED |
+| 371 | Create Transport Vehicle Store Form Request | COMPLETED |
+| 372 | Create Hostel Room Store Form Request | COMPLETED |
+
+---
+
+### Session 35 Files Created:
+
+#### Form Request Classes (Prompts 368-372):
+| File | Description |
+|------|-------------|
+| `app/Http/Requests/FeeRefundRequest.php` | Fee refund validation with transaction, amount, method, and reason fields |
+| `app/Http/Requests/LibraryCategoryStoreRequest.php` | Library category creation validation with name, code uniqueness, and active status |
+| `app/Http/Requests/LibraryMemberStoreRequest.php` | Library member creation validation with member type, card number uniqueness, and date range |
+| `app/Http/Requests/TransportVehicleStoreRequest.php` | Transport vehicle creation validation with vehicle number uniqueness, capacity, and document upload |
+| `app/Http/Requests/HostelRoomStoreRequest.php` | Hostel room creation validation with hostel, room type, capacity, rent, and status fields |
+
+### Session 35 Features:
+- All form requests extend BaseFormRequest for consistent validation error handling
+- Permission-based authorization using Spatie Permission (can() method)
+- Comprehensive validation rules for all fields (required, string, max, unique, exists, etc.)
+- Custom error messages for user-friendly validation feedback
+- Custom attribute names for cleaner error messages
+- Unique constraint validation for codes and numbers (library category code, card number, vehicle number)
+- Date validation with after_or_equal rules for membership date ranges
+- File validation for document uploads (pdf, jpg, jpeg, png with max size)
+- Enum validation for status fields (active/inactive, available/occupied/maintenance)
+
+---
+
 ## Last Updated
 Date: 2026-01-09
-Session: 34 - COMPLETED (Form Request Validation Implementation Part 2: 15 Form Request Classes)
-Status: BACKEND INTEGRATION PHASE IN PROGRESS (367/497 prompts - 73.8%)
+Session: 35 - COMPLETED (Form Request Validation Implementation Part 3: 5 Form Request Classes)
+Status: BACKEND INTEGRATION PHASE IN PROGRESS (372/497 prompts - 74.8%)
