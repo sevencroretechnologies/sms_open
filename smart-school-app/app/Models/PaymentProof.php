@@ -120,7 +120,7 @@ class PaymentProof extends Model
      */
     public function getExtensionAttribute(): string
     {
-        return pathinfo($this->original_name, PATHINFO_EXTENSION);
+        return $this->original_name ? pathinfo($this->original_name, PATHINFO_EXTENSION) : '';
     }
 
     /**
