@@ -197,27 +197,27 @@
                 <div class="card-body">
                     <div class="row g-2">
                         <div class="col-auto">
-                            <a href="#" class="btn btn-primary">
+                            <a href="{{ route('admin.students.create') }}" class="btn btn-primary">
                                 <i class="bi bi-person-plus me-2"></i>Add Student
                             </a>
                         </div>
                         <div class="col-auto">
-                            <a href="#" class="btn btn-success">
+                            <a href="{{ route('admin.attendance.mark') }}" class="btn btn-success">
                                 <i class="bi bi-calendar-check me-2"></i>Mark Attendance
                             </a>
                         </div>
                         <div class="col-auto">
-                            <a href="#" class="btn btn-info text-white">
+                            <a href="{{ route('admin.fees-collection.index') }}" class="btn btn-info text-white">
                                 <i class="bi bi-currency-rupee me-2"></i>Collect Fee
                             </a>
                         </div>
                         <div class="col-auto">
-                            <a href="#" class="btn btn-warning">
+                            <a href="{{ route('admin.notices.create') }}" class="btn btn-warning">
                                 <i class="bi bi-megaphone me-2"></i>Create Notice
                             </a>
                         </div>
                         <div class="col-auto">
-                            <a href="#" class="btn btn-secondary">
+                            <a href="{{ route('admin.reports.index') }}" class="btn btn-secondary">
                                 <i class="bi bi-file-earmark-bar-graph me-2"></i>Generate Report
                             </a>
                         </div>
