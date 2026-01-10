@@ -3,70 +3,42 @@
 namespace App\Http\Controllers\Student;
 
 use App\Http\Controllers\Controller;
+use App\Models\ClassTimetable;
+use App\Models\Student;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 /**
  * TimetableController
  * 
- * Stub controller - to be implemented in future sessions.
+ * Handles timetable viewing for students.
  */
 class TimetableController extends Controller
 {
-    public function __call($method, $parameters)
-    {
-        return $this->placeholder();
-    }
-
+    /**
+     * Display the student's class timetable.
+     */
     public function index()
     {
-        return $this->placeholder();
-    }
-
-    public function create()
-    {
-        return $this->placeholder();
-    }
-
-    public function store(Request $request)
-    {
-        return $this->placeholder();
-    }
-
-    public function show($id)
-    {
-        return $this->placeholder();
-    }
-
-    public function edit($id)
-    {
-        return $this->placeholder();
-    }
-
-    public function update(Request $request, $id)
-    {
-        return $this->placeholder();
-    }
-
-    public function destroy($id)
-    {
-        return $this->placeholder();
-    }
-
-    protected function placeholder()
-    {
-        $routeName = request()->route()?->getName() ?? 'unknown';
+        $user = Auth::user();
+        $student = Student::where('user_id', $user->id)
+            ->with(['schoolClass', 'section'])
+            ->first();
         
-        if (request()->expectsJson()) {
-            return response()->json([
-                'status' => 'info',
-                'message' => 'This feature is coming soon',
-                'route' => $routeName,
-            ], 200);
+        if (!$student) {
+            return redirect()->route('student.dashboard')->with('error', 'Student profile not found.');
         }
-
-        return response()->view('errors.coming-soon', [
-            'route' => $routeName,
-            'message' => 'This feature is under development and will be available soon.',
-        ], 200);
+        
+        $dayNames = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'];
+        
+        $timetable = ClassTimetable::where('class_id', $student->class_id)
+            ->where('section_id', $student->section_id)
+            ->with(['subject', 'teacher.user'])
+            ->orderByRaw("FIELD(day_of_week, 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday')")
+            ->orderBy('start_time')
+            ->get()
+            ->groupBy('day_of_week');
+        
+        return view('student.timetable.index', compact('timetable', 'dayNames', 'student'));
     }
 }

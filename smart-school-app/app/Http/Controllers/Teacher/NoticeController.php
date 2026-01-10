@@ -3,70 +3,51 @@
 namespace App\Http\Controllers\Teacher;
 
 use App\Http\Controllers\Controller;
+use App\Models\Notice;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 /**
  * NoticeController
  * 
- * Stub controller - to be implemented in future sessions.
+ * Handles notice viewing for teachers.
  */
 class NoticeController extends Controller
 {
-    public function __call($method, $parameters)
+    /**
+     * Display list of notices.
+     */
+    public function index(Request $request)
     {
-        return $this->placeholder();
+        $notices = Notice::where(function ($query) {
+                $query->where('audience', 'all')
+                    ->orWhere('audience', 'teachers')
+                    ->orWhere('audience', 'staff');
+            })
+            ->where('is_published', true)
+            ->when($request->search, function ($query, $search) {
+                $query->where('title', 'like', "%{$search}%")
+                    ->orWhere('content', 'like', "%{$search}%");
+            })
+            ->orderBy('publish_date', 'desc')
+            ->paginate(15);
+        
+        return view('teacher.notices.index', compact('notices'));
     }
 
-    public function index()
-    {
-        return $this->placeholder();
-    }
-
-    public function create()
-    {
-        return $this->placeholder();
-    }
-
-    public function store(Request $request)
-    {
-        return $this->placeholder();
-    }
-
+    /**
+     * Display a specific notice.
+     */
     public function show($id)
     {
-        return $this->placeholder();
-    }
-
-    public function edit($id)
-    {
-        return $this->placeholder();
-    }
-
-    public function update(Request $request, $id)
-    {
-        return $this->placeholder();
-    }
-
-    public function destroy($id)
-    {
-        return $this->placeholder();
-    }
-
-    protected function placeholder()
-    {
-        $routeName = request()->route()?->getName() ?? 'unknown';
+        $notice = Notice::where(function ($query) {
+                $query->where('audience', 'all')
+                    ->orWhere('audience', 'teachers')
+                    ->orWhere('audience', 'staff');
+            })
+            ->where('is_published', true)
+            ->findOrFail($id);
         
-        if (request()->expectsJson()) {
-            return response()->json([
-                'status' => 'info',
-                'message' => 'This feature is coming soon',
-                'route' => $routeName,
-            ], 200);
-        }
-
-        return response()->view('errors.coming-soon', [
-            'route' => $routeName,
-            'message' => 'This feature is under development and will be available soon.',
-        ], 200);
+        return view('teacher.notices.show', compact('notice'));
     }
 }

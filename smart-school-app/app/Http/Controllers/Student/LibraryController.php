@@ -3,70 +3,64 @@
 namespace App\Http\Controllers\Student;
 
 use App\Http\Controllers\Controller;
+use App\Models\LibraryBook;
+use App\Models\LibraryBookIssue;
+use App\Models\Student;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 /**
  * LibraryController
  * 
- * Stub controller - to be implemented in future sessions.
+ * Handles library book browsing and issued books viewing for students.
  */
 class LibraryController extends Controller
 {
-    public function __call($method, $parameters)
+    /**
+     * Display available library books.
+     */
+    public function index(Request $request)
     {
-        return $this->placeholder();
+        $books = LibraryBook::when($request->search, function ($query, $search) {
+                $query->where('title', 'like', "%{$search}%")
+                    ->orWhere('author', 'like', "%{$search}%")
+                    ->orWhere('isbn', 'like', "%{$search}%");
+            })
+            ->when($request->category, fn($q, $cat) => $q->where('category_id', $cat))
+            ->where('quantity', '>', 0)
+            ->orderBy('title')
+            ->paginate(20);
+        
+        return view('student.library.index', compact('books'));
     }
 
-    public function index()
+    /**
+     * Display books issued to the student.
+     */
+    public function issued()
     {
-        return $this->placeholder();
+        $user = Auth::user();
+        $student = Student::where('user_id', $user->id)->first();
+        
+        if (!$student) {
+            return redirect()->route('student.dashboard')->with('error', 'Student profile not found.');
+        }
+        
+        $issuedBooks = LibraryBookIssue::where('student_id', $student->id)
+            ->with('book')
+            ->orderBy('issue_date', 'desc')
+            ->paginate(15);
+        
+        return view('student.library.issued', compact('issuedBooks'));
     }
 
-    public function create()
-    {
-        return $this->placeholder();
-    }
-
-    public function store(Request $request)
-    {
-        return $this->placeholder();
-    }
-
+    /**
+     * Display book details.
+     */
     public function show($id)
     {
-        return $this->placeholder();
-    }
-
-    public function edit($id)
-    {
-        return $this->placeholder();
-    }
-
-    public function update(Request $request, $id)
-    {
-        return $this->placeholder();
-    }
-
-    public function destroy($id)
-    {
-        return $this->placeholder();
-    }
-
-    protected function placeholder()
-    {
-        $routeName = request()->route()?->getName() ?? 'unknown';
+        $book = LibraryBook::findOrFail($id);
         
-        if (request()->expectsJson()) {
-            return response()->json([
-                'status' => 'info',
-                'message' => 'This feature is coming soon',
-                'route' => $routeName,
-            ], 200);
-        }
-
-        return response()->view('errors.coming-soon', [
-            'route' => $routeName,
-            'message' => 'This feature is under development and will be available soon.',
-        ], 200);
+        return view('student.library.show', compact('book'));
     }
 }

@@ -3,70 +3,78 @@
 namespace App\Http\Controllers\Student;
 
 use App\Http\Controllers\Controller;
+use App\Models\Student;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 
 /**
  * ProfileController
  * 
- * Stub controller - to be implemented in future sessions.
+ * Handles student profile viewing and editing.
  */
 class ProfileController extends Controller
 {
-    public function __call($method, $parameters)
-    {
-        return $this->placeholder();
-    }
-
+    /**
+     * Display the student's profile.
+     */
     public function index()
     {
-        return $this->placeholder();
-    }
-
-    public function create()
-    {
-        return $this->placeholder();
-    }
-
-    public function store(Request $request)
-    {
-        return $this->placeholder();
-    }
-
-    public function show($id)
-    {
-        return $this->placeholder();
-    }
-
-    public function edit($id)
-    {
-        return $this->placeholder();
-    }
-
-    public function update(Request $request, $id)
-    {
-        return $this->placeholder();
-    }
-
-    public function destroy($id)
-    {
-        return $this->placeholder();
-    }
-
-    protected function placeholder()
-    {
-        $routeName = request()->route()?->getName() ?? 'unknown';
+        $user = Auth::user();
+        $student = Student::where('user_id', $user->id)
+            ->with(['schoolClass', 'section', 'category', 'user'])
+            ->first();
         
-        if (request()->expectsJson()) {
-            return response()->json([
-                'status' => 'info',
-                'message' => 'This feature is coming soon',
-                'route' => $routeName,
-            ], 200);
-        }
+        return view('student.profile.index', compact('student', 'user'));
+    }
 
-        return response()->view('errors.coming-soon', [
-            'route' => $routeName,
-            'message' => 'This feature is under development and will be available soon.',
-        ], 200);
+    /**
+     * Show the edit profile form.
+     */
+    public function edit()
+    {
+        $user = Auth::user();
+        $student = Student::where('user_id', $user->id)
+            ->with(['schoolClass', 'section', 'user'])
+            ->first();
+        
+        return view('student.profile.edit', compact('student', 'user'));
+    }
+
+    /**
+     * Update the student's profile.
+     */
+    public function update(Request $request)
+    {
+        $user = Auth::user();
+        
+        $request->validate([
+            'phone' => 'nullable|string|max:20',
+            'address' => 'nullable|string|max:500',
+            'current_password' => 'nullable|required_with:new_password',
+            'new_password' => 'nullable|min:8|confirmed',
+        ]);
+
+        if ($request->phone) {
+            $user->phone = $request->phone;
+        }
+        
+        if ($request->current_password && $request->new_password) {
+            if (!Hash::check($request->current_password, $user->password)) {
+                return back()->with('error', 'Current password is incorrect.');
+            }
+            $user->password = Hash::make($request->new_password);
+        }
+        
+        $user->save();
+        
+        $student = Student::where('user_id', $user->id)->first();
+        if ($student && $request->address) {
+            $student->current_address = $request->address;
+            $student->save();
+        }
+        
+        return redirect()->route('student.profile.index')
+            ->with('success', 'Profile updated successfully.');
     }
 }

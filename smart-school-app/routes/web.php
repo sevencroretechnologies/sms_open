@@ -613,22 +613,25 @@ Route::prefix('librarian')
         Route::resource('categories', \App\Http\Controllers\Librarian\CategoryController::class);
         
         // Members
-        Route::resource('members', \App\Http\Controllers\Librarian\MemberController::class);
-        Route::get('/members/{member}/card', [\App\Http\Controllers\Librarian\MemberController::class, 'card'])->name('members.card');
+        Route::resource('members', \App\Http\Controllers\Librarian\MemberController::class)->except(['edit', 'update']);
+        Route::post('/members/{member}/toggle-status', [\App\Http\Controllers\Librarian\MemberController::class, 'toggleStatus'])->name('members.toggle-status');
         
         // Issue/Return
         Route::get('/issues', [\App\Http\Controllers\Librarian\IssueController::class, 'index'])->name('issues.index');
-        Route::get('/issues/issue', [\App\Http\Controllers\Librarian\IssueController::class, 'issueForm'])->name('issues.issue');
-        Route::post('/issues/issue', [\App\Http\Controllers\Librarian\IssueController::class, 'issue'])->name('issues.store');
-        Route::get('/issues/{issue}/return', [\App\Http\Controllers\Librarian\IssueController::class, 'returnForm'])->name('issues.return');
-        Route::post('/issues/{issue}/return', [\App\Http\Controllers\Librarian\IssueController::class, 'returnBook'])->name('issues.return.store');
+        Route::get('/issues/create', [\App\Http\Controllers\Librarian\IssueController::class, 'create'])->name('issues.create');
+        Route::post('/issues', [\App\Http\Controllers\Librarian\IssueController::class, 'store'])->name('issues.store');
         Route::get('/issues/overdue', [\App\Http\Controllers\Librarian\IssueController::class, 'overdue'])->name('issues.overdue');
+        Route::get('/issues/{issue}', [\App\Http\Controllers\Librarian\IssueController::class, 'show'])->name('issues.show');
+        Route::get('/issues/{issue}/return', [\App\Http\Controllers\Librarian\IssueController::class, 'returnForm'])->name('issues.return');
+        Route::post('/issues/{issue}/return', [\App\Http\Controllers\Librarian\IssueController::class, 'processReturn'])->name('issues.processReturn');
         
         // Reports
         Route::get('/reports', [\App\Http\Controllers\Librarian\ReportController::class, 'index'])->name('reports.index');
+        Route::get('/reports/inventory', [\App\Http\Controllers\Librarian\ReportController::class, 'inventory'])->name('reports.inventory');
         Route::get('/reports/circulation', [\App\Http\Controllers\Librarian\ReportController::class, 'circulation'])->name('reports.circulation');
         Route::get('/reports/overdue', [\App\Http\Controllers\Librarian\ReportController::class, 'overdue'])->name('reports.overdue');
-        Route::get('/reports/popular', [\App\Http\Controllers\Librarian\ReportController::class, 'popular'])->name('reports.popular');
+        Route::get('/reports/fines', [\App\Http\Controllers\Librarian\ReportController::class, 'fines'])->name('reports.fines');
+        Route::get('/reports/category-wise', [\App\Http\Controllers\Librarian\ReportController::class, 'categoryWise'])->name('reports.category-wise');
         
         // Profile
         Route::get('/profile', [\App\Http\Controllers\Librarian\ProfileController::class, 'index'])->name('profile.index');
