@@ -190,23 +190,19 @@ class DashboardController extends Controller
     {
         return Homework::where('class_id', $student->class_id)
             ->where('section_id', $student->section_id)
-            ->where('due_date', '>=', Carbon::now()->toDateString())
-            ->whereDoesntHave('submissions', function ($query) use ($student) {
-                $query->where('student_id', $student->id);
-            })
-            ->with(['subject', 'teacher.user'])
-            ->orderBy('due_date')
+            ->where('submission_date', '>=', Carbon::now()->toDateString())
+            ->with(['subject'])
+            ->orderBy('submission_date')
             ->take(5)
             ->get()
             ->map(function ($homework) {
-                $dueDate = Carbon::parse($homework->due_date);
+                $dueDate = Carbon::parse($homework->submission_date);
                 $daysLeft = Carbon::now()->diffInDays($dueDate, false);
                 return [
                     'id' => $homework->id,
                     'title' => $homework->title,
                     'subject_name' => $homework->subject->name ?? 'N/A',
-                    'teacher_name' => $homework->teacher->user->name ?? 'N/A',
-                    'due_date' => $homework->due_date,
+                    'due_date' => $homework->submission_date,
                     'days_left' => $daysLeft,
                     'urgency' => $daysLeft <= 1 ? 'danger' : ($daysLeft <= 3 ? 'warning' : 'info'),
                 ];
