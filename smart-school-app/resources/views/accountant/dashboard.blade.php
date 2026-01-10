@@ -101,27 +101,27 @@
                 <div class="card-body">
                     <div class="row g-2">
                         <div class="col-auto">
-                            <a href="#" class="btn btn-primary">
+                            <a href="{{ route('accountant.fees-collection.index') }}" class="btn btn-primary">
                                 <i class="bi bi-plus-circle me-2"></i>Collect Fee
                             </a>
                         </div>
                         <div class="col-auto">
-                            <a href="#" class="btn btn-success">
+                            <a href="{{ route('accountant.fees-collection.index') }}" class="btn btn-success">
                                 <i class="bi bi-receipt me-2"></i>Generate Invoice
                             </a>
                         </div>
                         <div class="col-auto">
-                            <a href="#" class="btn btn-info text-white">
+                            <a href="{{ route('accountant.fees-reports.index') }}" class="btn btn-info text-white">
                                 <i class="bi bi-file-earmark-text me-2"></i>Fee Report
                             </a>
                         </div>
                         <div class="col-auto">
-                            <a href="#" class="btn btn-warning">
+                            <a href="{{ route('accountant.expenses.create') }}" class="btn btn-warning">
                                 <i class="bi bi-cash me-2"></i>Add Expense
                             </a>
                         </div>
                         <div class="col-auto">
-                            <a href="#" class="btn btn-secondary">
+                            <a href="{{ route('accountant.fees-collection.index') }}" class="btn btn-secondary">
                                 <i class="bi bi-printer me-2"></i>Print Receipt
                             </a>
                         </div>
@@ -165,7 +165,7 @@
             <div class="card">
                 <div class="card-header bg-white d-flex justify-content-between align-items-center">
                     <h6 class="mb-0"><i class="bi bi-clock-history me-2"></i>Recent Transactions</h6>
-                    <a href="#" class="btn btn-sm btn-link">View All</a>
+                    <a href="{{ route('accountant.fees-collection.index') }}" class="btn btn-sm btn-link">View All</a>
                 </div>
                 <div class="card-body p-0">
                     <div class="table-responsive">
@@ -249,7 +249,7 @@
             <div class="card">
                 <div class="card-header bg-white d-flex justify-content-between align-items-center">
                     <h6 class="mb-0"><i class="bi bi-building me-2"></i>Pending Fees by Class</h6>
-                    <a href="#" class="btn btn-sm btn-link">View Report</a>
+                    <a href="{{ route('accountant.fees-reports.due') }}" class="btn btn-sm btn-link">View Report</a>
                 </div>
                 <div class="card-body p-0">
                     <div class="table-responsive">

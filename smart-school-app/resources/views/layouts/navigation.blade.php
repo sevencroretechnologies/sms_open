@@ -219,50 +219,50 @@
         @if($userRole === 'teacher')
             <div class="menu-header">My Classes</div>
             
-            <a href="#" class="nav-link">
+            <a href="{{ route('teacher.timetable.index') }}" class="nav-link">
                 <i class="bi bi-building"></i>
                 <span>My Classes</span>
             </a>
             
-            <a href="#" class="nav-link">
+            <a href="{{ route('teacher.students.index') }}" class="nav-link">
                 <i class="bi bi-people"></i>
                 <span>My Students</span>
             </a>
             
             <div class="menu-header">Attendance</div>
             
-            <a href="#" class="nav-link">
+            <a href="{{ route('teacher.attendance.mark') }}" class="nav-link">
                 <i class="bi bi-calendar-check"></i>
                 <span>Mark Attendance</span>
             </a>
             
-            <a href="#" class="nav-link">
+            <a href="{{ route('teacher.attendance.report') }}" class="nav-link">
                 <i class="bi bi-calendar-range"></i>
                 <span>Attendance Report</span>
             </a>
             
             <div class="menu-header">Examination</div>
             
-            <a href="#" class="nav-link">
+            <a href="{{ route('teacher.exams.index') }}" class="nav-link">
                 <i class="bi bi-journal-text"></i>
                 <span>Exam Schedule</span>
             </a>
             
-            <a href="#" class="nav-link">
+            <a href="{{ route('teacher.exams.index') }}" class="nav-link">
                 <i class="bi bi-pencil-square"></i>
                 <span>Enter Marks</span>
             </a>
             
             <div class="menu-header">Communication</div>
             
-            <a href="#" class="nav-link">
+            <a href="{{ route('teacher.notices.index') }}" class="nav-link">
                 <i class="bi bi-megaphone"></i>
                 <span>Notices</span>
             </a>
             
-            <a href="#" class="nav-link">
+            <a href="{{ route('teacher.messages.index') }}" class="nav-link">
                 <i class="bi bi-calendar-event"></i>
-                <span>Events</span>
+                <span>Messages</span>
             </a>
         @endif
         
@@ -270,45 +270,45 @@
         @if($userRole === 'student')
             <div class="menu-header">Academic</div>
             
-            <a href="#" class="nav-link">
+            <a href="{{ route('student.attendance.index') }}" class="nav-link">
                 <i class="bi bi-calendar-check"></i>
                 <span>My Attendance</span>
             </a>
             
-            <a href="#" class="nav-link">
+            <a href="{{ route('student.exams.index') }}" class="nav-link">
                 <i class="bi bi-journal-text"></i>
                 <span>Exam Schedule</span>
             </a>
             
-            <a href="#" class="nav-link">
+            <a href="{{ route('student.exams.index') }}" class="nav-link">
                 <i class="bi bi-award"></i>
                 <span>My Results</span>
             </a>
             
             <div class="menu-header">Finance</div>
             
-            <a href="#" class="nav-link">
+            <a href="{{ route('student.fees.index') }}" class="nav-link">
                 <i class="bi bi-currency-rupee"></i>
                 <span>My Fees</span>
             </a>
             
             <div class="menu-header">Services</div>
             
-            <a href="#" class="nav-link">
+            <a href="{{ route('student.library.index') }}" class="nav-link">
                 <i class="bi bi-book"></i>
                 <span>Library</span>
             </a>
             
             <div class="menu-header">Communication</div>
             
-            <a href="#" class="nav-link">
+            <a href="{{ route('student.notices.index') }}" class="nav-link">
                 <i class="bi bi-megaphone"></i>
                 <span>Notices</span>
             </a>
             
-            <a href="#" class="nav-link">
+            <a href="{{ route('student.messages.index') }}" class="nav-link">
                 <i class="bi bi-calendar-event"></i>
-                <span>Events</span>
+                <span>Messages</span>
             </a>
         @endif
         
@@ -316,38 +316,38 @@
         @if($userRole === 'parent')
             <div class="menu-header">My Children</div>
             
-            <a href="#" class="nav-link">
+            <a href="{{ route('parent.children.index') }}" class="nav-link">
                 <i class="bi bi-people"></i>
                 <span>Children</span>
             </a>
             
-            <a href="#" class="nav-link">
+            <a href="{{ route('parent.children.index') }}" class="nav-link">
                 <i class="bi bi-calendar-check"></i>
                 <span>Attendance</span>
             </a>
             
-            <a href="#" class="nav-link">
+            <a href="{{ route('parent.children.index') }}" class="nav-link">
                 <i class="bi bi-award"></i>
                 <span>Results</span>
             </a>
             
             <div class="menu-header">Finance</div>
             
-            <a href="#" class="nav-link">
+            <a href="{{ route('parent.fees.index') }}" class="nav-link">
                 <i class="bi bi-currency-rupee"></i>
                 <span>Fees</span>
             </a>
             
             <div class="menu-header">Communication</div>
             
-            <a href="#" class="nav-link">
+            <a href="{{ route('parent.notices.index') }}" class="nav-link">
                 <i class="bi bi-megaphone"></i>
                 <span>Notices</span>
             </a>
             
-            <a href="#" class="nav-link">
+            <a href="{{ route('parent.messages.index') }}" class="nav-link">
                 <i class="bi bi-calendar-event"></i>
-                <span>Events</span>
+                <span>Messages</span>
             </a>
         @endif
         
@@ -361,20 +361,20 @@
                 <i class="bi bi-chevron-down ms-auto small toggle-icon"></i>
             </a>
             <div class="sidebar-submenu" style="display: none; background: rgba(0,0,0,0.2); margin-left: 15px; border-left: 2px solid #4f46e5;">
-                <a href="#" class="nav-link" style="padding: 8px 15px; font-size: 14px; color: #e2e8f0;">• Fee Collection</a>
-                <a href="#" class="nav-link" style="padding: 8px 15px; font-size: 14px; color: #e2e8f0;">• Fee Types</a>
-                <a href="#" class="nav-link" style="padding: 8px 15px; font-size: 14px; color: #e2e8f0;">• Fee Groups</a>
-                <a href="#" class="nav-link" style="padding: 8px 15px; font-size: 14px; color: #e2e8f0;">• Discounts</a>
+                <a href="{{ route('accountant.fees-collection.index') }}" class="nav-link" style="padding: 8px 15px; font-size: 14px; color: #e2e8f0;">• Fee Collection</a>
+                <a href="{{ route('accountant.fees-reports.index') }}" class="nav-link" style="padding: 8px 15px; font-size: 14px; color: #e2e8f0;">• Fee Reports</a>
+                <a href="{{ route('accountant.fees-reports.due') }}" class="nav-link" style="padding: 8px 15px; font-size: 14px; color: #e2e8f0;">• Due Fees</a>
+                <a href="{{ route('accountant.fees-reports.defaulters') }}" class="nav-link" style="padding: 8px 15px; font-size: 14px; color: #e2e8f0;">• Defaulters</a>
             </div>
             
             <div class="menu-header">Reports</div>
             
-            <a href="#" class="nav-link">
+            <a href="{{ route('accountant.fees-reports.index') }}" class="nav-link">
                 <i class="bi bi-file-earmark-bar-graph"></i>
                 <span>Fee Reports</span>
             </a>
             
-            <a href="#" class="nav-link">
+            <a href="{{ route('accountant.fees-reports.collection') }}" class="nav-link">
                 <i class="bi bi-graph-up"></i>
                 <span>Collection Summary</span>
             </a>
@@ -390,24 +390,24 @@
                 <i class="bi bi-chevron-down ms-auto small toggle-icon"></i>
             </a>
             <div class="sidebar-submenu" style="display: none; background: rgba(0,0,0,0.2); margin-left: 15px; border-left: 2px solid #4f46e5;">
-                <a href="#" class="nav-link" style="padding: 8px 15px; font-size: 14px; color: #e2e8f0;">• All Books</a>
-                <a href="#" class="nav-link" style="padding: 8px 15px; font-size: 14px; color: #e2e8f0;">• Add Book</a>
-                <a href="#" class="nav-link" style="padding: 8px 15px; font-size: 14px; color: #e2e8f0;">• Categories</a>
+                <a href="{{ route('librarian.books.index') }}" class="nav-link" style="padding: 8px 15px; font-size: 14px; color: #e2e8f0;">• All Books</a>
+                <a href="{{ route('librarian.books.create') }}" class="nav-link" style="padding: 8px 15px; font-size: 14px; color: #e2e8f0;">• Add Book</a>
+                <a href="{{ route('librarian.categories.index') }}" class="nav-link" style="padding: 8px 15px; font-size: 14px; color: #e2e8f0;">• Categories</a>
             </div>
             
-            <a href="#" class="nav-link">
+            <a href="{{ route('librarian.issues.index') }}" class="nav-link">
                 <i class="bi bi-arrow-left-right"></i>
                 <span>Issue/Return</span>
             </a>
             
-            <a href="#" class="nav-link">
+            <a href="{{ route('librarian.members.index') }}" class="nav-link">
                 <i class="bi bi-person-badge"></i>
                 <span>Members</span>
             </a>
             
             <div class="menu-header">Reports</div>
             
-            <a href="#" class="nav-link">
+            <a href="{{ route('librarian.reports.index') }}" class="nav-link">
                 <i class="bi bi-file-earmark-bar-graph"></i>
                 <span>Library Reports</span>
             </a>

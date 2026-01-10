@@ -42,7 +42,7 @@
                             </p>
                         </div>
                         <div class="col-auto">
-                            <a href="#" class="btn btn-light btn-sm">
+                            <a href="{{ route('student.profile.index') }}" class="btn btn-light btn-sm">
                                 <i class="bi bi-person me-1"></i>View Profile
                             </a>
                         </div>
@@ -135,27 +135,27 @@
                 <div class="card-body">
                     <div class="row g-2">
                         <div class="col-auto">
-                            <a href="#" class="btn btn-primary">
+                            <a href="{{ route('student.timetable.index') }}" class="btn btn-primary">
                                 <i class="bi bi-calendar3 me-2"></i>View Timetable
                             </a>
                         </div>
                         <div class="col-auto">
-                            <a href="#" class="btn btn-success">
+                            <a href="{{ route('student.exams.index') }}" class="btn btn-success">
                                 <i class="bi bi-journal-text me-2"></i>View Results
                             </a>
                         </div>
                         <div class="col-auto">
-                            <a href="#" class="btn btn-info text-white">
+                            <a href="{{ route('student.fees.index') }}" class="btn btn-info text-white">
                                 <i class="bi bi-credit-card me-2"></i>Pay Fees
                             </a>
                         </div>
                         <div class="col-auto">
-                            <a href="#" class="btn btn-warning">
+                            <a href="{{ route('student.attendance.index') }}" class="btn btn-warning">
                                 <i class="bi bi-calendar-check me-2"></i>Attendance
                             </a>
                         </div>
                         <div class="col-auto">
-                            <a href="#" class="btn btn-secondary">
+                            <a href="{{ route('student.homework.index') }}" class="btn btn-secondary">
                                 <i class="bi bi-journal-bookmark me-2"></i>Homework
                             </a>
                         </div>
@@ -217,7 +217,7 @@
                 <div class="card-body p-0">
                     <div class="list-group list-group-flush" style="max-height: 300px; overflow-y: auto;">
                         @forelse($pendingHomework as $homework)
-                            <a href="#" class="list-group-item list-group-item-action py-3">
+                            <a href="{{ route('student.homework.index') }}" class="list-group-item list-group-item-action py-3">
                                 <div class="d-flex justify-content-between align-items-start">
                                     <div>
                                         <h6 class="mb-1">{{ $homework['title'] }}</h6>
@@ -252,7 +252,7 @@
             <div class="card">
                 <div class="card-header bg-white d-flex justify-content-between align-items-center">
                     <h6 class="mb-0"><i class="bi bi-graph-up me-2"></i>Recent Results</h6>
-                    <a href="#" class="btn btn-sm btn-link">View All</a>
+                    <a href="{{ route('student.exams.index') }}" class="btn btn-sm btn-link">View All</a>
                 </div>
                 <div class="card-body p-0">
                     <div class="list-group list-group-flush" style="max-height: 300px; overflow-y: auto;">
@@ -281,7 +281,7 @@
             <div class="card">
                 <div class="card-header bg-white d-flex justify-content-between align-items-center">
                     <h6 class="mb-0"><i class="bi bi-calendar-event me-2"></i>Upcoming Exams</h6>
-                    <a href="#" class="btn btn-sm btn-link">View Schedule</a>
+                    <a href="{{ route('student.exams.index') }}" class="btn btn-sm btn-link">View Schedule</a>
                 </div>
                 <div class="card-body p-0">
                     <div class="list-group list-group-flush" style="max-height: 300px; overflow-y: auto;">
