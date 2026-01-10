@@ -497,6 +497,10 @@ Route::prefix('student')
         // Documents
         Route::get('/documents', [\App\Http\Controllers\Student\DocumentController::class, 'index'])->name('documents.index');
         Route::get('/documents/{document}/download', [\App\Http\Controllers\Student\DocumentController::class, 'download'])->name('documents.download');
+        
+        // Homework
+        Route::get('/homework', [\App\Http\Controllers\Student\HomeworkController::class, 'index'])->name('homework.index');
+        Route::get('/homework/{homework}', [\App\Http\Controllers\Student\HomeworkController::class, 'show'])->name('homework.show');
     });
 
 /*
@@ -510,7 +514,7 @@ Route::prefix('parent')
     ->group(function () {
         
         // Dashboard
-        Route::get('/dashboard', [\App\Http\Controllers\ParentUser\DashboardController::class, 'index'])->name('dashboard');
+        Route::get('/dashboard', [\App\Http\Controllers\Parent\DashboardController::class, 'index'])->name('dashboard');
         
         // Children
         Route::get('/children', [\App\Http\Controllers\ParentUser\ChildController::class, 'index'])->name('children.index');

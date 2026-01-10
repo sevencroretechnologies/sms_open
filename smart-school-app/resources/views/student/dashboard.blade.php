@@ -8,7 +8,7 @@
     <div class="d-flex justify-content-between align-items-center mb-4">
         <div>
             <h4 class="mb-1">Student Dashboard</h4>
-            <p class="text-muted mb-0">Welcome back, {{ Auth::user()->name ?? 'Student' }}!</p>
+            <p class="text-muted mb-0">Welcome back, {{ $profileData['name'] }}!</p>
         </div>
         <div class="d-flex gap-2">
             <span class="badge bg-primary fs-6">
@@ -24,21 +24,25 @@
                 <div class="card-body">
                     <div class="row align-items-center">
                         <div class="col-auto">
-                            <div class="avatar avatar-xl bg-white bg-opacity-25 rounded-circle d-flex align-items-center justify-content-center" style="width: 80px; height: 80px;">
-                                <i class="bi bi-mortarboard fs-1 text-white"></i>
-                            </div>
+                            @if($profileData['photo'])
+                                <img src="{{ asset('storage/' . $profileData['photo']) }}" alt="Profile" class="rounded-circle" style="width: 80px; height: 80px; object-fit: cover;">
+                            @else
+                                <div class="avatar avatar-xl bg-white bg-opacity-25 rounded-circle d-flex align-items-center justify-content-center" style="width: 80px; height: 80px;">
+                                    <i class="bi bi-mortarboard fs-1 text-white"></i>
+                                </div>
+                            @endif
                         </div>
                         <div class="col">
-                            <h4 class="mb-1">{{ Auth::user()->name ?? 'Student Name' }}</h4>
+                            <h4 class="mb-1">{{ $profileData['name'] }}</h4>
                             <p class="mb-0 opacity-75">
-                                <i class="bi bi-hash me-2"></i>Roll No: {{ $student->roll_number ?? 'STU001' }}
+                                <i class="bi bi-hash me-2"></i>Roll No: {{ $profileData['roll_number'] }}
                             </p>
                             <p class="mb-0 opacity-75">
-                                <i class="bi bi-building me-2"></i>Class: {{ $student->class_name ?? '10-A' }}
+                                <i class="bi bi-building me-2"></i>Class: {{ $profileData['class_name'] }}-{{ $profileData['section_name'] }}
                             </p>
                         </div>
                         <div class="col-auto">
-                            <a href="#" class="btn btn-light btn-sm">
+                            <a href="{{ route('student.profile.index') }}" class="btn btn-light btn-sm">
                                 <i class="bi bi-person me-1"></i>View Profile
                             </a>
                         </div>
@@ -56,8 +60,10 @@
                     <div class="d-flex justify-content-between align-items-start">
                         <div>
                             <p class="text-muted small mb-1">Attendance</p>
-                            <h3 class="mb-0">{{ $attendancePercentage ?? '92' }}%</h3>
-                            <small class="text-success"><i class="bi bi-arrow-up"></i> Good standing</small>
+                            <h3 class="mb-0">{{ $attendanceSummary['percentage'] }}%</h3>
+                            <small class="text-{{ $attendanceSummary['percentage'] >= 75 ? 'success' : ($attendanceSummary['percentage'] >= 50 ? 'warning' : 'danger') }}">
+                                <i class="bi bi-{{ $attendanceSummary['percentage'] >= 75 ? 'arrow-up' : 'arrow-down' }}"></i> {{ $attendanceSummary['status'] }}
+                            </small>
                         </div>
                         <div class="stat-icon bg-success bg-opacity-10 text-success">
                             <i class="bi bi-calendar-check"></i>
@@ -71,12 +77,12 @@
                 <div class="card-body">
                     <div class="d-flex justify-content-between align-items-start">
                         <div>
-                            <p class="text-muted small mb-1">Overall Grade</p>
-                            <h3 class="mb-0">{{ $overallGrade ?? 'A' }}</h3>
-                            <small class="text-muted">Current semester</small>
+                            <p class="text-muted small mb-1">Upcoming Exams</p>
+                            <h3 class="mb-0">{{ $upcomingExams->count() }}</h3>
+                            <small class="text-muted">Scheduled exams</small>
                         </div>
                         <div class="stat-icon bg-primary bg-opacity-10 text-primary">
-                            <i class="bi bi-award"></i>
+                            <i class="bi bi-journal-text"></i>
                         </div>
                     </div>
                 </div>
@@ -88,8 +94,11 @@
                     <div class="d-flex justify-content-between align-items-start">
                         <div>
                             <p class="text-muted small mb-1">Pending Fees</p>
-                            <h3 class="mb-0">{{ $pendingFees ?? '5,000' }}</h3>
-                            <small class="text-warning"><i class="bi bi-exclamation-circle"></i> Due soon</small>
+                            <h3 class="mb-0">{{ number_format($feeStatus['pending_amount']) }}</h3>
+                            <small class="text-{{ $feeStatus['pending_amount'] > 0 ? 'warning' : 'success' }}">
+                                <i class="bi bi-{{ $feeStatus['pending_amount'] > 0 ? 'exclamation-circle' : 'check-circle' }}"></i> 
+                                {{ $feeStatus['pending_count'] }} pending
+                            </small>
                         </div>
                         <div class="stat-icon bg-warning bg-opacity-10 text-warning">
                             <i class="bi bi-currency-rupee"></i>
@@ -103,12 +112,12 @@
                 <div class="card-body">
                     <div class="d-flex justify-content-between align-items-start">
                         <div>
-                            <p class="text-muted small mb-1">Library Books</p>
-                            <h3 class="mb-0">{{ $borrowedBooks ?? 2 }}</h3>
-                            <small class="text-info">Currently borrowed</small>
+                            <p class="text-muted small mb-1">Pending Homework</p>
+                            <h3 class="mb-0">{{ count($pendingHomework) }}</h3>
+                            <small class="text-info">Assignments due</small>
                         </div>
                         <div class="stat-icon bg-info bg-opacity-10 text-info">
-                            <i class="bi bi-book"></i>
+                            <i class="bi bi-journal-bookmark"></i>
                         </div>
                     </div>
                 </div>
@@ -126,28 +135,28 @@
                 <div class="card-body">
                     <div class="row g-2">
                         <div class="col-auto">
-                            <a href="#" class="btn btn-primary">
+                            <a href="{{ route('student.timetable.index') }}" class="btn btn-primary">
                                 <i class="bi bi-calendar3 me-2"></i>View Timetable
                             </a>
                         </div>
                         <div class="col-auto">
-                            <a href="#" class="btn btn-success">
+                            <a href="{{ route('student.exams.index') }}" class="btn btn-success">
                                 <i class="bi bi-journal-text me-2"></i>View Results
                             </a>
                         </div>
                         <div class="col-auto">
-                            <a href="#" class="btn btn-info text-white">
+                            <a href="{{ route('student.fees.index') }}" class="btn btn-info text-white">
                                 <i class="bi bi-credit-card me-2"></i>Pay Fees
                             </a>
                         </div>
                         <div class="col-auto">
-                            <a href="#" class="btn btn-warning">
-                                <i class="bi bi-book me-2"></i>Library
+                            <a href="{{ route('student.attendance.index') }}" class="btn btn-warning">
+                                <i class="bi bi-calendar-check me-2"></i>Attendance
                             </a>
                         </div>
                         <div class="col-auto">
-                            <a href="#" class="btn btn-secondary">
-                                <i class="bi bi-download me-2"></i>Download Materials
+                            <a href="{{ route('student.homework.index') }}" class="btn btn-secondary">
+                                <i class="bi bi-journal-bookmark me-2"></i>Homework
                             </a>
                         </div>
                     </div>
@@ -177,24 +186,22 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                @php
-                                    $schedule = $todaySchedule ?? [
-                                        ['period' => 1, 'time' => '08:00 - 08:45', 'subject' => 'Mathematics', 'teacher' => 'Mr. Sharma', 'room' => '101'],
-                                        ['period' => 2, 'time' => '08:45 - 09:30', 'subject' => 'English', 'teacher' => 'Mrs. Gupta', 'room' => '102'],
-                                        ['period' => 3, 'time' => '09:45 - 10:30', 'subject' => 'Science', 'teacher' => 'Mr. Kumar', 'room' => 'Lab 1'],
-                                        ['period' => 4, 'time' => '10:30 - 11:15', 'subject' => 'Hindi', 'teacher' => 'Mrs. Singh', 'room' => '101'],
-                                        ['period' => 5, 'time' => '11:30 - 12:15', 'subject' => 'Social Studies', 'teacher' => 'Mr. Verma', 'room' => '103'],
-                                    ];
-                                @endphp
-                                @foreach($schedule as $item)
+                                @forelse($todaySchedule as $item)
                                     <tr>
-                                        <td><span class="badge bg-secondary">{{ $item['period'] }}</span></td>
-                                        <td>{{ $item['time'] }}</td>
-                                        <td><strong>{{ $item['subject'] }}</strong></td>
-                                        <td>{{ $item['teacher'] }}</td>
-                                        <td>{{ $item['room'] }}</td>
+                                        <td><span class="badge bg-secondary">{{ $item->period_number ?? $loop->iteration }}</span></td>
+                                        <td>{{ \Carbon\Carbon::parse($item->start_time)->format('h:i A') }} - {{ \Carbon\Carbon::parse($item->end_time)->format('h:i A') }}</td>
+                                        <td><strong>{{ $item->subject->name ?? 'N/A' }}</strong></td>
+                                        <td>{{ $item->teacher->user->name ?? 'N/A' }}</td>
+                                        <td>{{ $item->room_number ?? 'N/A' }}</td>
                                     </tr>
-                                @endforeach
+                                @empty
+                                    <tr>
+                                        <td colspan="5" class="text-center text-muted py-4">
+                                            <i class="bi bi-calendar-x fs-3 d-block mb-2"></i>
+                                            No classes scheduled for today
+                                        </td>
+                                    </tr>
+                                @endforelse
                             </tbody>
                         </table>
                     </div>
@@ -205,37 +212,34 @@
             <div class="card h-100">
                 <div class="card-header bg-white d-flex justify-content-between align-items-center">
                     <h6 class="mb-0"><i class="bi bi-journal-bookmark me-2"></i>Pending Homework</h6>
-                    <span class="badge bg-warning">{{ $homeworkCount ?? 3 }}</span>
+                    <span class="badge bg-warning">{{ count($pendingHomework) }}</span>
                 </div>
                 <div class="card-body p-0">
-                    <div class="list-group list-group-flush">
-                        <div class="list-group-item py-3">
-                            <div class="d-flex justify-content-between align-items-start">
-                                <div>
-                                    <h6 class="mb-1">Mathematics Assignment</h6>
-                                    <small class="text-muted">Chapter 5 - Quadratic Equations</small>
+                    <div class="list-group list-group-flush" style="max-height: 300px; overflow-y: auto;">
+                        @forelse($pendingHomework as $homework)
+                            <a href="{{ route('student.homework.index') }}" class="list-group-item list-group-item-action py-3">
+                                <div class="d-flex justify-content-between align-items-start">
+                                    <div>
+                                        <h6 class="mb-1">{{ $homework['title'] }}</h6>
+                                        <small class="text-muted">{{ $homework['subject_name'] }}</small>
+                                    </div>
+                                    <span class="badge bg-{{ $homework['urgency'] }}">
+                                        @if($homework['days_left'] <= 0)
+                                            Due Today
+                                        @elseif($homework['days_left'] == 1)
+                                            Due Tomorrow
+                                        @else
+                                            Due in {{ $homework['days_left'] }} days
+                                        @endif
+                                    </span>
                                 </div>
-                                <span class="badge bg-danger">Due Tomorrow</span>
+                            </a>
+                        @empty
+                            <div class="text-center text-muted py-4">
+                                <i class="bi bi-check-circle fs-3 d-block mb-2"></i>
+                                No pending homework
                             </div>
-                        </div>
-                        <div class="list-group-item py-3">
-                            <div class="d-flex justify-content-between align-items-start">
-                                <div>
-                                    <h6 class="mb-1">Science Project</h6>
-                                    <small class="text-muted">Solar System Model</small>
-                                </div>
-                                <span class="badge bg-warning">Due in 3 days</span>
-                            </div>
-                        </div>
-                        <div class="list-group-item py-3">
-                            <div class="d-flex justify-content-between align-items-start">
-                                <div>
-                                    <h6 class="mb-1">English Essay</h6>
-                                    <small class="text-muted">My Favorite Book</small>
-                                </div>
-                                <span class="badge bg-info">Due in 5 days</span>
-                            </div>
-                        </div>
+                        @endforelse
                     </div>
                 </div>
             </div>
@@ -243,35 +247,32 @@
     </div>
 
     <!-- Recent Results & Upcoming Exams -->
-    <div class="row g-3">
+    <div class="row g-3 mb-4">
         <div class="col-lg-6">
             <div class="card">
                 <div class="card-header bg-white d-flex justify-content-between align-items-center">
                     <h6 class="mb-0"><i class="bi bi-graph-up me-2"></i>Recent Results</h6>
-                    <a href="#" class="btn btn-sm btn-link">View All</a>
+                    <a href="{{ route('student.exams.index') }}" class="btn btn-sm btn-link">View All</a>
                 </div>
                 <div class="card-body p-0">
-                    <div class="list-group list-group-flush">
-                        <div class="list-group-item d-flex justify-content-between align-items-center py-3">
-                            <div>
-                                <h6 class="mb-1">Mid-Term Examination</h6>
-                                <small class="text-muted">October 2025</small>
+                    <div class="list-group list-group-flush" style="max-height: 300px; overflow-y: auto;">
+                        @forelse($recentResults as $result)
+                            <div class="list-group-item d-flex justify-content-between align-items-center py-3">
+                                <div>
+                                    <h6 class="mb-1">{{ $result['exam_name'] }}</h6>
+                                    <small class="text-muted">{{ $result['subject_name'] }}</small>
+                                </div>
+                                <div class="text-end">
+                                    <span class="badge bg-{{ $result['percentage'] >= 80 ? 'success' : ($result['percentage'] >= 60 ? 'primary' : ($result['percentage'] >= 40 ? 'warning' : 'danger')) }} fs-6">{{ $result['percentage'] }}%</span>
+                                    <small class="d-block text-muted">Grade {{ $result['grade'] }}</small>
+                                </div>
                             </div>
-                            <div class="text-end">
-                                <span class="badge bg-success fs-6">85%</span>
-                                <small class="d-block text-muted">Grade A</small>
+                        @empty
+                            <div class="text-center text-muted py-4">
+                                <i class="bi bi-journal-x fs-3 d-block mb-2"></i>
+                                No results available
                             </div>
-                        </div>
-                        <div class="list-group-item d-flex justify-content-between align-items-center py-3">
-                            <div>
-                                <h6 class="mb-1">Unit Test 2</h6>
-                                <small class="text-muted">September 2025</small>
-                            </div>
-                            <div class="text-end">
-                                <span class="badge bg-primary fs-6">78%</span>
-                                <small class="d-block text-muted">Grade B</small>
-                            </div>
-                        </div>
+                        @endforelse
                     </div>
                 </div>
             </div>
@@ -280,37 +281,60 @@
             <div class="card">
                 <div class="card-header bg-white d-flex justify-content-between align-items-center">
                     <h6 class="mb-0"><i class="bi bi-calendar-event me-2"></i>Upcoming Exams</h6>
-                    <a href="#" class="btn btn-sm btn-link">View Schedule</a>
+                    <a href="{{ route('student.exams.index') }}" class="btn btn-sm btn-link">View Schedule</a>
                 </div>
                 <div class="card-body p-0">
-                    <div class="list-group list-group-flush">
-                        <div class="list-group-item d-flex align-items-center py-3">
-                            <div class="bg-danger bg-opacity-10 text-danger rounded p-2 me-3">
-                                <i class="bi bi-journal-text fs-5"></i>
+                    <div class="list-group list-group-flush" style="max-height: 300px; overflow-y: auto;">
+                        @forelse($upcomingExams as $exam)
+                            @php
+                                $examDate = \Carbon\Carbon::parse($exam->exam_date);
+                                $daysLeft = now()->diffInDays($examDate, false);
+                                $urgency = $daysLeft <= 3 ? 'danger' : ($daysLeft <= 7 ? 'warning' : 'info');
+                            @endphp
+                            <div class="list-group-item d-flex align-items-center py-3">
+                                <div class="bg-{{ $urgency }} bg-opacity-10 text-{{ $urgency }} rounded p-2 me-3">
+                                    <i class="bi bi-journal-text fs-5"></i>
+                                </div>
+                                <div class="flex-grow-1">
+                                    <h6 class="mb-1">{{ $exam->subject->name ?? 'N/A' }}</h6>
+                                    <small class="text-muted">{{ $exam->exam->name ?? 'Exam' }}</small>
+                                </div>
+                                <div class="text-end">
+                                    <span class="badge bg-{{ $urgency }}">{{ $examDate->format('M d, Y') }}</span>
+                                    <small class="d-block text-muted">{{ $daysLeft }} days left</small>
+                                </div>
                             </div>
-                            <div class="flex-grow-1">
-                                <h6 class="mb-1">Final Examination</h6>
-                                <small class="text-muted">All Subjects</small>
+                        @empty
+                            <div class="text-center text-muted py-4">
+                                <i class="bi bi-calendar-x fs-3 d-block mb-2"></i>
+                                No upcoming exams
                             </div>
-                            <div class="text-end">
-                                <span class="badge bg-danger">Jan 15, 2026</span>
-                                <small class="d-block text-muted">7 days left</small>
-                            </div>
-                        </div>
-                        <div class="list-group-item d-flex align-items-center py-3">
-                            <div class="bg-warning bg-opacity-10 text-warning rounded p-2 me-3">
-                                <i class="bi bi-journal-text fs-5"></i>
-                            </div>
-                            <div class="flex-grow-1">
-                                <h6 class="mb-1">Practical Exam</h6>
-                                <small class="text-muted">Science Lab</small>
-                            </div>
-                            <div class="text-end">
-                                <span class="badge bg-warning">Jan 20, 2026</span>
-                                <small class="d-block text-muted">12 days left</small>
-                            </div>
-                        </div>
+                        @endforelse
                     </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Charts Section -->
+    <div class="row g-3">
+        <div class="col-lg-6">
+            <div class="card">
+                <div class="card-header bg-white">
+                    <h6 class="mb-0"><i class="bi bi-graph-up me-2"></i>Attendance Trend (Last 6 Months)</h6>
+                </div>
+                <div class="card-body">
+                    <canvas id="attendanceChart" height="250"></canvas>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-6">
+            <div class="card">
+                <div class="card-header bg-white">
+                    <h6 class="mb-0"><i class="bi bi-bar-chart me-2"></i>Subject Performance</h6>
+                </div>
+                <div class="card-body">
+                    <canvas id="performanceChart" height="250"></canvas>
                 </div>
             </div>
         </div>
@@ -339,3 +363,98 @@
     }
 </style>
 @endsection
+
+@push('scripts')
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const chartData = @json($chartData);
+    
+    if (document.getElementById('attendanceChart')) {
+        const attendanceCtx = document.getElementById('attendanceChart').getContext('2d');
+        new Chart(attendanceCtx, {
+            type: 'line',
+            data: {
+                labels: chartData.attendanceMonthly?.labels || [],
+                datasets: [{
+                    label: 'Attendance %',
+                    data: chartData.attendanceMonthly?.data || [],
+                    borderColor: '#10b981',
+                    backgroundColor: 'rgba(16, 185, 129, 0.1)',
+                    fill: true,
+                    tension: 0.4,
+                    pointBackgroundColor: '#10b981',
+                    pointBorderColor: '#fff',
+                    pointBorderWidth: 2,
+                    pointRadius: 4
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        display: false
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        max: 100,
+                        ticks: {
+                            callback: function(value) {
+                                return value + '%';
+                            }
+                        }
+                    }
+                }
+            }
+        });
+    }
+    
+    if (document.getElementById('performanceChart')) {
+        const performanceCtx = document.getElementById('performanceChart').getContext('2d');
+        new Chart(performanceCtx, {
+            type: 'bar',
+            data: {
+                labels: chartData.subjectPerformance?.labels || [],
+                datasets: [{
+                    label: 'Average %',
+                    data: chartData.subjectPerformance?.data || [],
+                    backgroundColor: [
+                        'rgba(79, 70, 229, 0.8)',
+                        'rgba(16, 185, 129, 0.8)',
+                        'rgba(245, 158, 11, 0.8)',
+                        'rgba(239, 68, 68, 0.8)',
+                        'rgba(59, 130, 246, 0.8)',
+                        'rgba(168, 85, 247, 0.8)',
+                        'rgba(236, 72, 153, 0.8)',
+                        'rgba(20, 184, 166, 0.8)'
+                    ],
+                    borderRadius: 6
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        display: false
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        max: 100,
+                        ticks: {
+                            callback: function(value) {
+                                return value + '%';
+                            }
+                        }
+                    }
+                }
+            }
+        });
+    }
+});
+</script>
+@endpush
