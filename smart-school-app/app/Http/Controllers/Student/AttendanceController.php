@@ -3,70 +3,54 @@
 namespace App\Http\Controllers\Student;
 
 use App\Http\Controllers\Controller;
+use App\Models\Attendance;
+use App\Models\AttendanceType;
+use App\Models\Student;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 /**
  * AttendanceController
  * 
- * Stub controller - to be implemented in future sessions.
+ * Handles attendance viewing for students.
  */
 class AttendanceController extends Controller
 {
-    public function __call($method, $parameters)
+    /**
+     * Display attendance history.
+     */
+    public function index(Request $request)
     {
-        return $this->placeholder();
-    }
-
-    public function index()
-    {
-        return $this->placeholder();
-    }
-
-    public function create()
-    {
-        return $this->placeholder();
-    }
-
-    public function store(Request $request)
-    {
-        return $this->placeholder();
-    }
-
-    public function show($id)
-    {
-        return $this->placeholder();
-    }
-
-    public function edit($id)
-    {
-        return $this->placeholder();
-    }
-
-    public function update(Request $request, $id)
-    {
-        return $this->placeholder();
-    }
-
-    public function destroy($id)
-    {
-        return $this->placeholder();
-    }
-
-    protected function placeholder()
-    {
-        $routeName = request()->route()?->getName() ?? 'unknown';
+        $user = Auth::user();
+        $student = Student::where('user_id', $user->id)->first();
         
-        if (request()->expectsJson()) {
-            return response()->json([
-                'status' => 'info',
-                'message' => 'This feature is coming soon',
-                'route' => $routeName,
-            ], 200);
+        if (!$student) {
+            return redirect()->route('student.dashboard')->with('error', 'Student profile not found.');
         }
-
-        return response()->view('errors.coming-soon', [
-            'route' => $routeName,
-            'message' => 'This feature is under development and will be available soon.',
-        ], 200);
+        
+        $month = $request->month ?? Carbon::now()->format('Y-m');
+        $startDate = Carbon::parse($month)->startOfMonth();
+        $endDate = Carbon::parse($month)->endOfMonth();
+        
+        $attendances = Attendance::where('student_id', $student->id)
+            ->whereBetween('attendance_date', [$startDate, $endDate])
+            ->with('attendanceType')
+            ->orderBy('attendance_date', 'desc')
+            ->get();
+        
+        $summary = [
+            'total' => $attendances->count(),
+            'present' => $attendances->filter(fn($a) => $a->attendanceType && $a->attendanceType->is_present)->count(),
+            'absent' => $attendances->filter(fn($a) => $a->attendanceType && !$a->attendanceType->is_present)->count(),
+        ];
+        
+        $summary['percentage'] = $summary['total'] > 0 
+            ? round(($summary['present'] / $summary['total']) * 100, 1) 
+            : 0;
+        
+        $calendarData = $attendances->keyBy(fn($a) => $a->attendance_date->format('Y-m-d'));
+        
+        return view('student.attendance.index', compact('attendances', 'summary', 'month', 'calendarData', 'startDate', 'endDate'));
     }
 }
