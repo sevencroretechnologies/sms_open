@@ -64,13 +64,13 @@ class DashboardController extends Controller
 
         $subjectClasses = DB::table('class_subjects')
             ->where('teacher_id', $teacher->id)
-            ->join('school_classes', 'class_subjects.class_id', '=', 'school_classes.id')
+            ->join('classes', 'class_subjects.class_id', '=', 'classes.id')
             ->join('sections', 'class_subjects.section_id', '=', 'sections.id')
             ->join('subjects', 'class_subjects.subject_id', '=', 'subjects.id')
             ->select(
-                'school_classes.id as class_id',
-                'school_classes.name as class_name',
-                'school_classes.display_name as class_display_name',
+                'classes.id as class_id',
+                'classes.name as class_name',
+                'classes.display_name as class_display_name',
                 'sections.id as section_id',
                 'sections.name as section_name',
                 'sections.display_name as section_display_name',
@@ -136,12 +136,12 @@ class DashboardController extends Controller
         $schedule = DB::table('class_timetables')
             ->where('teacher_id', $teacher->id)
             ->where('day_of_week', $dayName)
-            ->join('school_classes', 'class_timetables.class_id', '=', 'school_classes.id')
+            ->join('classes', 'class_timetables.class_id', '=', 'classes.id')
             ->join('sections', 'class_timetables.section_id', '=', 'sections.id')
             ->join('subjects', 'class_timetables.subject_id', '=', 'subjects.id')
             ->select(
                 'class_timetables.*',
-                'school_classes.display_name as class_name',
+                'classes.display_name as class_name',
                 'sections.display_name as section_name',
                 'subjects.name as subject_name'
             )
