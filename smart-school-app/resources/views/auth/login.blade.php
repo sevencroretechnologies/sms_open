@@ -292,13 +292,36 @@
                             </span>
                         </button>
                         
-                        <!-- Demo Credentials -->
+                        <!-- Demo Login Buttons -->
                         <div class="mt-4 p-3 bg-light rounded">
                             <p class="small text-muted mb-2">
-                                <i class="bi bi-info-circle me-1"></i>Demo Credentials:
+                                <i class="bi bi-info-circle me-1"></i>Quick Demo Login:
                             </p>
-                            <div class="small">
-                                <strong>Admin:</strong> admin@smartschool.com / password123
+                            <div class="d-flex flex-wrap gap-2">
+                                <button type="button" class="btn btn-sm btn-outline-primary demo-login-btn" 
+                                        data-email="admin@smartschool.com" data-password="password123">
+                                    <i class="bi bi-person-gear me-1"></i>Admin
+                                </button>
+                                <button type="button" class="btn btn-sm btn-outline-success demo-login-btn" 
+                                        data-email="teacher@smartschool.com" data-password="password123">
+                                    <i class="bi bi-person-video3 me-1"></i>Teacher
+                                </button>
+                                <button type="button" class="btn btn-sm btn-outline-info demo-login-btn" 
+                                        data-email="student@smartschool.com" data-password="password123">
+                                    <i class="bi bi-mortarboard me-1"></i>Student
+                                </button>
+                                <button type="button" class="btn btn-sm btn-outline-warning demo-login-btn" 
+                                        data-email="parent@smartschool.com" data-password="password123">
+                                    <i class="bi bi-people me-1"></i>Parent
+                                </button>
+                                <button type="button" class="btn btn-sm btn-outline-secondary demo-login-btn" 
+                                        data-email="accountant@smartschool.com" data-password="password123">
+                                    <i class="bi bi-calculator me-1"></i>Accountant
+                                </button>
+                                <button type="button" class="btn btn-sm btn-outline-dark demo-login-btn" 
+                                        data-email="librarian@smartschool.com" data-password="password123">
+                                    <i class="bi bi-book me-1"></i>Librarian
+                                </button>
                             </div>
                         </div>
                     </form>
@@ -343,6 +366,20 @@
             btn.disabled = true;
             btnText.classList.add('d-none');
             btnLoading.classList.remove('d-none');
+        });
+        
+        // Demo login buttons - fill form and submit
+        document.querySelectorAll('.demo-login-btn').forEach(function(btn) {
+            btn.addEventListener('click', function() {
+                const email = this.getAttribute('data-email');
+                const password = this.getAttribute('data-password');
+                
+                document.getElementById('email').value = email;
+                document.getElementById('password').value = password;
+                
+                // Submit the form
+                document.getElementById('loginForm').submit();
+            });
         });
     </script>
 </body>

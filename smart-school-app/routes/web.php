@@ -317,6 +317,21 @@ Route::prefix('admin')
             Route::get('/financial', [\App\Http\Controllers\Admin\ReportController::class, 'financial'])->name('financial');
         });
         
+        // AI Tools
+        Route::prefix('ai-tools')->name('ai-tools.')->group(function () {
+            Route::get('/', [\App\Http\Controllers\Admin\AIToolsController::class, 'index'])->name('index');
+            Route::get('/performance-predictor', [\App\Http\Controllers\Admin\AIToolsController::class, 'performancePredictor'])->name('performance-predictor');
+            Route::get('/report-card-comments', [\App\Http\Controllers\Admin\AIToolsController::class, 'reportCardComments'])->name('report-card-comments');
+            Route::get('/parent-communication', [\App\Http\Controllers\Admin\AIToolsController::class, 'parentCommunication'])->name('parent-communication');
+            Route::get('/assignment-grader', [\App\Http\Controllers\Admin\AIToolsController::class, 'assignmentGrader'])->name('assignment-grader');
+            Route::get('/study-plan', [\App\Http\Controllers\Admin\AIToolsController::class, 'studyPlan'])->name('study-plan');
+            Route::get('/question-generator', [\App\Http\Controllers\Admin\AIToolsController::class, 'questionGenerator'])->name('question-generator');
+            Route::get('/timetable-optimizer', [\App\Http\Controllers\Admin\AIToolsController::class, 'timetableOptimizer'])->name('timetable-optimizer');
+            Route::get('/career-guidance', [\App\Http\Controllers\Admin\AIToolsController::class, 'careerGuidance'])->name('career-guidance');
+            Route::get('/meeting-summary', [\App\Http\Controllers\Admin\AIToolsController::class, 'meetingSummary'])->name('meeting-summary');
+            Route::get('/curriculum-checker', [\App\Http\Controllers\Admin\AIToolsController::class, 'curriculumChecker'])->name('curriculum-checker');
+        });
+        
         // Settings
         Route::prefix('settings')->name('settings.')->group(function () {
             Route::get('/', [\App\Http\Controllers\Admin\SettingsController::class, 'index'])->name('index');

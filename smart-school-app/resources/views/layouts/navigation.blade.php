@@ -184,6 +184,27 @@
             </div>
             @endcan
             
+            <div class="menu-header">AI Tools</div>
+            
+            <a href="javascript:void(0)" class="nav-link sidebar-toggle" onclick="toggleSubmenu(this)">
+                <i class="bi bi-robot"></i>
+                <span>AI Tools</span>
+                <i class="bi bi-chevron-down ms-auto small toggle-icon"></i>
+            </a>
+            <div class="sidebar-submenu" style="display: none; background: rgba(0,0,0,0.2); margin-left: 15px; border-left: 2px solid #4f46e5;">
+                <a href="{{ route('admin.ai-tools.index') }}" class="nav-link" style="padding: 8px 15px; font-size: 14px; color: #e2e8f0;">• All AI Tools</a>
+                <a href="{{ route('admin.ai-tools.performance-predictor') }}" class="nav-link" style="padding: 8px 15px; font-size: 14px; color: #e2e8f0;">• Performance Predictor</a>
+                <a href="{{ route('admin.ai-tools.report-card-comments') }}" class="nav-link" style="padding: 8px 15px; font-size: 14px; color: #e2e8f0;">• Report Card Comments</a>
+                <a href="{{ route('admin.ai-tools.parent-communication') }}" class="nav-link" style="padding: 8px 15px; font-size: 14px; color: #e2e8f0;">• Parent Communication</a>
+                <a href="{{ route('admin.ai-tools.assignment-grader') }}" class="nav-link" style="padding: 8px 15px; font-size: 14px; color: #e2e8f0;">• Assignment Grader</a>
+                <a href="{{ route('admin.ai-tools.study-plan') }}" class="nav-link" style="padding: 8px 15px; font-size: 14px; color: #e2e8f0;">• Study Plan Generator</a>
+                <a href="{{ route('admin.ai-tools.question-generator') }}" class="nav-link" style="padding: 8px 15px; font-size: 14px; color: #e2e8f0;">• Question Generator</a>
+                <a href="{{ route('admin.ai-tools.timetable-optimizer') }}" class="nav-link" style="padding: 8px 15px; font-size: 14px; color: #e2e8f0;">• Timetable Optimizer</a>
+                <a href="{{ route('admin.ai-tools.career-guidance') }}" class="nav-link" style="padding: 8px 15px; font-size: 14px; color: #e2e8f0;">• Career Guidance</a>
+                <a href="{{ route('admin.ai-tools.meeting-summary') }}" class="nav-link" style="padding: 8px 15px; font-size: 14px; color: #e2e8f0;">• Meeting Summary</a>
+                <a href="{{ route('admin.ai-tools.curriculum-checker') }}" class="nav-link" style="padding: 8px 15px; font-size: 14px; color: #e2e8f0;">• Curriculum Checker</a>
+            </div>
+            
             <div class="menu-header">Settings</div>
             
             @can('settings.view')
