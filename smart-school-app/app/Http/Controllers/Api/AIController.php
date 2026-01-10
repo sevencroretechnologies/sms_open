@@ -187,7 +187,7 @@ class AIController extends Controller
         $request->validate([
             'subject' => 'required|string|max:255',
             'topic' => 'required|string|max:255',
-            'class' => 'required|string|max:50',
+            'class' => 'nullable|string|max:50',
             'difficulty' => 'required|in:easy,medium,hard,mixed',
             'count' => 'required|integer|min:1|max:50',
             'question_types' => 'required|array|min:1',

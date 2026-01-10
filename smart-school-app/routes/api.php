@@ -255,24 +255,29 @@ Route::prefix('v1')
             Route::delete('/{path}', [\App\Http\Controllers\Api\UploadController::class, 'destroy'])->name('destroy')->where('path', '.*');
         });
         
-        /*
-        |----------------------------------------------------------------------
-        | AI Tools API
-        |----------------------------------------------------------------------
-        | AI-powered features for school management
-        */
-        Route::prefix('ai')->name('ai.')->group(function () {
-            Route::post('/predict-performance', [\App\Http\Controllers\Api\AIController::class, 'predictPerformance'])->name('predict-performance');
-            Route::post('/report-card-comment', [\App\Http\Controllers\Api\AIController::class, 'generateReportCardComment'])->name('report-card-comment');
-            Route::post('/parent-message', [\App\Http\Controllers\Api\AIController::class, 'generateParentMessage'])->name('parent-message');
-            Route::post('/grade-assignment', [\App\Http\Controllers\Api\AIController::class, 'gradeAssignment'])->name('grade-assignment');
-            Route::post('/study-plan', [\App\Http\Controllers\Api\AIController::class, 'generateStudyPlan'])->name('study-plan');
-            Route::post('/generate-questions', [\App\Http\Controllers\Api\AIController::class, 'generateQuestions'])->name('generate-questions');
-            Route::post('/optimize-timetable', [\App\Http\Controllers\Api\AIController::class, 'optimizeTimetable'])->name('optimize-timetable');
-            Route::post('/career-guidance', [\App\Http\Controllers\Api\AIController::class, 'provideCareerGuidance'])->name('career-guidance');
-            Route::post('/meeting-summary', [\App\Http\Controllers\Api\AIController::class, 'generateMeetingSummary'])->name('meeting-summary');
-            Route::post('/check-curriculum', [\App\Http\Controllers\Api\AIController::class, 'checkCurriculumAlignment'])->name('check-curriculum');
-        });
+    });
+
+/*
+|--------------------------------------------------------------------------
+| AI Tools API (Web Session Authentication)
+|--------------------------------------------------------------------------
+| AI-powered features for school management
+| Uses web session authentication instead of Sanctum for frontend access
+*/
+Route::prefix('v1/ai')
+    ->name('api.v1.ai.')
+    ->middleware(['web', 'auth', 'throttle:api'])
+    ->group(function () {
+        Route::post('/predict-performance', [\App\Http\Controllers\Api\AIController::class, 'predictPerformance'])->name('predict-performance');
+        Route::post('/report-card-comment', [\App\Http\Controllers\Api\AIController::class, 'generateReportCardComment'])->name('report-card-comment');
+        Route::post('/parent-message', [\App\Http\Controllers\Api\AIController::class, 'generateParentMessage'])->name('parent-message');
+        Route::post('/grade-assignment', [\App\Http\Controllers\Api\AIController::class, 'gradeAssignment'])->name('grade-assignment');
+        Route::post('/study-plan', [\App\Http\Controllers\Api\AIController::class, 'generateStudyPlan'])->name('study-plan');
+        Route::post('/generate-questions', [\App\Http\Controllers\Api\AIController::class, 'generateQuestions'])->name('generate-questions');
+        Route::post('/optimize-timetable', [\App\Http\Controllers\Api\AIController::class, 'optimizeTimetable'])->name('optimize-timetable');
+        Route::post('/career-guidance', [\App\Http\Controllers\Api\AIController::class, 'provideCareerGuidance'])->name('career-guidance');
+        Route::post('/meeting-summary', [\App\Http\Controllers\Api\AIController::class, 'generateMeetingSummary'])->name('meeting-summary');
+        Route::post('/check-curriculum', [\App\Http\Controllers\Api\AIController::class, 'checkCurriculumAlignment'])->name('check-curriculum');
     });
 
 /*

@@ -147,7 +147,7 @@ function questionGenerator() {
         questions: [],
 
         isValid() {
-            return this.subject && this.topic && this.classLevel && this.questionTypes.length > 0;
+            return this.subject && this.topic && this.questionTypes.length > 0;
         },
 
         getDifficultyClass(difficulty) {
