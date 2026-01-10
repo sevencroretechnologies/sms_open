@@ -295,7 +295,11 @@ Route::prefix('admin')
         // Roles
         Route::resource('roles', \App\Http\Controllers\Admin\RoleController::class);
         Route::get('roles/{role}/permissions', [\App\Http\Controllers\Admin\RoleController::class, 'permissions'])->name('roles.permissions');
-        Route::post('roles/{role}/permissions', [\App\Http\Controllers\Admin\RoleController::class, 'updatePermissions'])->name('roles.permissions.update');
+        Route::put('roles/{role}/permissions', [\App\Http\Controllers\Admin\RoleController::class, 'updatePermissions'])->name('roles.permissions.update');
+        
+        // Permissions
+        Route::resource('permissions', \App\Http\Controllers\Admin\PermissionController::class);
+        Route::put('permissions/{permission}/assign-roles', [\App\Http\Controllers\Admin\PermissionController::class, 'assignToRoles'])->name('permissions.assign-roles');
         
         // Users
         Route::resource('users', \App\Http\Controllers\Admin\UserController::class);
