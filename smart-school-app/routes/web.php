@@ -510,7 +510,7 @@ Route::prefix('parent')
     ->group(function () {
         
         // Dashboard
-        Route::get('/dashboard', [\App\Http\Controllers\ParentUser\DashboardController::class, 'index'])->name('dashboard');
+        Route::get('/dashboard', [\App\Http\Controllers\Parent\DashboardController::class, 'index'])->name('dashboard');
         
         // Children
         Route::get('/children', [\App\Http\Controllers\ParentUser\ChildController::class, 'index'])->name('children.index');

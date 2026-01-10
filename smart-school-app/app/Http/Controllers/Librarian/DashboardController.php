@@ -42,15 +42,9 @@ class DashboardController extends Controller
 
         $overdueCount = LibraryIssue::overdue()->count();
 
-        $activeStudents = Student::whereHas('libraryIssues', function ($query) {
-            $query->whereNull('return_date');
-        })->count();
-
-        $activeTeachers = Teacher::whereHas('libraryIssues', function ($query) {
-            $query->whereNull('return_date');
-        })->count();
-
-        $activeMembers = $activeStudents + $activeTeachers;
+        $activeMembers = LibraryIssue::whereNull('return_date')
+            ->distinct('member_id')
+            ->count('member_id');
 
         $totalMembers = Student::count() + Teacher::count();
 

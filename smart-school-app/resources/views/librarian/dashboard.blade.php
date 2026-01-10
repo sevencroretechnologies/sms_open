@@ -98,27 +98,27 @@
                 <div class="card-body">
                     <div class="row g-2">
                         <div class="col-auto">
-                            <a href="{{ route('librarian.issues.create') }}" class="btn btn-primary">
+                            <a href="#" class="btn btn-primary">
                                 <i class="bi bi-plus-circle me-2"></i>Issue Book
                             </a>
                         </div>
                         <div class="col-auto">
-                            <a href="{{ route('librarian.returns.create') }}" class="btn btn-success">
+                            <a href="#" class="btn btn-success">
                                 <i class="bi bi-arrow-return-left me-2"></i>Return Book
                             </a>
                         </div>
                         <div class="col-auto">
-                            <a href="{{ route('librarian.books.create') }}" class="btn btn-info text-white">
+                            <a href="#" class="btn btn-info text-white">
                                 <i class="bi bi-book me-2"></i>Add New Book
                             </a>
                         </div>
                         <div class="col-auto">
-                            <a href="{{ route('librarian.members.create') }}" class="btn btn-warning">
+                            <a href="#" class="btn btn-warning">
                                 <i class="bi bi-person-plus me-2"></i>Add Member
                             </a>
                         </div>
                         <div class="col-auto">
-                            <a href="{{ route('librarian.books.index') }}" class="btn btn-secondary">
+                            <a href="#" class="btn btn-secondary">
                                 <i class="bi bi-search me-2"></i>Search Catalog
                             </a>
                         </div>
@@ -162,7 +162,7 @@
             <div class="card">
                 <div class="card-header bg-white d-flex justify-content-between align-items-center">
                     <h6 class="mb-0"><i class="bi bi-clock-history me-2"></i>Recent Issues</h6>
-                    <a href="{{ route('librarian.issues.index') }}" class="btn btn-sm btn-link">View All</a>
+                    <a href="#" class="btn btn-sm btn-link">View All</a>
                 </div>
                 <div class="card-body p-0">
                     <div class="table-responsive">
@@ -224,7 +224,7 @@
                                 </div>
                                 <div class="text-end">
                                     <span class="badge bg-{{ $overdue['urgency'] }}">Fine: {{ number_format($overdue['fine_amount']) }}</span>
-                                    <a href="{{ route('librarian.issues.notify', $overdue['id']) }}" class="btn btn-sm btn-outline-primary d-block mt-1">Notify</a>
+                                    <a href="#" class="btn btn-sm btn-outline-primary d-block mt-1">Notify</a>
                                 </div>
                             </div>
                         @empty
@@ -245,7 +245,7 @@
             <div class="card">
                 <div class="card-header bg-white d-flex justify-content-between align-items-center">
                     <h6 class="mb-0"><i class="bi bi-star me-2"></i>Popular Books</h6>
-                    <a href="{{ route('librarian.books.index') }}" class="btn btn-sm btn-link">View All Books</a>
+                    <a href="#" class="btn btn-sm btn-link">View All Books</a>
                 </div>
                 <div class="card-body p-0">
                     <div class="table-responsive">

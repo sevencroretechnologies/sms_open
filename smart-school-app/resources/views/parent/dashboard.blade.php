@@ -71,7 +71,7 @@
                                             </p>
                                         </div>
                                         <div class="col-auto">
-                                            <a href="{{ route('parent.children.show', $child->id) }}" class="btn btn-outline-primary btn-sm">
+                                            <a href="#" class="btn btn-outline-primary btn-sm">
                                                 <i class="bi bi-eye me-1"></i>Full Profile
                                             </a>
                                         </div>
@@ -153,22 +153,22 @@
                         <!-- Quick Actions for Child -->
                         <div class="row g-2 mb-4">
                             <div class="col-auto">
-                                <a href="{{ route('parent.children.attendance', $child->id) }}" class="btn btn-primary btn-sm">
+                                <a href="#" class="btn btn-primary btn-sm">
                                     <i class="bi bi-calendar-check me-1"></i>Attendance
                                 </a>
                             </div>
                             <div class="col-auto">
-                                <a href="{{ route('parent.children.results', $child->id) }}" class="btn btn-success btn-sm">
+                                <a href="#" class="btn btn-success btn-sm">
                                     <i class="bi bi-graph-up me-1"></i>Results
                                 </a>
                             </div>
                             <div class="col-auto">
-                                <a href="{{ route('parent.fees.index') }}" class="btn btn-info btn-sm text-white">
+                                <a href="#" class="btn btn-info btn-sm text-white">
                                     <i class="bi bi-credit-card me-1"></i>Pay Fees
                                 </a>
                             </div>
                             <div class="col-auto">
-                                <a href="{{ route('parent.messages.create') }}" class="btn btn-warning btn-sm">
+                                <a href="#" class="btn btn-warning btn-sm">
                                     <i class="bi bi-envelope me-1"></i>Message Teacher
                                 </a>
                             </div>
@@ -245,7 +245,7 @@
             <div class="card">
                 <div class="card-header bg-white d-flex justify-content-between align-items-center">
                     <h6 class="mb-0"><i class="bi bi-currency-rupee me-2"></i>Fee Summary</h6>
-                    <a href="{{ route('parent.fees.index') }}" class="btn btn-sm btn-primary">Pay Now</a>
+                    <a href="#" class="btn btn-sm btn-primary">Pay Now</a>
                 </div>
                 <div class="card-body p-0">
                     <div class="list-group list-group-flush">
@@ -282,12 +282,12 @@
             <div class="card">
                 <div class="card-header bg-white d-flex justify-content-between align-items-center">
                     <h6 class="mb-0"><i class="bi bi-megaphone me-2"></i>School Notices</h6>
-                    <a href="{{ route('parent.notices.index') }}" class="btn btn-sm btn-link">View All</a>
+                    <a href="#" class="btn btn-sm btn-link">View All</a>
                 </div>
                 <div class="card-body p-0">
                     <div class="list-group list-group-flush">
                         @forelse($notices ?? [] as $notice)
-                            <a href="{{ route('parent.notices.show', $notice->id) }}" class="list-group-item list-group-item-action py-3">
+                            <a href="#" class="list-group-item list-group-item-action py-3">
                                 <div class="d-flex justify-content-between">
                                     <strong>{{ $notice->title }}</strong>
                                     <small class="text-muted">{{ $notice->created_at->diffForHumans() }}</small>

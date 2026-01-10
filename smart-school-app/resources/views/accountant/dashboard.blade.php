@@ -101,27 +101,27 @@
                 <div class="card-body">
                     <div class="row g-2">
                         <div class="col-auto">
-                            <a href="{{ route('accountant.fees.collect') }}" class="btn btn-primary">
+                            <a href="#" class="btn btn-primary">
                                 <i class="bi bi-plus-circle me-2"></i>Collect Fee
                             </a>
                         </div>
                         <div class="col-auto">
-                            <a href="{{ route('accountant.fees.invoice') }}" class="btn btn-success">
+                            <a href="#" class="btn btn-success">
                                 <i class="bi bi-receipt me-2"></i>Generate Invoice
                             </a>
                         </div>
                         <div class="col-auto">
-                            <a href="{{ route('accountant.reports.fees') }}" class="btn btn-info text-white">
+                            <a href="#" class="btn btn-info text-white">
                                 <i class="bi bi-file-earmark-text me-2"></i>Fee Report
                             </a>
                         </div>
                         <div class="col-auto">
-                            <a href="{{ route('accountant.expenses.create') }}" class="btn btn-warning">
+                            <a href="#" class="btn btn-warning">
                                 <i class="bi bi-cash me-2"></i>Add Expense
                             </a>
                         </div>
                         <div class="col-auto">
-                            <a href="{{ route('accountant.fees.receipts') }}" class="btn btn-secondary">
+                            <a href="#" class="btn btn-secondary">
                                 <i class="bi bi-printer me-2"></i>Print Receipt
                             </a>
                         </div>
@@ -165,7 +165,7 @@
             <div class="card">
                 <div class="card-header bg-white d-flex justify-content-between align-items-center">
                     <h6 class="mb-0"><i class="bi bi-clock-history me-2"></i>Recent Transactions</h6>
-                    <a href="{{ route('accountant.fees.transactions') }}" class="btn btn-sm btn-link">View All</a>
+                    <a href="#" class="btn btn-sm btn-link">View All</a>
                 </div>
                 <div class="card-body p-0">
                     <div class="table-responsive">
@@ -228,7 +228,7 @@
                                 </div>
                                 <div class="text-end">
                                     <strong class="text-{{ $overdue['urgency'] }}">{{ number_format($overdue['amount']) }}</strong>
-                                    <a href="{{ route('accountant.fees.reminder', $overdue['student_id']) }}" class="btn btn-sm btn-outline-primary d-block mt-1">Send Reminder</a>
+                                    <a href="#" class="btn btn-sm btn-outline-primary d-block mt-1">Send Reminder</a>
                                 </div>
                             </div>
                         @empty
@@ -249,7 +249,7 @@
             <div class="card">
                 <div class="card-header bg-white d-flex justify-content-between align-items-center">
                     <h6 class="mb-0"><i class="bi bi-building me-2"></i>Pending Fees by Class</h6>
-                    <a href="{{ route('accountant.reports.fees') }}" class="btn btn-sm btn-link">View Report</a>
+                    <a href="#" class="btn btn-sm btn-link">View Report</a>
                 </div>
                 <div class="card-body p-0">
                     <div class="table-responsive">
@@ -271,7 +271,7 @@
                                         <td><span class="badge bg-warning">{{ $classData['pending_count'] }}</span></td>
                                         <td><strong class="text-danger">{{ number_format($classData['pending_amount']) }}</strong></td>
                                         <td>
-                                            <a href="{{ route('accountant.fees.index', ['class_id' => $classData['class_id']]) }}" class="btn btn-sm btn-outline-primary">View Details</a>
+                                            <a href="#" class="btn btn-sm btn-outline-primary">View Details</a>
                                         </td>
                                     </tr>
                                 @empty
@@ -361,7 +361,8 @@ document.addEventListener('DOMContentLoaded', function() {
     if (typeCtx) {
         const feeTypeLabels = @json($chartData['feeTypeDistribution']['labels'] ?? []);
         const feeTypeData = @json($chartData['feeTypeDistribution']['data'] ?? []);
-        const feeTypeColors = @json($chartData['feeTypeDistribution']['colors'] ?? ['#4f46e5', '#10b981', '#f59e0b', '#ef4444', '#8b5cf6']);
+        const defaultColors = ['#4f46e5', '#10b981', '#f59e0b', '#ef4444', '#8b5cf6'];
+        const feeTypeColors = @json($chartData['feeTypeDistribution']['colors'] ?? []).length > 0 ? @json($chartData['feeTypeDistribution']['colors'] ?? []) : defaultColors;
         
         new Chart(typeCtx.getContext('2d'), {
             type: 'doughnut',
