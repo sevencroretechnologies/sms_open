@@ -11,6 +11,9 @@
             <p class="text-muted mb-0">Welcome back, {{ Auth::user()->name ?? 'Accountant' }}!</p>
         </div>
         <div class="d-flex gap-2">
+            <span class="badge bg-success fs-6 me-2">
+                <i class="bi bi-cash-coin me-1"></i>Today: {{ number_format($todayCollection['total_amount'] ?? 0) }} ({{ $todayCollection['transaction_count'] ?? 0 }} txns)
+            </span>
             <span class="badge bg-primary fs-6">
                 <i class="bi bi-calendar me-1"></i>{{ now()->format('l, F j, Y') }}
             </span>
@@ -25,7 +28,7 @@
                     <div class="d-flex justify-content-between align-items-start">
                         <div>
                             <p class="text-muted small mb-1">Total Collection</p>
-                            <h3 class="mb-0 text-success">{{ $totalCollection ?? '12,50,000' }}</h3>
+                            <h3 class="mb-0 text-success">{{ number_format($statistics['total_collection'] ?? 0) }}</h3>
                             <small class="text-success"><i class="bi bi-arrow-up"></i> This month</small>
                         </div>
                         <div class="stat-icon bg-success bg-opacity-10 text-success">
@@ -41,7 +44,7 @@
                     <div class="d-flex justify-content-between align-items-start">
                         <div>
                             <p class="text-muted small mb-1">Pending Fees</p>
-                            <h3 class="mb-0 text-warning">{{ $pendingFees ?? '3,45,000' }}</h3>
+                            <h3 class="mb-0 text-warning">{{ number_format($statistics['pending_fees'] ?? 0) }}</h3>
                             <small class="text-warning"><i class="bi bi-exclamation-circle"></i> To collect</small>
                         </div>
                         <div class="stat-icon bg-warning bg-opacity-10 text-warning">
@@ -57,7 +60,7 @@
                     <div class="d-flex justify-content-between align-items-start">
                         <div>
                             <p class="text-muted small mb-1">Total Expenses</p>
-                            <h3 class="mb-0 text-danger">{{ $totalExpenses ?? '8,75,000' }}</h3>
+                            <h3 class="mb-0 text-danger">{{ number_format($statistics['total_expenses'] ?? 0) }}</h3>
                             <small class="text-muted">This month</small>
                         </div>
                         <div class="stat-icon bg-danger bg-opacity-10 text-danger">
@@ -73,8 +76,11 @@
                     <div class="d-flex justify-content-between align-items-start">
                         <div>
                             <p class="text-muted small mb-1">Net Balance</p>
-                            <h3 class="mb-0 text-primary">{{ $netBalance ?? '3,75,000' }}</h3>
-                            <small class="text-success"><i class="bi bi-arrow-up"></i> +15% from last month</small>
+                            <h3 class="mb-0 text-primary">{{ number_format($statistics['net_balance'] ?? 0) }}</h3>
+                            <small class="text-{{ ($statistics['collection_change'] ?? 0) >= 0 ? 'success' : 'danger' }}">
+                                <i class="bi bi-arrow-{{ ($statistics['collection_change'] ?? 0) >= 0 ? 'up' : 'down' }}"></i> 
+                                {{ ($statistics['collection_change'] ?? 0) >= 0 ? '+' : '' }}{{ $statistics['collection_change'] ?? 0 }}% from last month
+                            </small>
                         </div>
                         <div class="stat-icon bg-primary bg-opacity-10 text-primary">
                             <i class="bi bi-wallet2"></i>
@@ -95,27 +101,27 @@
                 <div class="card-body">
                     <div class="row g-2">
                         <div class="col-auto">
-                            <a href="#" class="btn btn-primary">
+                            <a href="{{ route('accountant.fees.collect') }}" class="btn btn-primary">
                                 <i class="bi bi-plus-circle me-2"></i>Collect Fee
                             </a>
                         </div>
                         <div class="col-auto">
-                            <a href="#" class="btn btn-success">
+                            <a href="{{ route('accountant.fees.invoice') }}" class="btn btn-success">
                                 <i class="bi bi-receipt me-2"></i>Generate Invoice
                             </a>
                         </div>
                         <div class="col-auto">
-                            <a href="#" class="btn btn-info text-white">
+                            <a href="{{ route('accountant.reports.fees') }}" class="btn btn-info text-white">
                                 <i class="bi bi-file-earmark-text me-2"></i>Fee Report
                             </a>
                         </div>
                         <div class="col-auto">
-                            <a href="#" class="btn btn-warning">
+                            <a href="{{ route('accountant.expenses.create') }}" class="btn btn-warning">
                                 <i class="bi bi-cash me-2"></i>Add Expense
                             </a>
                         </div>
                         <div class="col-auto">
-                            <a href="#" class="btn btn-secondary">
+                            <a href="{{ route('accountant.fees.receipts') }}" class="btn btn-secondary">
                                 <i class="bi bi-printer me-2"></i>Print Receipt
                             </a>
                         </div>
@@ -153,13 +159,13 @@
         </div>
     </div>
 
-    <!-- Recent Transactions & Pending Fees -->
-    <div class="row g-3">
+    <!-- Recent Transactions & Overdue Fees -->
+    <div class="row g-3 mb-4">
         <div class="col-lg-7">
             <div class="card">
                 <div class="card-header bg-white d-flex justify-content-between align-items-center">
                     <h6 class="mb-0"><i class="bi bi-clock-history me-2"></i>Recent Transactions</h6>
-                    <a href="#" class="btn btn-sm btn-link">View All</a>
+                    <a href="{{ route('accountant.fees.transactions') }}" class="btn btn-sm btn-link">View All</a>
                 </div>
                 <div class="card-body p-0">
                     <div class="table-responsive">
@@ -175,30 +181,31 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                @php
-                                    $transactions = $recentTransactions ?? [
-                                        ['receipt' => 'RCP001', 'student' => 'John Doe', 'type' => 'Tuition', 'amount' => '5,000', 'date' => 'Today', 'status' => 'completed'],
-                                        ['receipt' => 'RCP002', 'student' => 'Jane Smith', 'type' => 'Transport', 'amount' => '2,000', 'date' => 'Today', 'status' => 'completed'],
-                                        ['receipt' => 'RCP003', 'student' => 'Mike Johnson', 'type' => 'Library', 'amount' => '500', 'date' => 'Yesterday', 'status' => 'completed'],
-                                        ['receipt' => 'RCP004', 'student' => 'Sarah Wilson', 'type' => 'Tuition', 'amount' => '5,000', 'date' => 'Yesterday', 'status' => 'pending'],
-                                    ];
-                                @endphp
-                                @foreach($transactions as $txn)
+                                @forelse($recentTransactions ?? [] as $txn)
                                     <tr>
-                                        <td><code>{{ $txn['receipt'] }}</code></td>
-                                        <td>{{ $txn['student'] }}</td>
-                                        <td><span class="badge bg-secondary">{{ $txn['type'] }}</span></td>
-                                        <td><strong>{{ $txn['amount'] }}</strong></td>
-                                        <td>{{ $txn['date'] }}</td>
+                                        <td><code>{{ $txn['transaction_id'] }}</code></td>
+                                        <td>{{ $txn['student_name'] }}</td>
+                                        <td><span class="badge bg-secondary">{{ $txn['fee_type'] }}</span></td>
+                                        <td><strong>{{ number_format($txn['amount']) }}</strong></td>
+                                        <td>{{ $txn['payment_date'] ? \Carbon\Carbon::parse($txn['payment_date'])->diffForHumans() : 'N/A' }}</td>
                                         <td>
                                             @if($txn['status'] == 'completed')
                                                 <span class="badge bg-success">Completed</span>
+                                            @elseif($txn['status'] == 'refund')
+                                                <span class="badge bg-info">Refund</span>
                                             @else
                                                 <span class="badge bg-warning">Pending</span>
                                             @endif
                                         </td>
                                     </tr>
-                                @endforeach
+                                @empty
+                                    <tr>
+                                        <td colspan="6" class="text-center py-4 text-muted">
+                                            <i class="bi bi-receipt fs-3 d-block mb-2"></i>
+                                            No recent transactions
+                                        </td>
+                                    </tr>
+                                @endforelse
                             </tbody>
                         </table>
                     </div>
@@ -209,40 +216,74 @@
             <div class="card">
                 <div class="card-header bg-white d-flex justify-content-between align-items-center">
                     <h6 class="mb-0"><i class="bi bi-exclamation-triangle me-2"></i>Overdue Fees</h6>
-                    <span class="badge bg-danger">{{ $overdueCount ?? 12 }}</span>
+                    <span class="badge bg-danger">{{ count($overdueFees ?? []) }}</span>
                 </div>
                 <div class="card-body p-0">
                     <div class="list-group list-group-flush">
-                        <div class="list-group-item d-flex justify-content-between align-items-center py-3">
-                            <div>
-                                <h6 class="mb-1">John Doe - Class 10-A</h6>
-                                <small class="text-danger">Overdue by 15 days</small>
+                        @forelse($overdueFees ?? [] as $overdue)
+                            <div class="list-group-item d-flex justify-content-between align-items-center py-3">
+                                <div>
+                                    <h6 class="mb-1">{{ $overdue['student_name'] }} - Class {{ $overdue['class_name'] }}{{ $overdue['section_name'] ? '-' . $overdue['section_name'] : '' }}</h6>
+                                    <small class="text-{{ $overdue['urgency'] }}">Overdue by {{ $overdue['days_overdue'] }} days</small>
+                                </div>
+                                <div class="text-end">
+                                    <strong class="text-{{ $overdue['urgency'] }}">{{ number_format($overdue['amount']) }}</strong>
+                                    <a href="{{ route('accountant.fees.reminder', $overdue['student_id']) }}" class="btn btn-sm btn-outline-primary d-block mt-1">Send Reminder</a>
+                                </div>
                             </div>
-                            <div class="text-end">
-                                <strong class="text-danger">5,000</strong>
-                                <a href="#" class="btn btn-sm btn-outline-primary d-block mt-1">Send Reminder</a>
+                        @empty
+                            <div class="list-group-item text-center py-4 text-muted">
+                                <i class="bi bi-check-circle fs-3 d-block mb-2 text-success"></i>
+                                No overdue fees
                             </div>
-                        </div>
-                        <div class="list-group-item d-flex justify-content-between align-items-center py-3">
-                            <div>
-                                <h6 class="mb-1">Jane Smith - Class 9-B</h6>
-                                <small class="text-danger">Overdue by 10 days</small>
-                            </div>
-                            <div class="text-end">
-                                <strong class="text-danger">3,500</strong>
-                                <a href="#" class="btn btn-sm btn-outline-primary d-block mt-1">Send Reminder</a>
-                            </div>
-                        </div>
-                        <div class="list-group-item d-flex justify-content-between align-items-center py-3">
-                            <div>
-                                <h6 class="mb-1">Mike Johnson - Class 8-A</h6>
-                                <small class="text-warning">Overdue by 5 days</small>
-                            </div>
-                            <div class="text-end">
-                                <strong class="text-warning">2,000</strong>
-                                <a href="#" class="btn btn-sm btn-outline-primary d-block mt-1">Send Reminder</a>
-                            </div>
-                        </div>
+                        @endforelse
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Pending Fees by Class -->
+    <div class="row g-3">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header bg-white d-flex justify-content-between align-items-center">
+                    <h6 class="mb-0"><i class="bi bi-building me-2"></i>Pending Fees by Class</h6>
+                    <a href="{{ route('accountant.reports.fees') }}" class="btn btn-sm btn-link">View Report</a>
+                </div>
+                <div class="card-body p-0">
+                    <div class="table-responsive">
+                        <table class="table table-hover mb-0">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>Class</th>
+                                    <th>Students</th>
+                                    <th>Pending Count</th>
+                                    <th>Pending Amount</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @forelse($pendingFeesByClass ?? [] as $classData)
+                                    <tr>
+                                        <td><strong>{{ $classData['class_name'] }}</strong></td>
+                                        <td>{{ $classData['student_count'] }}</td>
+                                        <td><span class="badge bg-warning">{{ $classData['pending_count'] }}</span></td>
+                                        <td><strong class="text-danger">{{ number_format($classData['pending_amount']) }}</strong></td>
+                                        <td>
+                                            <a href="{{ route('accountant.fees.index', ['class_id' => $classData['class_id']]) }}" class="btn btn-sm btn-outline-primary">View Details</a>
+                                        </td>
+                                    </tr>
+                                @empty
+                                    <tr>
+                                        <td colspan="5" class="text-center py-4 text-muted">
+                                            <i class="bi bi-check-circle fs-3 d-block mb-2 text-success"></i>
+                                            No pending fees
+                                        </td>
+                                    </tr>
+                                @endforelse
+                            </tbody>
+                        </table>
                     </div>
                 </div>
             </div>
@@ -272,55 +313,82 @@
 @push('scripts')
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
+document.addEventListener('DOMContentLoaded', function() {
     // Fee Collection Chart
-    const feeCtx = document.getElementById('feeCollectionChart').getContext('2d');
-    new Chart(feeCtx, {
-        type: 'line',
-        data: {
-            labels: ['Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec', 'Jan'],
-            datasets: [{
-                label: 'Collection',
-                data: [850000, 920000, 780000, 1100000, 950000, 1050000, 1200000, 980000, 1150000, 1250000],
-                borderColor: '#10b981',
-                backgroundColor: 'rgba(16, 185, 129, 0.1)',
-                fill: true,
-                tension: 0.4
-            }, {
-                label: 'Target',
-                data: [1000000, 1000000, 1000000, 1000000, 1000000, 1000000, 1000000, 1000000, 1000000, 1000000],
-                borderColor: '#6366f1',
-                borderDash: [5, 5],
-                fill: false
-            }]
-        },
-        options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            plugins: {
-                legend: { position: 'bottom' }
+    const feeCtx = document.getElementById('feeCollectionChart');
+    if (feeCtx) {
+        new Chart(feeCtx.getContext('2d'), {
+            type: 'line',
+            data: {
+                labels: @json($chartData['collectionTrend']['labels'] ?? []),
+                datasets: [{
+                    label: 'Collection',
+                    data: @json($chartData['collectionTrend']['collection'] ?? []),
+                    borderColor: '#10b981',
+                    backgroundColor: 'rgba(16, 185, 129, 0.1)',
+                    fill: true,
+                    tension: 0.4
+                }, {
+                    label: 'Target',
+                    data: @json($chartData['collectionTrend']['target'] ?? []),
+                    borderColor: '#6366f1',
+                    borderDash: [5, 5],
+                    fill: false
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { position: 'bottom' }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        ticks: {
+                            callback: function(value) {
+                                return value.toLocaleString();
+                            }
+                        }
+                    }
+                }
             }
-        }
-    });
+        });
+    }
 
     // Fee Type Distribution Chart
-    const typeCtx = document.getElementById('feeTypeChart').getContext('2d');
-    new Chart(typeCtx, {
-        type: 'doughnut',
-        data: {
-            labels: ['Tuition', 'Transport', 'Library', 'Lab', 'Sports'],
-            datasets: [{
-                data: [60, 20, 8, 7, 5],
-                backgroundColor: ['#4f46e5', '#10b981', '#f59e0b', '#ef4444', '#8b5cf6']
-            }]
-        },
-        options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            plugins: {
-                legend: { position: 'bottom' }
+    const typeCtx = document.getElementById('feeTypeChart');
+    if (typeCtx) {
+        const feeTypeLabels = @json($chartData['feeTypeDistribution']['labels'] ?? []);
+        const feeTypeData = @json($chartData['feeTypeDistribution']['data'] ?? []);
+        const feeTypeColors = @json($chartData['feeTypeDistribution']['colors'] ?? ['#4f46e5', '#10b981', '#f59e0b', '#ef4444', '#8b5cf6']);
+        
+        new Chart(typeCtx.getContext('2d'), {
+            type: 'doughnut',
+            data: {
+                labels: feeTypeLabels.length > 0 ? feeTypeLabels : ['No Data'],
+                datasets: [{
+                    data: feeTypeData.length > 0 ? feeTypeData : [1],
+                    backgroundColor: feeTypeData.length > 0 ? feeTypeColors : ['#e5e7eb']
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { position: 'bottom' },
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                return context.label + ': ' + context.raw.toLocaleString();
+                            }
+                        }
+                    }
+                }
             }
-        }
-    });
+        });
+    }
+});
 </script>
 @endpush
 @endsection
