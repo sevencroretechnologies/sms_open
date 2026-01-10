@@ -4,34 +4,26 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\HasMany;
 
-class Homework extends Model
+class ClassTimetable extends Model
 {
-
-    protected $table = 'homework';
+    protected $table = 'class_timetables';
 
     protected $fillable = [
-        'title',
-        'description',
         'class_id',
         'section_id',
         'subject_id',
         'teacher_id',
-        'attachment',
-        'submission_date',
+        'day_of_week',
+        'start_time',
+        'end_time',
+        'room_number',
         'is_active',
     ];
 
     protected $casts = [
-        'submission_date' => 'date',
         'is_active' => 'boolean',
     ];
-
-    public function getDueDateAttribute()
-    {
-        return $this->submission_date;
-    }
 
     public function schoolClass(): BelongsTo
     {
@@ -51,10 +43,5 @@ class Homework extends Model
     public function teacher(): BelongsTo
     {
         return $this->belongsTo(Teacher::class);
-    }
-
-    public function submissions(): HasMany
-    {
-        return $this->hasMany(HomeworkSubmission::class);
     }
 }
